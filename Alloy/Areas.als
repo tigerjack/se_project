@@ -30,7 +30,7 @@ sig ParkingArea extends Area {
 	but also recharge the vehicle
 */
 sig SpecialParkingArea extends ParkingArea {
-	plugs: some Plug,
+	sockets: some Socket,
 	chargingVehicles: set Vehicle
 }
 // ?? check
@@ -52,11 +52,15 @@ sig OperatingArea extends Area {
 
 
 /*
-	It's a power supply
+	It's a power supply. We assume there is one type of socket.
 */
-sig Plug {}
-fact plugMustBeAssociatedToSpecialParkingStation {
-	all spa: SpecialParkingArea, p: Plug | p in spa.plugs
+sig Socket {}
+fact socketMustBeAssociatedToSpecialParkingStation {
+	all spa: SpecialParkingArea, s: Socket | s in spa.sockets
 }
+
+pred show() {}
+
+run show for 5
 
 

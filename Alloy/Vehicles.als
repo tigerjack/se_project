@@ -11,6 +11,8 @@ abstract sig Vehicle {
 	usedSeats: Int,
 	currentPosition: one Position,
 	currentState: one VehicleState
+	// We assume there is one type of plug, so we don't mention it.
+	// If multiple plugs should be allowed, we have to modify this sig
 }
 {code > 0 seats > 0 seats <=4 usedSeats <= seats}
 fact codesAreUniques {
