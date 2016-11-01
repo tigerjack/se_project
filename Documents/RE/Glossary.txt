@@ -36,10 +36,13 @@ Passenger
 Someone (either User or not) who travels in a Vehicle rented by a User together with him.
 
 Plug
-A physical link between a Vehicle and a Charging Area. When a Vehicle is Plugged, its Battery recharges over time.
+A part of the Vehicle that interfaces itself with a Socket of a Charging Area. If a Vehicle's Plug is linked to a Charging Area's Socket, the Vehicle is Plugged.
 
 Reservation
 A User can perform a Reservation in order to link themselves with an Available Vehicle.
+
+Socket
+A part of the Charging Area that interfaces itself with the Plug of a Vehicle. If a Vehicle's Plug is linked to a Charging Area's Socket, the Vehicle is Plugged.
 
 System
 The automated software structure this document is about.
@@ -49,10 +52,17 @@ User
 A person registered on the System, who will use the Vehicles for a Fee.
 
 Vehicle
-An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A vehicle can be In Use, if a User is driving it, Available, if it can be Reserved, Reserved, if it is linked to a User but not yet In Use, or Unavailable if it can't be Reserved (for example due to damage, battery exhausted etc.)
+An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A vehicle can be:
+- In Use, if a User is driving it
+- Available, if it can be Reserved
+- Reserved, if it is linked to a User but not yet In Use
+- Unavailable if it can't be Reserved (for example due to damage, battery exhaustion etc.)
+- Plugged, if its Plug is connected to the Socket of a Charging Area. A Plugged Vehicle is also Available.
 
 Visitor
 A person who needs to complete the registration in order to become a User.
+
+--------
 
 Alloy
 A descriptive language that allows to describe a set of structures through constraints.
