@@ -1,8 +1,19 @@
+Account
+An account is a virtual representation of a User. The System can read and store information about a User by editing their Account.
+
 Battery
 A Battery powers a Vehicle. The charge state of the Battery can be anywhere between 0% and 100%, is reduced when the Vehicle is In Use, and increases when the Vehicle is Plugged to a Charging Area.
 
 Banking System
 An interface that allows the System to charge the users for a Fee.
+
+Car
+An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A Car can be:
+- In Use, if a User is driving it
+- Available, if it can be Reserved
+- Reserved, if it is linked to a User but not yet In Use
+- Unavailable if it can't be Reserved (for example due to damage, battery exhaustion etc.)
+- Plugged, if its Plug is connected to the Socket of a Charging Area. A Plugged Car is also Available.
 
 Car-sharing
 A Car-sharing service allows Users to rent Vehicles for a limited amount of time, being charged a Fee according to time and possibly applying a Discount or an Increase.
@@ -52,14 +63,6 @@ It tracks Users and Vehicles and deals with all the details needed for Carsharin
 
 User
 A person registered on the System, who will use the Vehicles for a Fee.
-
-Vehicle
-An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A vehicle can be:
-- In Use, if a User is driving it
-- Available, if it can be Reserved
-- Reserved, if it is linked to a User but not yet In Use
-- Unavailable if it can't be Reserved (for example due to damage, battery exhaustion etc.)
-- Plugged, if its Plug is connected to the Socket of a Charging Area. A Plugged Vehicle is also Available.
 
 Visitor
 A person who needs to complete the registration in order to become a User.
