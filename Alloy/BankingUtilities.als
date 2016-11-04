@@ -1,20 +1,4 @@
-module Utilities
-
-/**
-	Geolocalization
-*/
-sig Position {
-	latitude: one Int,
-	longitude: one Int
-}
-
-sig Segment {
-	start: one Position,
-	end: one Position
-}
-{start != end}
-
-
+module BankingUtilities
 /**
 	Fee
 */

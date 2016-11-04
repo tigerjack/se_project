@@ -16,17 +16,6 @@ fact noChargingVehicleInUse {
 }
 */
 
-fact vehiclesMustBeOwnedByTheCompany {
-	all v: Vehicle, c: Company | v in c.vehicles
-}
-
-fact operatingAreasShouldBelongToCompany {
-	all o: OperatingArea, c: Company | o in c.operatingAreas
-}
-
-assert AllRegisteredUsersAreInCompanyUserSet {
-	all ru: RegisteredUser, c: Company | ru in c.registeredUsers
-}
 
 check AllRegisteredUsersAreInCompanyUserSet
 
