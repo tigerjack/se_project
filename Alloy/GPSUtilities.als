@@ -61,6 +61,8 @@ pred pathsIntersects(p1, p2: GPSPath) {
 }
 
 
+
+
 pred show() {}
 
 run show for 5 but 3 GPSPolygon

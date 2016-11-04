@@ -1,0 +1,21 @@
+***String
+Don't know why, but if you use a
+	var: one String
+inside a signature Alloy doesn't generate instances of the model.
+
+***Int
+From experience, it seems that the number of generated integers is also bounded to the number of entities specified in the `run` function.
+F.e. if you use
+	run show() for 5
+it generates a range of 2^5 - 1 integers.
+It is important because with a small range some constraints can fail.
+F.e. if you have a costraint
+	number > 100
+used with
+	run show() for 3
+Alloy doesn't generate any model at all.
+
+If you want a greater number of generated integers, you have to specify it with 
+	run X for 5 but 7 Int
+where 7 specifies the integer bitwidth.
+// Also, you can't specify a bitwidth greater than 30

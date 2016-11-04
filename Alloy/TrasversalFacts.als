@@ -17,6 +17,12 @@ fact noChargingVehicleInUse {
 */
 
 
+
+
+fun lookupByAddress[ad: Address]: set Car {
+	all 
+}
+
 check AllRegisteredUsersAreInCompanyUserSet
 
 pred show() {}

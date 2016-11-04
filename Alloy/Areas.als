@@ -1,18 +1,22 @@
 module Areas
 //open GPSUtilities
-open Vehicles
+open Cars
+open Codes
 
-/**
-	Geographical Areas
-*/
+sig Address {}
+
 abstract sig Area {
-	id: one Int,
-	address: one String,
-	// perimeter: one GPSPolygon
+	code: one AreaCode,
+	address: one Address,
+// perimeter: one GPSPolygon
 }
-fact areaIdDoNotOverlap {
-	all a1, a2: Area | a1 != a2 implies (a1.id != a2.id and
+fact areaIdAndAddressAreUnique {
+	all a1, a2: Area | a1 != a2 implies (a1.code != a2.code and
 			a1.address != a2.address)
+}
+fact areaCodesAreAssociatedToOneArea
+{
+	all ac: AreaCode | one a: Area | ac in a.code
 }
 
 /*
@@ -20,11 +24,11 @@ fact areaIdDoNotOverlap {
 */
 sig ParkingArea extends Area {
 	parkingCapacity: Int,
-	parkedVehicles: set Vehicle,
+	parkedVehicles: set Car,
 	metersForNearestChargingStation: Int	
 }
 {
-	#metersForNearestChargingStation > 0
+	metersForNearestChargingStation > 0
 	#parkedVehicles <= parkingCapacity
 }
 
@@ -34,7 +38,7 @@ sig ParkingArea extends Area {
 */
 sig ChargingArea extends ParkingArea {
 	sockets: some Socket,
-	chargingVehicles: set Vehicle
+	chargingVehicles: set Car
 }
 {	
 	// Note that even a charging area stores the distance from the
@@ -54,16 +58,16 @@ sig OperatingArea extends Area {
 }
 
 // If there is at least one vehicle, it should be at least one area to park
-{#vehicles > 0 => #parkingAreas > 0}
+
 */
 
 /*
 	It's a power supply. We assume there is one type of socket.
 */
 sig Socket {}
-fact socketMustBeAssociatedToSpecialParkingStation {
-	all ca: ChargingArea, s: Socket | s in ca.sockets
-}
+fact socketMustBeAssociatedToOneChargingArea {
+	all s: Socket | one ca: ChargingArea | s in ca.sockets
+} 
 
 pred show() {}
 

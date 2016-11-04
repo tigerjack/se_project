@@ -17,4 +17,4 @@ sig FixedFee {
 sig PenaltyFee extends FixedFee {}
 
 sig DiscountFeePercentage extends FixedFee {}
-{amount <= 100}
+{amount >=0 and amount <= 100}
