@@ -1,9 +1,6 @@
 module BankingUtilities
-/**
-	Fee
-*/
-abstract sig Fee {}
 
+abstract sig Fee {}
 
 sig TimeFee extends Fee {
 	amountPerMinutes: Int
@@ -14,7 +11,7 @@ sig FixedFee {
 }
 {amount > 0}
 
-sig PenaltyFee extends FixedFee {}
-
-sig DiscountFeePercentage extends FixedFee {}
-{amount >=0 and amount <= 100}
+sig PercentageFee extends Fee {
+	amount: Int
+}
+{amount >= 0 and amount <= 100}

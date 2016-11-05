@@ -5,6 +5,7 @@ module GPSUtilities
 */
 
 // A simple float used to describe a GPS latitude or longitude
+
 sig GPSFloat {}
 
 sig GPSPoint {
@@ -59,9 +60,6 @@ pred lineIntersects(l1, l2: GPSStraightLine) {
 pred pathsIntersects(p1, p2: GPSPath) {
 	p1 != p2 and (some l1: p1.intermediateLines, l2: p2.intermediateLines | lineIntersects[l1, l2])
 }
-
-
-
 
 pred show() {}
 

@@ -1,0 +1,23 @@
+0.	ChargingArea extends ParkingArea!! (in Alloy, it means CA is a subset of PA)
+1.	All Int are fake (to say so) bcz when we run the model we generates only a
+	small amount of integers. However, this model is consistent.	
+2.	Id codes and emails are not relevant for our Alloy model
+3.	Not interested in Plugs or Socket type bcz we assume only one kind of 
+	Plug/Socket connector.
+4.	ChargingCars and ParkedCars are two disjoint sets. It implies, among other 
+	things, that the ParkingCapacity is not necessarily greater than 
+	ChargingCapacity.
+5.	
+  	
+// Trasversal assumptions
+1.	A car may be minor damaged but still available (the  employee has manually 
+	set the status to available again) ??
+2.	Minutes are rounded up (if a user has driven for 30 seconds it gets rounded
+	up to 1 minute) 
+3.	We have one kind of Plug and one kind of Socket.
+4.	There is one parking area or charging area at a given address
+5.	Cars in a Parking Area can be Available, Reserved or Unavailable.
+	Cars in a Charging Area can also be Plugged.
+6.	All ParkingArea (including All ChargingAreas have a chargingCapacity > 0.
+7.	CarState = InUse implies that a Car can't be in a Parking/Charging Area.
+

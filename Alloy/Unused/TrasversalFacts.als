@@ -1,10 +1,12 @@
 module TrasversalFacts
-open Vehicles
+open Cars
 open Areas
 open Users
-open Utilities
+open GPSUtilities
+open BankingUtilities
 open Company
-open VehiclesUsage
+open CarsUsage
+open Cars
 
 
 /**
@@ -14,7 +16,7 @@ fact noChargingVehicleInUse {
 	all spa: SpecialParkingArea, u: RegisteredUser | 
 		spa.chargingVehicles & u.usedVehicle = none
 }
-*/
+
 
 
 
@@ -24,7 +26,9 @@ fun lookupByAddress[ad: Address]: set Car {
 }
 
 check AllRegisteredUsersAreInCompanyUserSet
+*/
+pred show() {
+	#Car > 0
+}
 
-pred show() {}
-
-run show for 5 but 0 Reservation, 0 Fee, 0 DrivingData
+run show for 5 but 0 ReservationData, 0 Fee, 0 DrivingData

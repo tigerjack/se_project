@@ -18,4 +18,15 @@ Alloy doesn't generate any model at all.
 If you want a greater number of generated integers, you have to specify it with 
 	run X for 5 but 7 Int
 where 7 specifies the integer bitwidth.
-// Also, you can't specify a bitwidth greater than 30
+Also, you can't specify a bitwidth greater than 30.
+Dafault bitwidth is 4.
+
+***Show
+pred show() {
+	#ReservationData > 0
+	#DrivingData > 0
+	#Car = 6 //!!
+}
+run show for 4
+
+Doens't produce any instance at all (bcz 4 < 6)
