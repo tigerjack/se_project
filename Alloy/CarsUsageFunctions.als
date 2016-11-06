@@ -38,12 +38,12 @@ sig EndingRideData {
 	FACTS
 */
 fact drivenCarsStateShouldBeInUse {
-	all d: DrivingData, c: Car | (d.isDriving).c != none implies 
+	all d: DrivingData, c: Car | (d.isDriving).c != none iff 
 		c.currentState = InUse
 }
 
 fact reservedCarsStateShouldBeReserved {
-	all r: ReservationData, c: Car | (r.hasReserved).c != none implies 
+	all r: ReservationData, c: Car | (r.hasReserved).c != none iff 
 		c.currentState = Reserved
 }
 
@@ -66,26 +66,38 @@ check allDrivenCarsHaveADriver for 5 but 8 int
 /**
 	PREDICATES
 */
-/*
+
 pred canReserveACar[u: User, c: Car] {
-	all r: ReservationData | not u in r.user and c.currentState = Available
+	all r: ReservationData | not u in (r.hasReserved).Car and 
+	(c.currentState = Available or c.currentState = Plugged)
 }
 
-pred addReservation[r, r': ReservationData] {
+
+pred addReservationData[r, r': ReservationData, u: User, c: Car] {
+	(r'.hasReserved = r.hasReserved + u -> c) &&
+	r.reservationMinutes = 0
+}
+
+/*
+pred addDrivingData[d, d': DrivingData, u: User, c: Car] {
 	
-	r' = r
+	(r'.hasReserved = r.hasReserved + u -> c) &&
+	r.reservationMinutes = 0
+
 }
 
-
+/*
 fun driveACar[u: User, c: Car]: DrivingData {
 
 }
-/*
+
 fun reserveACar[u: User, c: Car]: ReservationData {
 	
 }
 */
 
+run canReserveACar for 3 but 8 Int
+run addReservationData for 3 but 8 Int
 
 pred show() {
 	#ReservationData > 0
