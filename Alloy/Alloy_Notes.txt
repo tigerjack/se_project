@@ -21,12 +21,43 @@ where 7 specifies the integer bitwidth.
 Also, you can't specify a bitwidth greater than 30.
 Dafault bitwidth is 4.
 
+
+***Enum vs Abstract
+enums don't appear in the Visualizer if you use Magic Layout, from this point of
+view is better to use 'abstract sig' and 'extend' directly.
+On the other hand, if you use 'abstract sig' and 'extend', you'll come up with 
+a model in which there are many sets corresponding to the same concept.
+E.g. in our project we can use
+	abstract sig Damage {}
+	sig MajorDamage, MinorDamage extends Damage {}
+or
+	enum Damage {
+		MajorDamage, MinorDamage
+	}
+
+but in the first case we can have f.e. different MinorDamage atoms (MinorDamage0, 
+MinorDamage1, ...), while in the second case you can have only one MinorDamage.
+So, it really depends on what you have to do.
+Also, keep in mind that if you have an enum composed by X elements and execute
+	run show for Y
+where Y < X, Alloy produces no instance at all
+
 ***Show
-pred show() {
-	#ReservationData > 0
-	#DrivingData > 0
-	#Car = 6 //!!
-}
+**
+	pred show() {
+		#ReservationData > 0
+		#DrivingData > 0
+		#Car = 6 //!!
+	}
 run show for 4
 
 Doens't produce any instance at all (bcz 4 < 6)
+
+**
+If you have
+enum Bla {
+	X, Y, Z, W
+}
+
+run show for 3 
+doesn't produce any instance at all (bcz # of enums is greater than 4.

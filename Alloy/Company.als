@@ -4,19 +4,25 @@ open Areas
 open Users
 open CarsUsage
 
+/**
+	SIGNATURES
+*/
 one sig Company {
 	// Vehicles
-	cars: set Car,
+	cars: some Car,
 	// parking areas
-	parkingAreas: set ParkingArea,
+	parkingAreas: some ParkingArea,
 	// registered users
 	users: set User,
 	carsUsageData: set CarsUsageData
 }
 // If there is a car owned by the company, there is also a parking area
 // to leave the car
-{#cars > 0 implies #parkingAreas > 0}
+{#cars > 0 implies #ChargingArea > 0}
 
+/**
+	FACTS
+*/
 fact vehiclesMustBeOwnedByTheCompany {
 	all c: Car | one com: Company | c in com.cars
 }
@@ -27,7 +33,9 @@ fact allUsersAreInCompanyUserSet {
 	all u: User | one com: Company | u in com.users
 }
 
-
+/**
+	ASSERTS
+*/
 assert allUsersAreInCompanyUserSet {
 	all u: User | one com: Company | u in com.users
 }
@@ -35,13 +43,15 @@ assert allUsersAreInCompanyUserSet {
 check allUsersAreInCompanyUserSet for 3 but 8 Int
 
 
+/**
+	PREDICATES/FUNCTIONS
+*/
 pred show() {
 
-	#Car = 3
-	#ParkingArea > 0
+	#Car > 2
+	#ParkingArea > 2
 	#User > 0
 /*
-	
 	#GPSPoint = 0
 */
 }

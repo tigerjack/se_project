@@ -1,6 +1,8 @@
 module Cars
 
-
+/*
+	SIGNATURES
+*/
 sig Car {
 	battery: one Battery,
 	seats: Int,
@@ -33,21 +35,36 @@ sig Battery {
 	statusPercentage >= 0 statusPercentage <= 100
 }
 
+// Check difference b/w enum and abstract
+
 abstract sig Damage {}
 sig MajorDamage, MinorDamage extends Damage {}
+
+abstract sig CarState {}
+sig Available, Unavailable, Reserved, InUse, Plugged extends CarState {}
+
+/*
+enum Damage {
+	MajorDamage, MinorDamage
+}
 
 enum CarState {
 	Available, Unavailable, Reserved, InUse, Plugged
 }
+*/
 
-// FACTS
 
+/*
+	FACTS
+*/
 fact batteriesMustBeAssociatedToOneVehicle {
 	all b: Battery | one c: Car | b in c.battery
 }
+
 fact damagesMustBeAssociatedToACar {
 	all d: Damage | d in Car.damages
 }
+
 fact carStatesMustBeAssociatedToSomeCars {
 //	It reaches the same end goal, but generates an additional relation
 //	between a state and a car
@@ -60,20 +77,30 @@ fact majorDamagesImpliesUnavailableCars {
 		c.currentState = Unavailable
 }
 
+/*
+	ASSERTS
+*/
 assert allMajorDamagedCarsAreUnavailable {
 	all m: MajorDamage, c: Car | m in c.damages implies
 		c.currentState = Unavailable
 }
+
 assert allReservedCarsHasEnoughBattery {
 	all c: Car | c.currentState = Reserved and 
 		c.battery.statusPercentage >= 20
 }
-assert allCarsNotUsedAndNotPluggedAndWithLowBatteryShouldBeUnavailable {
+
+assert noCarInUseHaveZeroBattery {
+	no c: Car | c.currentState = InUse and c.battery.statusPercentage = 0
+}
+
+assert allCarsNotInUseAndNotPluggedAndWithLowBatteryShouldBeUnavailable {
 	all c: Car | (c.battery.statusPercentage < 20 and
 		c.currentState != InUse and
 		c.currentState != Plugged) implies 
 		c.currentState = Unavailable
 }
+
 
 /*
 // Not true, a car may be minor damaged but still available (the 
@@ -87,11 +114,17 @@ assert allCarsUnusedAndMinorDamagedAreUnavailable {
 
 check allMajorDamagedCarsAreUnavailable for 8
 check allReservedCarsHasEnoughBattery for 8
-check allCarsNotUsedAndNotPluggedAndWithLowBatteryShouldBeUnavailable for 8
+check allCarsNotInUseAndNotPluggedAndWithLowBatteryShouldBeUnavailable for 8
+check noCarInUseHaveZeroBattery for 8
 
+/*
+	PREDICATES/FUNCTIONS
+*/
 pred show() {
-	#Car > 1
-	#Battery.statusPercentage = #Car
+	#Car > 0
+	#(Car.currentState & Reserved) = #Car
+//	Car.currentState & Available = none
+/*
 	#InUse > 0
 	#Unavailable > 0
 	#Reserved > 0
@@ -99,9 +132,15 @@ pred show() {
 	#Available > 0
 	#MajorDamage > 0
 	#MinorDamage > 0
+	#Damage > 0
+	1 in Car.usedSeats
+	0 in Battery.statusPercentage
+	19 in Battery.statusPercentage
+	20 in Battery.statusPercentage
+*/
 }
 
-run show for 5 but 8 Int
+run show for 3 but 8 Int
 
 /*
 open Codes

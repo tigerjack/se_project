@@ -1,5 +1,8 @@
-module BankingUtilities
+module BankingFunctions
 
+/**
+	SIGNATURES
+*/
 abstract sig Fee {}
 
 sig TimeFee extends Fee {

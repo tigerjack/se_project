@@ -1,6 +1,7 @@
 module Users
-// SIG
-
+/**
+	SIGNATURES
+*/
 abstract sig Person {}
 sig Visitor extends Person {}
 sig User extends Person {
@@ -10,8 +11,9 @@ sig User extends Person {
 	// Not interested in other parameters
 }
 
-// PRED
-
+/**
+	PREDICATES/FUNCTIONS
+*/
 pred show() {
 	#User > 0
 }

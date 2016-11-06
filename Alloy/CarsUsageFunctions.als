@@ -1,8 +1,10 @@
-module VehiclesUsage
+module CarUsageFunctions
 open Cars
 open Users
 
-// SIGNATURES
+/**
+	SIGNATURES
+*/
 abstract sig CarsUsageData {}
 
 sig DrivingData extends CarsUsageData {
@@ -14,7 +16,7 @@ sig DrivingData extends CarsUsageData {
 }
 {
 	ridingMinutes > 0
-	passengersMinutes >= 0
+	passengersMinutesRange >= 0
 }
 
 sig ReservationData extends CarsUsageData {
@@ -32,8 +34,9 @@ sig PluggingData {
 sig EndingRideData {
 }
 
-// FACTS
-
+/**
+	FACTS
+*/
 fact drivenCarsStateShouldBeInUse {
 	all d: DrivingData, c: Car | (d.isDriving).c != none implies 
 		c.currentState = InUse
@@ -44,7 +47,9 @@ fact reservedCarsStateShouldBeReserved {
 		c.currentState = Reserved
 }
 
-// ASSERT
+/**
+	ASSERTS
+*/
 assert allDrivenCarsStateIsInUse {
 	all c: Car | one d: DrivingData | c in User.(d.isDriving)
 }
@@ -58,8 +63,9 @@ assert allDrivenCarsHaveADriver {
 check allDrivenCarsStateIsInUse for 5 but 7 Int
 check allDrivenCarsHaveADriver for 5 but 8 int
 
-// PREDICATES
-
+/**
+	PREDICATES
+*/
 /*
 pred canReserveACar[u: User, c: Car] {
 	all r: ReservationData | not u in r.user and c.currentState = Available

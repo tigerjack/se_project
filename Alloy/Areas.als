@@ -2,11 +2,12 @@ module Areas
 //open GPSUtilities
 open Cars
 
+/**
+	SIGNATURES
+*/
 sig Address {}
 
-
 abstract sig CompanyArea {
-//	code: one AreaCode,
 	address: one Address,
 // perimeter: one GPSPolygon
 }
@@ -14,6 +15,7 @@ abstract sig CompanyArea {
 sig ParkingArea extends CompanyArea {
 	parkingCapacity: Int,
 	parkedCars: set Car,
+//	May be useful in a while
 //	metersForNearestChargingStation: Int	
 }
 {
@@ -37,13 +39,10 @@ sig ChargingArea extends ParkingArea {
 }
 
 
-// FACT
-// Maybe redundant, see next fact
-fact areaAddressesAreUnique {
-	all a1, a2: CompanyArea | a1 != a2 implies 
-		a1.address != a2.address
-}
-
+/**
+	FACTS
+*/
+// This fact also enforce the uniqueness of area address
 fact areaAddressesAreAssociatedToExaxtlyOneCompanyArea {
 	all a: Address | one ar: CompanyArea | a in ar.address
 }
@@ -92,7 +91,9 @@ fact carParkedInOneParkingArea {
 */
 
 
-// ASSERT
+/**
+	ASSERTS
+*/
 assert sameCarShouldNotBePluggedAtDifferentChargingArea {
 	all c: Car | one ca: ChargingArea | 
 		c.currentState = Plugged implies
@@ -101,7 +102,9 @@ assert sameCarShouldNotBePluggedAtDifferentChargingArea {
 
 check sameCarShouldNotBePluggedAtDifferentChargingArea for 5 but 8 Int
 
-// PREDICATES
+/**
+	PREDICATES/FUNCTIONS
+*/
 pred show() {
 	#Car > 0 
 	#ChargingArea > 0
@@ -116,7 +119,7 @@ pred show() {
 	20 in Battery.statusPercentage
 }
 
-run show for 5 but 8 Int
+run show for 3 but 8 Int
 
 
 /*
