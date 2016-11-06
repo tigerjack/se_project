@@ -8,7 +8,7 @@
 	bcz it helps to have them in the Visualizer.
 4.	ChargingCars and ParkedCars are two disjoint sets. It implies, among other 
 	things, that the ParkingCapacity is not necessarily greater than 
-	ChargingCapacity.
+	ChargingCapacity. CONTINUO A PENSARE CHE BISOGNI CAMBIARE IL NOME DI "PARKED CARS", E' TROPPO MISLEADING
 5.	
   	
 *** Project assumptions
@@ -20,11 +20,12 @@
 1.	A car may be minor damaged but still available (the  employee has manually 
 	set the status to available again) ??
 2.	We have one kind of Plug, one kind of Socket.
-3.	Users can reserve Plugged and Available cars and no others.
-4.	A car can always be set to Unavailable by an Employee or the System, despite
+3.	Users can reserve Plugged and Available cars and no others. NON E' IMPLICITO NEI REQUISITI?
+4.	A car can always be set to Unavailable by an Employee or the System, despite 
 	the fact that its battery is below 20% or it has a serious damage. In other
 	words Unavailable not implies always a SeriousDamage or battery below 20%,
 	but also other choices from the Company (f.e. maintenance, we don't know)
+	SE LA MACCHINA E' IN USO NON POSSIAMO METTERLA AVAILABLE O IL POVERINO SI RITROVA IN MEZZO ALL'AUTOSTRADA FERMO :D
 	
 
 **	Areas
@@ -34,6 +35,7 @@
 6.	All ParkingAreas (excluding ChargingArea) have a parkingCapacity > 0.
 7.	All ChargingAreas have a chargingCapacity > 0, but the parkingCapacity can
 	also be 0.
-7.	CarState = InUse implies that a Car can't be in a Parking/ChargingArea.
+7.	CarState = InUse implies that a Car can't be in a Parking/ChargingArea. 
+LO TOGLIEREI COME REQUISITO, UN TIZIO PUO' STARE FERMO NELLA PARKING AREA E COMUNQUE CI PAGA. IN PIU' SE QUESTO HA APPENA PRESO LA MACCHINA DA UNA PARKING AREA SICURO STA NELLA PARKING AREA PER QUALCHE SECONDO PER USCIRNE
 8.	The company has at least 1 ChargingArea (eitherwise we can't have discount
 	and so on) and at least 1 Car.
