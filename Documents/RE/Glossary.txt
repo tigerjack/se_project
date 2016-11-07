@@ -8,12 +8,12 @@ Banking System
 An interface that allows the System to charge the users for a Fee.
 
 Car
-An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A Car can be:
+An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A Car has a status and a Plugged flag, the status can be:
 - In Use, if a User is driving it
 - Available, if it can be Reserved
 - Reserved, if it is linked to a User but not yet In Use
 - Unavailable if it can't be Reserved (for example due to damage, battery exhaustion etc.)
-- Plugged, if its Plug is connected to the Socket of a Charging Area. A Plugged Car is also Available.
+The Plugged Flag can be true or false indicating if the Car is,or not, plugged.
 
 Car-sharing
 A Car-sharing service allows Users to rent Cars for a limited amount of time, being charged a Fee according to time and possibly applying a Discount or an Increase.
@@ -30,11 +30,14 @@ A structure that holds informations linked logically according to relationships.
 Discount
 A reduction in the Fee to be paid because of good behaviour on the part of the User, e.g. leaving the Cars plugged or bringing it back with a mostly-full battery. The actions that constitute good behaviour are determined ad detailed further in the document.
 
+Employee
+He's an employee of the Company which is charged of every kind of maintenance of the Car. (Charging the Car battery on-site, moving a Car to a Charging Area and so on). 
+
 Fee
 The amount of money that the User will be charged for their usage of the Car-sharing service, or for making a Reservation that is not used.
 
 GPS
-Global Positioning System. A system that allows to precisely know a Cars's position.
+Global Positioning System. A system that allows to precisely know the position of the device on which is installed. (Detect Car's, User's and Charging Area's position).
 
 Surcharge
 An increase in the Fee to be paid because of improper behaviour on the part of the User, e.g. bringing the Cars back with a mostly-empty battery.
