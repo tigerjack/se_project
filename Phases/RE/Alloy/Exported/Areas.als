@@ -72,7 +72,7 @@ fact carStateInUseImpliesCarNotInParkingArea {
 // If a car is plugged <=> it must be in one charging area
 fact carStatePluggedIffCarInOneChargingCars {
 	all c: Car | one ca: ChargingArea | 
-		c.currentState = Plugged iff c in ca.chargingCars
+		c.plugged = False iff c in ca.chargingCars
 }
 
 
@@ -96,7 +96,7 @@ fact carParkedInOneParkingArea {
 */
 assert sameCarShouldNotBePluggedAtDifferentChargingArea {
 	all c: Car | one ca: ChargingArea | 
-		c.currentState = Plugged implies
+		c.plugged = False implies
 		c in ca.chargingCars
 }
 

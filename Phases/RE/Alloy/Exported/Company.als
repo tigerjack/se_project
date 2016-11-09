@@ -2,7 +2,7 @@ module Company
 open Cars
 open Areas
 open Users
-open CarsUsage
+open CarsUsageFunctions
 
 /**
 	SIGNATURES

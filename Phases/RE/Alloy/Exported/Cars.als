@@ -1,4 +1,5 @@
 module Cars
+open util/boolean
 
 /*
 	SIGNATURES
@@ -8,7 +9,8 @@ sig Car {
 	seats: Int,
 	usedSeats: Int,
 	damages: set Damage,
-	currentState: one CarState
+	currentState: one CarState,
+	plugged: one Bool
 //	code: one CarCode,
 //	plug: one Plug,
 //	currentPosition: one GPSPoint
@@ -24,7 +26,7 @@ sig Car {
 	currentState = InUse implies battery.statusPercentage > 0
 	(battery.statusPercentage < 20 and
 		currentState != InUse and
-		currentState != Plugged) implies 
+		plugged = False) implies 
 		currentState = Unavailable
 }
 
@@ -41,7 +43,7 @@ abstract sig Damage {}
 sig MajorDamage, MinorDamage extends Damage {}
 
 abstract sig CarState {}
-sig Available, Unavailable, Reserved, InUse, Plugged extends CarState {}
+sig Available, Unavailable, Reserved, InUse extends CarState {}
 
 /*
 enum Damage {
@@ -97,7 +99,7 @@ assert noCarInUseHaveZeroBattery {
 assert allCarsNotInUseAndNotPluggedAndWithLowBatteryShouldBeUnavailable {
 	all c: Car | (c.battery.statusPercentage < 20 and
 		c.currentState != InUse and
-		c.currentState != Plugged) implies 
+		c.plugged = False) implies 
 		c.currentState = Unavailable
 }
 
