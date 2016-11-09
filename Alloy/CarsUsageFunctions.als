@@ -60,6 +60,8 @@ assert allDrivenCarsHaveADriver {
 		(d.isDriving).c != none
 }
 
+
+
 check allDrivenCarsStateIsInUse for 5 but 7 Int
 check allDrivenCarsHaveADriver for 5 but 8 int
 
@@ -67,6 +69,7 @@ check allDrivenCarsHaveADriver for 5 but 8 int
 	PREDICATES
 */
 
+/*
 pred canReserveACar[u: User, c: Car] {
 	all r: ReservationData | not u in (r.hasReserved).Car and 
 	(c.currentState = Available or c.currentState = Plugged)
