@@ -1,0 +1,283 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+% To split tables b/w pages
+\usepackage{longtable}
+\usepackage{caption}
+
+\begin{document}
+%%% From now on all should be integrated in the main file
+
+% Counter to use for UseCaseId
+\newcounter{UseCaseIdCounter}
+
+% It starts from 0 by default, so I've incremented it.
+\stepcounter{UseCaseIdCounter}
+
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Register Account}} % Table caption
+	\label{UC_Register}%If later on you want to refer to this label, you can this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & Visitor wants to create an account for the Car-Sharing Service. \\ \hline
+	\textbf{Actors} & Visitor.\\ \hline
+	\textbf{Description} & Visitor wants to create an account for the Car-Sharing Service. \\ \hline
+	\textbf{Pre-Conditions} & The Visitor connects to the Company's Car Sharing Web Site/ Application. \\ \hline
+	\textbf{Flow of events} & 
+		\begin{enumerate}
+			\item The Visitor selects the function \textit{\textquotedblleft{Sign Up}\textquotedblright}.
+			\item The System returns a form to enter all the required data: Name, Surname, Birth date, Social Security Number, ID Card Number, Driving License number and Credit Card number. It also asks for an Email address and a password which will be used for the future logins.
+			\item The Visitor fill the forms with all the required information.
+			\item The System stores the request together with all the data provided with it, generates a random activation URL and asks the Mail System to forward this/her URL to the email address of the Visitor.
+		\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The Mail System sends the activation URL to the Visitor's email provided in the registration form. \\ \hline
+	\textbf{Exceptions} & 
+		\begin{itemize}
+		\item The System recognizes invalid or missing data in the form compiled by the Visitor and informs him/her of the error. The flow of events restarts from point 1.
+		\item The Visitor inserts in the form a Social Security Number, or ID Card Number, or Driving License number, or Email Address, which is already present in the System. The System shows an error message saying that some of those credentials were already been inserted into the System for another account. The flow of events restarts from point 1.
+		\end{itemize} \\ \hline
+\end{longtable}
+%\end{table}
+
+
+%%%%%OTHER USE CASES!!
+USE CASE : Activate Account.
+
+Id:  UC2
+Description
+The Visitor wants to activate his/her/her account.
+
+Actors
+Visitor.
+
+Pre-Conditions
+The Visitor has received the activation URL on his/her mail box.
+
+
+
+Flow of events
+
+1. The Visitor clicks on the received activation URL.
+2. The System acknowledges that the Visitor has arrived in his/her activation Web Page and activates his/her account.
+
+Post-Conditions
+The Visitor is now become the User which can access the System using the credentials (Email, password) he provided during the registration phase.
+Exceptions :
+The Activation URL expires after 10 days it has been generated. The Visitor?s data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
+
+USE CASE : Log in
+
+Id:  UC3
+
+Description
+The User wants to log in the System.
+
+Actors
+User.
+
+Pre-Conditions
+The User connects to the Company?s Car Sharing Web Site/Application .
+
+Flow of events
+1. The User selects the function ?Login?.
+2. The System shows the User a login form, asking him/her to insert his/her account Email and password.
+3. The User inserts the pair (Email, Password) used during the registration phase and selects the function ?Log me in?.
+
+Post-Condition
+The System verifies the existence of an account associated with that pair (Email, Password) and logs the User in.
+ The User has now access to the System User?s dedicated functionalities.
+Exceptions :
+4 	The System doesn?t find an account associated with that pair (Email, Password) and   shows an error message, the flow of events starts from point 1.
+
+USE CASE : Log out
+
+Id:  UC4
+Description
+The User which is logged in the System wants to log out.
+
+Actors
+User
+
+Pre-Conditions
+The User is logged in the System.
+
+
+
+Flow of events
+
+1. The User selects the function ?log out?.
+2. The System performs the User?s logout.
+Post-Condition
+The System shows the confirmation of the logout to the User.
+The User is now not able to use the System functionalities dedicated to Users anymore (until he logs in again).
+
+USE CASE : Locate available cars.
+Id:  UC5
+
+Description
+The User wants to locate a Car.
+
+Actors
+User.
+
+Pre-Condition
+The User must be logged into the System.
+
+Flow of events
+
+1 The User selects the function ?Locate Cars?.
+2 The System shows a text box asking the User to provide an address near which he would like to see the Cars whose state is Available.
+3 The User inserts the desired address and selects the ?Locate? function.
+
+Post-Condition
+The System shows the User a map containing all the Cars, whose state is Available, which are inside a 5KM distance range from the provided address or User?s GPS position.
+Alternative flow of events
+3a 	The User selects the function ?Near me? instead of inserting a specific address and sends his/her GPS Coordinates to the System.
+
+Exceptions :
+
+4b	The System does not find the inserted address and informs the User. The Flow of Events starts from point 1.
+4c	There are no available Cars in the specified address/User?s Position. The System informs the User. The Flow of Events start from point 1.
+
+		
+USE CASE : Reserve available car.
+
+
+Id:  UC6
+
+
+Description
+The User wants to reserve a Car.
+
+Actors
+User
+
+Pre-Condition
+The User must be logged into the System and the System must have found cars when the User activated the ?Locate available cars? function. 
+
+
+Flow of events
+1. The User chooses a specific Car between the showed ones in the map.
+2. User selects the function ?Reserve this Car?.
+
+Post-Condition
+The System stores the Reservation of the Car, changing the Car status in Reserved.
+The System activates a countdown of 1 hour during which the User will have the possibility to unlock the reserved Car.
+
+
+USE CASE : Unlock Car.
+ID : UC9
+
+DESCRIPTION : The User wants to ask the System to open the doors of the Car in order  to enter it.
+PARTECIPATING ACTORS : User  
+PRE-CONDITION : The User must be logged in the System and must have reserved a car. 
+FLOW OF EVENTS : 
+1 The User activates the function ?Unlock Car?.
+2 The User  sends his/her GPS coordinates to the System; 
+3 The System checks that the GPS coordinates of the specific User ?s Reserved Car and the GPS coordinates of the User himself are in a 15 meters distance range. 
+EXCEPTIONS :
+If one hour has passed since the reservation has been done and the User didn?t unlock the Car because he wasn?t in the 15 meters distance range or didn?t activate this function :
+1. the reservation expires and the User cannot unlock the car anymore (unless with another reservation). 
+2. The System changes the Car status to Available.
+3. The System communicates to the Banking System the amount of money (corresponding to the fee of 1 EUR) to charge to the User.
+4. The System now allows the User to perform another reservation. 
+POST-CONDITION :  
+The System has verified that User is nearby the car (inside the specified distance range) and unlocks the Car doors. 
+The System now changes the Car status to In Use and sets the Plugged Field False. 
+The User enters the Car.
+
+
+
+USE CASE : Drive Car. 
+ID : UC10				
+DESCRIPTION  : The User starts to drive the reserved Car.
+PARTECIPATING ACTORS : User 
+PRE-CONDITION : The User has unlocked the doors of the car and entered the Car.
+FLOW OF EVENTS : 
+1 The User starts the engine of the Car.
+2 The System starts the Ride Timer which indicates the time usage of the Car.
+3 [Extension Point UC11].
+4 [Extension Point UC14].
+5 The System calculates the current fee charged to the User (calculated as a given amount of money per minute multiplied by the minutes of the Ride Timer) while showing it on the on-board screen.
+POST-CONDITION :  
+The User drives the Car. 
+
+
+
+
+USE CASE : Drive with Passengers.  <<extends UC10>>
+ID : UC 11
+DESCRIPTION : The User picks up passengers to share the ride with.
+PARTECIPATING ACTORS : User
+PRE-CONDITION : The User is driving his/her reserved Car.
+
+FLOW OF EVENTS : 
+1. The User picks up the desired passengers.
+2. The Car detects the number of passengers.
+
+POST-CONDITION :  
+The User is sharing the ride with his/her passengers.
+The System stores the number of passengers in the ride and if they stayed in the Car for at least 3 minutes.
+
+USE CASE : End ride.
+Id : UC12
+DESCRIPTION : The User ends the ride and the System processes the fee.
+PARTECIPATING ACTORS : User 
+PRE-CONDITION : The User parks the Car in one of the Parking Areas.
+FLOW OF EVENTS : 
+1. The User exits the Car.
+2. The System verifies that no one is in the car.
+3. The System checks the battery status. 
+4. The System checks, using the GPS coordinates, if the User has left the Car within a 3KM distance range from the nearest Charging Area.
+5. The System checks if the User drove with passengers (UC11).
+6. [Extension Point UC13].
+POST-CONDITION :  
+The System locks the doors of the Car and sets it as Available.
+The System communicates to the Banking System the final fee to charge to the User.
+ALTERNATIVE FLOW OF EVENTS:
+7a 	The battery status is higher than 50%, the User didn?t or did take at least 2 passengers with him for at least 3 minutes (UC11) , didn?t leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 20% discount on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7b The User did plug the Car (UC13), the battery status is higher than or equal to 20%, he/she didn?t or did take at least 2 passengers with him for at least 3 minutes (UC11), hence the System applies a 30% discount on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7c The User did plug the Car (UC13), the battery status is lower than 20%, he/she didn?t or did take at least 2 passengers with him for at least 3 minutes (UC11), didn?t plug the Car (UC13), hence the System doesn?t apply any discount or surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7d The User didn?t plug the Car (UC13), the battery status is higher than 50%, he/she did or didn?t take at least 2 passengers with him for at least 3 minutes (UC11), did leave the Car at more than 3KM from the nearest Charging Area, hence the System applies a 10% surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7e 	The battery status is between 20% and 50% (included), the User did take at least 2 passengers with him for at least 3 minutes (UC11) , didn?t leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 10% discount on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7f The battery status is lower than 20%, the User did take at least 2 passengers with him for at least 3 minutes (UC11) , did or didn?t leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 20% surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7g The battery status is between 20% and 50% (included), the User did take at least 2 passengers with him for at least 3 minutes (UC11) , did leave the Car at more than 3KM from the nearest Charging Area, hence the System applies a 20% surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7h The battery status is lower than 20%, the User didn?t take at least 2 passengers with him for at least 3 minutes (UC11) , did or didn?t leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 30 % surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7j The battery status is higher than 50%, the User did or didn?t take at least 2 passengers with him for at least 3 minutes (UC11) , did leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 10 % surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+7k The battery status is between 20% and 50% (included), the User didn?t take at least 2 passengers with him for at least 3 minutes (UC11) , did leave the Car at more than 3KM from the nearest Charging Area, hence the System applies a 30% surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
+
+EXCEPTIONS : 
+The Ride ends and the Car stops moving when the battery status reaches 0% of the full capacity or when the Car detects a major damage. 
+
+USE CASE : Plug the Car.  ( <<extends UC12>> )
+ID : UC13
+PARTECIPATING ACTORS : User 
+PRE-CONDITION : The User has parked the Car in one of the Charging Areas designated by the System. 
+FLOW OF EVENTS :
+1. The User plugs the Car into the socket of the Charging Area. 
+2. The System detects that the Car is plugged within 2 minutes since the User got off the Car.
+POST-CONDITION :  
+The battery of the Car is charging and the System stores the User?s action for possible discounts.
+The System sets the Car Plugged Field True.
+USE CASE : Enable Money Saving Option. ( <<Extends UC10>> )
+ID : UC14
+PARTECIPATING ACTORS : User 
+PRE-CONDITION : The User enables the Money Saving Option.
+FLOW OF EVENTS : 
+1. The System asks the User the address of his final destination showing a text box where to insert the address.
+2. The User provides the address to the System.
+
+POST-CONDITION :  
+The System computes an algorithm which takes in consideration the distribution of the cars in the city, the final destination of the User and the availability of power plugs in the Charging Area. The result of this algorithm will be sent to the User providing him the address of the Charging Area where to leave the Car. 
+(The User will still have to plug the Car in order to have a discount!)
+
+EXCEPTIONS : 
+If the Socket of the Charging Area has no more available plugs , the System informs the User and the Flow of Events starts from point 1.
+
+\end{document}
+
+
+
