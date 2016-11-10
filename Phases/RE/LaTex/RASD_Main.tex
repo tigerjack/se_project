@@ -1,15 +1,3 @@
-\documentclass[12pt]{article}
-
-\usepackage[utf8]{inputenc}
-
-\title{Requirement Analysis and Specification Document for PowerEnJoy}
-\author{Enrico Migliorini, Alessandro Paglialonga, Simone Perriello}
-
-\setcounter{secnumdepth}{4}
-%S: TOC Depth set to 3 as specified by Prof during lessons
-\setcounter{tocdepth}{3}
-
-\begin{document}
 \maketitle
 \clearpage
 \tableofcontents
@@ -44,6 +32,7 @@ The automated software structure this document is about. It tracks \emph{Users} 
 A person registered on the \emph{System}, who will use the \emph{Cars} for a \emph{Fee}.
 \paragraph{Car}
 An electric car owned by the \emph{Car-sharing} service, rented to the \emph{User} and tracked by the \emph{System}.
+
 \subsubsection{Document specific terms}
 \paragraph{Alloy}
 A descriptive language that allows to describe a set of structures through constraints.
@@ -63,11 +52,13 @@ The PowerEnjoy system is created in order to provide a unified platform to be us
 Access to the full System is reserved to the registered Users, although it is also possible for a Visitor to register themselves, becoming a User.
 
 Once registered, a User will have easy access to the functionalities of PowerEnJoy, allowing them to see the locations of nearby Cars, reserve and rent them and enable money-saving options to become eligible for Discounts.
+
 \subsection{Product Perspective}
 The main System will be housed on a central elaborator, called server. This server will be responsible for all necessary operations, including communicating with the internal Database, keeping track of all the Cars and interacting with the Banking System in order to charge Fees to the Users.
 The user will access the System through a mobile app (client), connected to the main System via Internet, and interacting with the Smartphone's GPS System. Information exchange between the client and the server will be based on the HTTP protocol.
+
 \subsection{Product Functions}
-Here are explained the main needs of the PowerEnJow system.
+Here are explained the main needs of the PowerEnJoy system.
 \begin{center}
   \begin{tabular}{|p{.2\textwidth}|p{.12\textwidth}|p{.58\textwidth}|}
     \hline
@@ -79,6 +70,7 @@ Here are explained the main needs of the PowerEnJow system.
     Proximity Unlock & ? & Unlocks the car when the User who Reserved it is close \\ \hline
   \end{tabular}
 \end{center}
+
 \begin{center}
   \begin{tabular}{|p{.2\textwidth}|p{.12\textwidth}|p{.58\textwidth}|}
     \hline
@@ -90,6 +82,7 @@ Here are explained the main needs of the PowerEnJow system.
     Administrative Access & ? & Allows an administrator to modify the information in the Database or parametres of the System \\ \hline
   \end{tabular}
 \end{center}
+
 \subsection{User Classes and Characteristics}
 \begin{center}
   \begin{tabular}{|p{.2\textwidth}|p{.39\textwidth}|p{.39\textwidth}|}
@@ -100,18 +93,21 @@ Here are explained the main needs of the PowerEnJow system.
     Administrator & A specialized worker for the Company & Can modify the Database and the application's various parameters \\ \hline
   \end{tabular}
 \end{center}
+
 \subsection{Operating Environment}\label{OE}
 Users and Visitors will access the System through a smartphone application. The smartphones used to access the application will need to have a sufficiently advanced hardware in order to run it, and the application will require both an Internet connection and a GPS signal. The mobile application will, however, only be required in order to run the Find Nearby Cars, Reservation and Proximity Unlock functions.
 
 The Cars will also need to be modified by adding a device capable of getting GPS signal and remotely communicate with the central System.
 
 The central System will need a suitably powerful elaborator to run on.
+
 \subsection{Design and Implementation Constraints}
 The system will employ the HTTP protocol in order to have the client software, both the software application and the one installed on the Cars, communicate with the central System. As mentioned above, a network connection will be necessary. In order to maximize availability, it is advised to use the best available hardware.
 
 User ID and password will be required in order to access the System. In order to register as a User, a Visitor needs to undergo Registration. 
+
 \subsection{Assumptions and Dependencies}
-[INTEGRATE FROM THE LIST]
+\input{RASD_Assumptions}
 
 \clearpage\section{External Interface Requirements}
 The interfaces the system should interact with.
@@ -138,15 +134,5 @@ The functionality for the various users.
 \subsection{Sequence Diagrams}
 \subsection{Alloy representation of requirements}
 
-\clearpage\section{Non-functional Requirements}
-Additional requirements that may be added to improve on the program.
-\subsection{Performance Requirements}
-\subsection{Safety and Security Requirements}
-\subsection{Software Quality Attributes}
-\subsubsection{Availability}
-\subsubsection{Reliability}
-\subsubsection{Extensibility}
-\subsubsection{Interoperability}
-\subsection{Business Rules}
-
-\end{document}
+\clearpage
+\input{RASD_NFR}
