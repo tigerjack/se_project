@@ -1,5 +1,4 @@
 \section{General Description}
-\subsection{General Description}
 The PowerEnjoy system is created in order to provide a unified platform to be used for reserving and renting electrical Cars.
 
 Access to the full System is reserved to the registered Users, although it is also possible for a Visitor to register themselves, becoming a User.
@@ -47,14 +46,15 @@ Here are explained the main needs of the PowerEnJoy system.
   \end{tabular}
 \end{center}
 
-\subsection{Operating Environment}\label{OE}
+\subsection{Constraints}
+\subsubsection{Operating Environment}\label{OE}
 Users and Visitors will access the System through a smartphone application. The smartphones used to access the application will need to have a sufficiently advanced hardware in order to run it, and the application will require both an Internet connection and a GPS signal. The mobile application will, however, only be required in order to run the Find Nearby Cars, Reservation and Proximity Unlock functions.
 
 The Cars will also need to be modified by adding a device capable of getting GPS signal and remotely communicate with the central System.
 
 The central System will need a suitably powerful elaborator to run on.
 
-\subsection{Design and Implementation Constraints}
+\subsubsection{Design and Implementation Constraints}
 The system will employ the HTTP protocol in order to have the client software, both the software application and the one installed on the Cars, communicate with the central System. As mentioned above, a network connection will be necessary. In order to maximize availability, it is advised to use the best available hardware.
 
 User ID and password will be required in order to access the System. In order to register as a User, a Visitor needs to undergo Registration. 
@@ -62,17 +62,4 @@ User ID and password will be required in order to access the System. In order to
 \subsection{Assumptions and Dependencies}
 \input{RASD_Assumptions}
 
-\clearpage\section{External Interface Requirements}
-The interfaces the system should interact with.
-\subsection{User Interface}
-The User Interface is provided by the client smartphone application, and allows the user to perform all of their actions.
-\subsection{Hardware Interface}
-The client application must be developed so as to have access to both the phone's network connection and its GPS locator.
-
-The central server must be provided with one or more sufficiently advanced computers that may run the server-side application, and allow it access to a high-speed network connection.
-
-The Cars will be fitted with the device mentioned in \ref{OE}, allowing access to various informations, such as battery status, location, and eventual presence of Passengers.
-\subsection{Software Interface}
-The System does not need to interface with external software. Database management can be performed via the Administrative Access function.
-\subsection{Communication Interface}
-As mentioned above, the System heavily uses Internet communications protocols, mainly the HTTP protocol. HTTP requests to and from the server will be mostly carried by mobile network connections.
+\clearpage

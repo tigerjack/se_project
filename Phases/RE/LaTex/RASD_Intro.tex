@@ -1,42 +1,110 @@
 \section{Introduction}
+
 \subsection{Purpose}
 This document presents the requirements of the \emph{PowerEnJoy} system, aimed at powering a car-sharing service. Said requirements will be presented using both natural language and diagrams.
+
 \subsection{Intended Audience}
 This document is addressed to all the stakeholders in the \emph{PowerEnJoy} project. This includes, but is not limited to, the CEO, the end users, the development committee, product designers and engineers, quality assurance and marketing.
+
 \subsection{Product Scope}
 The \emph{PowerEnJoy} is a partially automated electric car-sharing service. The system keeps track of users and Cars, addresses users to available cars, locks cars when not in use, and charges the users for use and abuse of the Cars. The system also needs to keep track of the battery level of the Cars and dispatch personnel to connect low-on-battery Cars to the power grid.
 
 It is important to notice that this document only describes the requirements for the software dealing with the cars, not the hardware on which the software will run or the management system.
+
 \subsection{Definitions, Acronyms and Abbreviations}
+
 \subsubsection{Business terms glossary}
-[OBSOLETE: REFER TO GLOSSARY.TXT, THIS WILL BE UPDATED LATER]
-\paragraph{Car-sharing}
-A \emph{Car-sharing} service allows \emph{Users} to rent \emph{Cars} for a limited amount of time, being charged a \emph{Fee} according to time and possibly applying a \emph{Discount} or an \emph{Increase}.
-\paragraph{Database}
-A structure that holds informations linked logically according to relationships. For instance, a \emph{Database} could hold records of every registered \emph{User}, every available \emph{Car} and every time a \emph{User} rented a \emph{Car}.
-\paragraph{Discount}
-A reduction in the \emph{Fee} to be paid because of good behaviour on the part of the \emph{User}, e.g. leaving the \emph{Car} plugged or bringing it back with a mostly-full battery. The actions that constitute good behaviour are determined ad detailed further in the document. [ADD A REFERENCE WHEN YOU MAKE THE SECTION]
-\paragraph{Fee}
-The amount of money that the \emph{User} will be charged for his usage of the \emph{Car-sharing} service.
-\paragraph{Increase}
-An increase in the \emph{Fee} to be paid because of improper behavious on the part of the \emph{User}, e.g. bringing the \emph{Car} back with a mostly-empty battery.
-\paragraph{Management System}
-An external system that allows administrative access to the internal \emph{Database}.
-\paragraph{System}
-The automated software structure this document is about. It tracks \emph{Users} and \emph{Cars} and deals with all the details needed for \emph{Car-sharing}, from GPS mapping to charging \emph{Users} with \emph{Fees}.
-\paragraph{User}
-A person registered on the \emph{System}, who will use the \emph{Cars} for a \emph{Fee}.
-\paragraph{Car}
-An electric car owned by the \emph{Car-sharing} service, rented to the \emph{User} and tracked by the \emph{System}.
+\begin{itemize}
+	\item \emph{Account}
+	An account is a virtual representation of a User. The System can read and store information about a User by editing their Account.
+	
+	\item \emph{Battery}
+	A Battery powers a Vehicle. The charge state of the Battery can be anywhere between 0% and 100%, is reduced when the Vehicle is In Use, and increases when the Vehicle is Plugged to a Charging Area.
+	
+	\item \emph{Banking System}
+	An interface that allows the System to charge the users for a Fee.
+	
+	\item \emph{Car}
+	An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A Car has a status and a Plugged flag, the status can be:
+	\begin{itemize}
+		\item In Use, if a User is driving it
+		\item Available, if it can be Reserved
+		\item Reserved, if it is linked to a User but not yet In Use
+		\item Unavailable if it can't be Reserved (for example due to damage, battery exhaustion etc.)
+	\end{itemize}
+	The Plugged Flag can be true or false indicating if the Car is plugged or not.
+	
+	\item \emph{Car-sharing}
+	A Car-sharing service allows Users to rent Cars for a limited amount of time, being charged a Fee according to time and possibly applying a Discount or an Increase.
+
+	\item \emph{Charging Area}
+	A special Parking Area where Cars can be Plugged.
+
+	\item \emph{Company}
+	The enterprise that want to built the System to provide a car-sharing services to its Users. It is the main stakeholder.
+
+
+	\item \emph{Database}
+	A structure that holds informations linked logically according to relationships. For instance, a Database could hold records of every registered User, every available Cars and every time a User rented a Vehicle.
+
+	\item \emph{Discount}
+	A reduction in the Fee to be paid because of good behaviour on the part of the User, e.g. leaving the Cars plugged or bringing it back with a mostly-full battery. The actions that constitute good behaviour are determined ad detailed further in the document.
+
+	\item \emph{Employee}
+	He's an employee of the Company which is charged of every kind of maintenance of the Car. (Charging the Car battery on-site, moving a Car to a Charging Area and so on). 
+
+	\item \emph{Fee}
+	The amount of money that the User will be charged for their usage of the Car-sharing service, or for making a Reservation that is not used.
+
+	\item \emph{GPS}
+	Global Positioning System. A system that allows to precisely know the position of the device on which is installed. (Detect Car's, User's and Charging Area's position).
+
+
+	\item \emph{Surcharge}
+	An increase in the Fee to be paid because of improper behaviour on the part of the User, e.g. bringing the Cars back with a mostly-empty battery.
+
+	\item \emph{Management System}
+	An external system that allows administrative access to the internal Database.
+
+	\item \emph{Parking Area}
+	A place where the User can leave their Car and exit it to end the Ride. Parking Areas are predefined by the System.
+
+	\item \emph{Passenger}
+	Someone (either User or not) who travels in a Cars rented by a User together with them.
+
+	\item \emph{Plug}
+	A part of the Car that interfaces itself with a Socket of a Charging Area. If a Car's Plug is linked to a Charging Area's Socket, the Car is Plugged.
+
+	\item \emph{Ride}
+	Represents the travel done with the Car by the User. It starts from the moment the User ignites the engine of the Car and ends when the Car is parked in a Parking Area and the User exits the Car.
+
+	\item \emph{Reservation}
+	A User can make a Reservation in order to link themselves with an Available Car.
+
+	\item \emph{Socket}
+	A part of the Charging Area that interfaces itself with the Plug of a Car. If a Car's Plug is linked to a Charging Area's Socket, the Car is Plugged.
+
+	\item \emph{System}
+	The automated software structure this document is about.
+	It tracks Users and Vehicles and deals with all the details needed for Carsharing, from GPS mapping to charging Users with Fees.
+
+	\item \emph{User}
+	A person registered on the System, who will use the Vehicles for a Fee.
+
+	\item \emph{Visitor}
+	A person who needs to complete the registration in order to become a User.
+\end{itemize}
 
 \subsubsection{Document specific terms}
-\paragraph{Alloy}
-A descriptive language that allows to describe a set of structures through constraints.
-\paragraph{DBMS}
-Data Base Management System. A software interface allowing to interact with the \emph{Database}.
-\paragraph{RASD}
-Requirements Analysis and Specification Document. This document, describing the \emph{System} to be developed.
-\paragraph{UC}
-Use Case. A description of interaction between \emph{Users} and \emph{System}.
-\paragraph{UML}
-Unified Modeling Language. A language for modeling Object-Oriented software systems.
+\begin{itemize}
+	\item \emph{Alloy.}
+	A descriptive language that allows to describe a set of structures through constraints.
+	\item \emph{DBMS.}
+	Data Base Management System. A software interface allowing to interact with the \emph{Database}.
+	\item \emph{RASD.}
+	Requirements Analysis and Specification Document. This document, describing the \emph{System} to be developed.
+	\item \emph{UC.}
+	Use Case. A description of interaction between \emph{User}s and \emph{System}.
+	\item \emph{UML.}
+	Unified Modeling Language. A language for modeling Object-Oriented software systems.
+\end{itemize}
