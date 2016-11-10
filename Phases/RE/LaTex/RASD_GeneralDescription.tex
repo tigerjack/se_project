@@ -1,0 +1,78 @@
+\section{General Description}
+\subsection{General Description}
+The PowerEnjoy system is created in order to provide a unified platform to be used for reserving and renting electrical Cars.
+
+Access to the full System is reserved to the registered Users, although it is also possible for a Visitor to register themselves, becoming a User.
+
+Once registered, a User will have easy access to the functionalities of PowerEnJoy, allowing them to see the locations of nearby Cars, reserve and rent them and enable money-saving options to become eligible for Discounts.
+
+\subsection{Product Perspective}
+The main System will be housed on a central elaborator, called server. This server will be responsible for all necessary operations, including communicating with the internal Database, keeping track of all the Cars and interacting with the Banking System in order to charge Fees to the Users.
+The user will access the System through a mobile app (client), connected to the main System via Internet, and interacting with the Smartphone's GPS System. Information exchange between the client and the server will be based on the HTTP protocol.
+
+\subsection{Product Functions}
+Here are explained the main needs of the PowerEnJoy system.
+\begin{center}
+  \begin{tabular}{|p{.2\textwidth}|p{.12\textwidth}|p{.58\textwidth}|}
+    \hline
+    \textbf{Need} & \textbf{Priority} & \textbf{Function} \\ \hline
+    Registration & ? & Allows a Visitor to register their credentials, becoming a User \\ \hline
+    Login & ? & Lets a User access the system \\ \hline
+    Find Nearby Cars & ? & Shows Available Cars in a location \\ \hline
+    Reservation & ? & Allows a user to set a nearby Car as Reserved \\ \hline
+    Proximity Unlock & ? & Unlocks the car when the User who Reserved it is close \\ \hline
+  \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{|p{.2\textwidth}|p{.12\textwidth}|p{.58\textwidth}|}
+    \hline
+    \textbf{Need} & \textbf{Priority} & \textbf{Function} \\ \hline
+    Computation & ? & Computes the Fee to be paid, including Discounts and Increases \\ \hline
+    Payment & ? & Charges the user for the computed Fee \\ \hline
+    Detect Parking & ? & Detects whether a Car has been left in a Parking Area \\ \hline
+    Detect Charging & ? & Detects whether a Car is Plugged to a Charging Area \\ \hline
+    Administrative Access & ? & Allows an administrator to modify the information in the Database or parametres of the System \\ \hline
+  \end{tabular}
+\end{center}
+
+\subsection{User Classes and Characteristics}
+\begin{center}
+  \begin{tabular}{|p{.2\textwidth}|p{.39\textwidth}|p{.39\textwidth}|}
+    \hline
+    \textbf{Name} & \textbf{Description} & \textbf{Responsibility} \\ \hline
+    Visitor & A person who needs to undergo Registration to become a User & Performs a Registration \\ \hline
+    User & Someone who is registered in the system and can access its functionalities & Can find, reserve and rent Cars \\ \hline
+    Administrator & A specialized worker for the Company & Can modify the Database and the application's various parameters \\ \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Operating Environment}\label{OE}
+Users and Visitors will access the System through a smartphone application. The smartphones used to access the application will need to have a sufficiently advanced hardware in order to run it, and the application will require both an Internet connection and a GPS signal. The mobile application will, however, only be required in order to run the Find Nearby Cars, Reservation and Proximity Unlock functions.
+
+The Cars will also need to be modified by adding a device capable of getting GPS signal and remotely communicate with the central System.
+
+The central System will need a suitably powerful elaborator to run on.
+
+\subsection{Design and Implementation Constraints}
+The system will employ the HTTP protocol in order to have the client software, both the software application and the one installed on the Cars, communicate with the central System. As mentioned above, a network connection will be necessary. In order to maximize availability, it is advised to use the best available hardware.
+
+User ID and password will be required in order to access the System. In order to register as a User, a Visitor needs to undergo Registration. 
+
+\subsection{Assumptions and Dependencies}
+\input{RASD_Assumptions}
+
+\clearpage\section{External Interface Requirements}
+The interfaces the system should interact with.
+\subsection{User Interface}
+The User Interface is provided by the client smartphone application, and allows the user to perform all of their actions.
+\subsection{Hardware Interface}
+The client application must be developed so as to have access to both the phone's network connection and its GPS locator.
+
+The central server must be provided with one or more sufficiently advanced computers that may run the server-side application, and allow it access to a high-speed network connection.
+
+The Cars will be fitted with the device mentioned in \ref{OE}, allowing access to various informations, such as battery status, location, and eventual presence of Passengers.
+\subsection{Software Interface}
+The System does not need to interface with external software. Database management can be performed via the Administrative Access function.
+\subsection{Communication Interface}
+As mentioned above, the System heavily uses Internet communications protocols, mainly the HTTP protocol. HTTP requests to and from the server will be mostly carried by mobile network connections.
