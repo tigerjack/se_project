@@ -1,18 +1,17 @@
 \section{Introduction}
 
 \subsection{Purpose}
-This document presents the requirements of the \emph{PowerEnJoy} system, aimed at powering a car-sharing service. Said requirements will be presented using both natural language and diagrams.
+This document presents the requirements of the \emph{PowerEnJoy} system, aimed at powering a car-sharing service. Said requirements will be presented using a mix of natural language, diagrams and code.
 
 \subsection{Intended Audience}
-This document is addressed to all the stakeholders in the \emph{PowerEnJoy} project. This includes, but is not limited to, the CEO, the end users, the development committee, product designers and engineers, quality assurance and marketing.
+This document is addressed to all the stakeholders in the \emph{PowerEnJoy} project. This includes, but is not limited to, the CEO, the development committee, product designers and engineers, quality assurance and marketing.
 
 \subsection{Product Scope}
-The \emph{PowerEnJoy} is a partially automated electric car-sharing service. The system keeps track of users and Cars, addresses users to available cars, locks cars when not in use, and charges the users for use and abuse of the Cars. The system also needs to keep track of the battery level of the Cars and dispatch personnel to connect low-on-battery Cars to the power grid.
-
-It is important to notice that this document only describes the requirements for the software dealing with the cars, not the hardware on which the software will run or the management system.
+The \emph{PowerEnJoy} is a \textbf{Car-Sharing} service. 
+The \textbf{System} keeps track of \textbf{Car}s position, addresses \textbf{User}s to available \textbf{Car}s, locks \textbf{Car}s when not \textbf{In Use}, and charges the \textbf{User}s for use of the \textbf{Car}s. 
+The \textbf{System} also needs to keep track of the \textbf{Battery} level of the \textbf{Car}s and dispatch \textbf{Employee} to connect low-on-battery \textbf{Car}s to the power grid.
 
 \subsection{Definitions, Acronyms and Abbreviations}
-
 \subsubsection{Business terms glossary}
 \begin{itemize}
 	\item \emph{Account}
@@ -27,12 +26,12 @@ It is important to notice that this document only describes the requirements for
 	\item \emph{Car}
 	An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A Car has a status and a Plugged flag, the status can be:
 	\begin{itemize}
-		\item In Use, if a User is driving it
-		\item Available, if it can be Reserved
-		\item Reserved, if it is linked to a User but not yet In Use
-		\item Unavailable if it can't be Reserved (for example due to damage, battery exhaustion etc.)
+		\item \textit{In Use}, if a User is driving it
+		\item \textit{Available}, if it can be Reserved
+		\item \textit{Reserved}, if it is linked to a User but not yet In Use
+		\item \textit{Unavailable} if it can't be \textit{Reserved} (for example due to damage, battery exhaustion etc.)
 	\end{itemize}
-	The Plugged Flag can be true or false indicating if the Car is plugged or not.
+	The \textit{Plugged} flag indicate if the \emph{Car} is plugged or not to the power grid.
 	
 	\item \emph{Car-sharing}
 	A Car-sharing service allows Users to rent Cars for a limited amount of time, being charged a Fee according to time and possibly applying a Discount or an Increase.
@@ -42,7 +41,6 @@ It is important to notice that this document only describes the requirements for
 
 	\item \emph{Company}
 	The enterprise that want to built the System to provide a car-sharing services to its Users. It is the main stakeholder.
-
 
 	\item \emph{Database}
 	A structure that holds informations linked logically according to relationships. For instance, a Database could hold records of every registered User, every available Cars and every time a User rented a Vehicle.

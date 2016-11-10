@@ -13,97 +13,128 @@
 	
 	% The table itself
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
-	\textbf{Description} & Visitor wants to create an account for the Car-Sharing Service. \\ \hline
-	\textbf{Actors} & Visitor.\\ \hline
-	\textbf{Description} & Visitor wants to create an account for the Car-Sharing Service. \\ \hline
-	\textbf{Pre-Conditions} & The Visitor connects to the Company's Car Sharing Web Site/ Application. \\ \hline
+	\textbf{Description} & The Visitor wants to create an account for the Car-Sharing Service. \\ \hline
+	\textbf{Actors} & \emph{Visitor}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the \emph{Company's Car-Sharing}} WebSite/Application. \\ \hline
 	\textbf{Flow of events} & 
 		\begin{enumerate}
-			\item The Visitor selects the function \textit{\textquotedblleft{Sign Up}\textquotedblright}.
-			\item The System returns a form to enter all the required data: Name, Surname, Birth date, Social Security Number, ID Card Number, Driving License number and Credit Card number. It also asks for an Email address and a password which will be used for the future logins.
-			\item The Visitor fill the forms with all the required information.
-			\item The System stores the request together with all the data provided with it, generates a random activation URL and asks the Mail System to forward this/her URL to the email address of the Visitor.
+			\item The \emph{Visitor} selects the function \textit{\textquotedblleft{Sign Up}\textquotedblright}.
+			\item The \emph{System} returns a form to enter all the required data: Name, Surname, Birth date, ID Card Number, Driving License number and Credit Card number. It also asks for an email address and a password which will be used for the future logins.
+			\item The \emph{Visitor} fills the form with all the required information.
+			\item The \emph{System} stores the request together with all the data provided with it, generates a random activation URL and asks the \emph{Mail System} to forward his/her URL to the email address of the \emph{Visitor}.
 		\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The Mail System sends the activation URL to the Visitor's email provided in the registration form. \\ \hline
+	\textbf{Post Conditions} & The \emph{Mail System} sends the activation URL to the \emph{Visitor}'s email provided in the registration form. \\ \hline
 	\textbf{Exceptions} & 
 		\begin{itemize}
-		\item The System recognizes invalid or missing data in the form compiled by the Visitor and informs him/her of the error. The flow of events restarts from point 1.
+		\item The \emph{System} recognizes invalid or missing data in the form compiled by the emph{Visitor}and informs him/her of the error. The flow of events restarts from point 1.
 		\item The Visitor inserts in the form a Social Security Number, or ID Card Number, or Driving License number, or Email Address, which is already present in the System. The System shows an error message saying that some of those credentials were already been inserted into the System for another account. The flow of events restarts from point 1.
 		\end{itemize} \\ \hline
 \end{longtable}
 
+\stepcounter{UseCaseIdCounter}
 
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Activate Account}} % Table caption
+	\label{UC_Activate}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The Visitor wants to activate his/her account. \\ \hline
+	\textbf{Actors} & \emph{Visitor}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{Visitor} has received the activation URL on his/her mail box. \\ \hline
+	\textbf{Flow of ev-ents} & 
+	\begin{enumerate}
+		\item The \emph{Visitor} opens the received activation URL.
+		\item The \emph{System} acknowledges that the Visitor has arrived in his/her activation Web Page and activates his/her account.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{Visitor} is now become an \emph{User} which can access the \emph{System} using the credentials (Email, password) he provided during the registration phase. \\ \hline
+	\textbf{Exceptions} & 
+	\begin{itemize}
+		\item The Activation URL expires after 10 days it has been generated. The Visitor?s data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
+	\end{itemize} \\ \hline
+\end{longtable}
+
+\stepcounter{UseCaseIdCounter}
+
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Log In}} % Table caption
+	\label{UC_Login}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The Visitor wants to log in the System. \\ \hline
+	\textbf{Actors} & \emph{Visitor}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the Company's \emph{Car-Sharing WebSite/Application} \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{Visitor} selects the function \textit{\textquotedblleft{Login}\textquotedblright} .
+		\item The \emph{System} shows the \emph{Visitor} a login form, asking him to insert the email and password provided in the registration form.
+		\item The \emph{Visitor} inserts the pair (Email,Password) used during the registration phase and selects the function \textit{\textquotedblleft{Log me in}\textquotedblright}
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{System} verifies the existence of an account associated with that pair (Email,password) and logs the \emph{Visitor} in. The \emph{Visitor} has now become \emph{User}  \\ \hline
+	\textbf{Exceptions} & 
+	\begin{itemize}
+		\item The Activation URL expires after 10 days it has been generated. The Visitor?s data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
+	\end{itemize} \\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
+
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Log Out}} % Table caption
+	\label{UC_Logout}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The User wants to log out from the System. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} is logged in the \emph{System} \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} selects the function \textit{\textquotedblleft{Log out}\textquotedblright} .
+		\item The \emph{System} performs the \emph{User}'s logout.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{System} shows the confirmation of the logout to the \emph{User}\\ \hline
+	The \emph{User} is now not able to use the \emph{System} functionalities dedicated to Users anymore (until he logs in again). \\ \hline
+	\textbf{Exceptions} & 
+	\begin{itemize}
+	\end{itemize} \\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
+
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Locate Available Cars}} % Table caption
+	\label{UC_LocateCars}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The User wants to locate the avialable Cars. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} is logged in the \emph{System} \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} selects the function \textit{\textquotedblleft{Locate Cars}\textquotedblright} .
+		\item The \emph{System} shows a text box asking the \emph{User} to provide an address near which he/she would like to see the \emph{Cars} whose state is \textit{Available}.
+		\item The \emph{User} inserts the desired address and selects the \textit{\textquotedblleft{Locate}\textquotedblright} function.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{System} shows the confirmation of the logout to the \emph{User}\\ \hline
+	The \emph{User} is now not able to use the \emph{System} functionalities dedicated to Users anymore (until he logs in again). \\ \hline
+	\textbf{Exceptions} & 
+	\begin{itemize}
+	\end{itemize} \\ \hline
+\end{longtable}
 %%%%%OTHER USE CASES!!
-USE CASE : Activate Account.
-
-Id:  UC2
-Description
-The Visitor wants to activate his/her/her account.
-
-Actors
-Visitor.
-
-Pre-Conditions
-The Visitor has received the activation URL on his/her mail box.
-
-
-
-Flow of events
-
-1. The Visitor clicks on the received activation URL.
-2. The System acknowledges that the Visitor has arrived in his/her activation Web Page and activates his/her account.
-
-Post-Conditions
-The Visitor is now become the User which can access the System using the credentials (Email, password) he provided during the registration phase.
-Exceptions :
-The Activation URL expires after 10 days it has been generated. The Visitor?s data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
-
-USE CASE : Log in
-
-Id:  UC3
-
-Description
-The User wants to log in the System.
-
-Actors
-User.
-
-Pre-Conditions
-The User connects to the Company?s Car Sharing Web Site/Application .
-
-Flow of events
-1. The User selects the function ?Login?.
-2. The System shows the User a login form, asking him/her to insert his/her account Email and password.
-3. The User inserts the pair (Email, Password) used during the registration phase and selects the function ?Log me in?.
-
-Post-Condition
-The System verifies the existence of an account associated with that pair (Email, Password) and logs the User in.
- The User has now access to the System User?s dedicated functionalities.
-Exceptions :
-4 	The System doesn?t find an account associated with that pair (Email, Password) and   shows an error message, the flow of events starts from point 1.
-
-USE CASE : Log out
-
-Id:  UC4
-Description
-The User which is logged in the System wants to log out.
-
-Actors
-User
-
-Pre-Conditions
-The User is logged in the System.
-
-
-
-Flow of events
-
-1. The User selects the function ?log out?.
-2. The System performs the User?s logout.
-Post-Condition
-The System shows the confirmation of the logout to the User.
-The User is now not able to use the System functionalities dedicated to Users anymore (until he logs in again).
-
 USE CASE : Locate available cars.
 Id:  UC5
 
