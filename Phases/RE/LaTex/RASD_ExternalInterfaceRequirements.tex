@@ -1,0 +1,39 @@
+\subsection{External Interface Requirements}
+%TODO I would avoid to include here the interfaces of the base software (operating system, web server, etc) for your system. Focus instead on the external software your system is going to interact with (e.g., the payment gateway you mentioned)
+This system provides a detailed description of all inputs into and outputs from the system. It also gives a general description of the hardware, software and comunication interfaces.
+
+\subsubsection{Software Interface}
+The Application has to communicate with the GPS module in order to get the GPS position of the User.
+
+The Application has to communicate with the Database 
+
+\subsubsection{User Interface}
+The Application is the only interface between a User and the System.
+
+A generic Visitor of the Application should see the registration and login forms. If the Visitor has not registered yet, he/she should be able to do it through the registration form.
+On the other hand, if the Visitor is already registered, he/she should be able to log in through the login form.
+
+Whenever a Visitor logs in into th e System through the Application, he/she becomes a User and can access all the functionalities of the System reserved to him/her.
+
+Every User use the Application to :
+\begin{itemize}
+	\item communicate to the System his/her GPS position and visualize it on a map
+	\item locate all the Cars Available in a range of 3 km from his/her GPS position or from a given address and visualize them on a map
+	\item reserve a Car among the one previously displayed
+	\item unlock a Car when he/she is nearby the previously reserved Car
+	\item know if a car is plugged to a socket of a Charging Area
+	\item know the Battery status of a Car
+	\item know the GPS position of Charging Area and Parking Area and visualize it on a map	
+	\item select the \textit{Money saving option}
+\end{itemize}
+
+The Application also communicate to the User short error messages.
+	
+\subsubsection{Hardware Interface}
+
+
+The central server must be provided with one or more sufficiently advanced computers that may run the server-side application, and allow it access to a high-speed network connection.
+
+
+\subsubsection{Communication Interface}
+As mentioned above, the System heavily uses Internet communications protocols, mainly the HTTP protocol. HTTP requests to and from the server will be mostly carried by mobile network connections.
