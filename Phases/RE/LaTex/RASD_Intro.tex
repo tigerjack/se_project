@@ -1,142 +1,134 @@
 \subsection{Purpose}
-This document presents the requirements of the \emph{PowerEnJoy} system, aimed at powering a car-sharing service. Said requirements will be presented using a mix of natural language, diagrams and code.
+This paper represents the \textbf{R}equirement \textbf{A}nalysis and \textbf{S}pecification \textbf{D}ocument of the \textit{System Under Development}, which will implement the \emph{PowerEnJoy Car-Sharing} Service. This document aims at explaining the functionalities of the System in terms of Functional Requirements, NonFunctional Requirements and Special Requirements, represented using both diagrams and natural language.
 
 %\newcounter{GoalCounter}
 %\stepcounter{GoalCounter}
 %TODO Insert goals in this section and label them
-The above is a comprehensive list of functionalities provided by the system, that actually translates to a list of goals that the system should reach.
+The above is a comprehensive list of functionalities provided by the System, that actually translates to a list of goals that the system should reach.
 
 \begin{enumerate}
-	\item The system should allow the registration of the Visitors with their credentials and payment informations.
-	\item The system should allow all Users to use all the functionalities reserved to them.
-	\item The system should be able to give each User the list of all the available cars in a range of 5KM from his/her GPS position.
-	\item The system should allow each of its Users to reserve a Car whose state is Available.
-	\item If an User has reserved a Car and he/she not unlock it within 1 hour from the reservation, the system set the car state as Available, the reservation expires and the user pays a fixed Fee of 1 EUR.  
-	\item The system should allow each User to unlock a previously reserved Car when he/she is in a distance range of 15 meters from the same Car.
-	\item The system should allow each User to drive a Car which he/she has previously unlocked, .
-	\item The system should be able to know the time usage of the minutes.
-	\item The system should allow each User to end the ride in a Parking Area.
-	\item If the system detects the user took at least two other passengers onto the car, the system applies a discount of 10\% on the last ride. 
-	\item If a car is left with no more than 50\% of the battery empty, the system applies a discount of 20\% on the last ride. 
-	\item If a car is left at special parking areas where they can be recharged and the user takes care of plugging the car into the power grid, the system applies a discount of 30\% on the last ride. 
-	\item If a Car is left at more than 3 KM from the nearest power grid station or with more than 80\% of the battery empty, the system charges 30\% more on the last ride to compensate for the cost required to recharge the car on-site.
-	\item If the user enables the money saving option, he/she can input his/her final destination and the system provides information about the Charging Area where to leave the Car in order to get a Discount on the total Fee. The Charging Area is determined by the system to ensure a uniform distribution of Cars in the city and depends both on the destination of the User and on the availability of Sockets at the selected Charging Area. 
+	\item[G1] The System should allow the registration of the Visitors with their credentials and payment informations.
+	\item[G2] The System should allow all Users to use all the functionalities reserved to them.
+	\item[G3] The System should be able to give each User the list of all the available cars in a range of 5KM from his/her GPS position.
+	\item[G4] The System should allow each of its Users to reserve a Car whose state is Available.
+	\item[G5] If an User has reserved a Car and he/she not unlock it within 1 hour from the reservation, the System sets the Car state as Available, the reservation expires and the user pays a fixed Fee of 1 EUR.  
+	\item[G6] The system should allow each User to unlock a previously reserved Car when he/she is in a distance range of 15 meters from the same Car.
+	\item[G7] The system should allow each User to drive a Car which he/she has previously unlocked.
+	\item[G8] The System should be able to know the time usage of the Car, misured in minutes.
+	\item[G9] The system should allow each User to end the ride in a Parking Area.
+	\item[G10] If the System detects the User took at least two other passengers onto the Car, the system applies a discount of 10\% on the last ride. 
+	\item[G11] If a Car is left with no more than 50\% of the battery empty, the System applies a discount of 20\% on the last ride. 
+	\item[G12] If a Car is left at special parking areas where they can be recharged and the User takes care of plugging the Car into the power grid, the System applies a discount of 30\% on the last ride. 
+	\item[G13] If a Car is left at more than 3 KM from the nearest Charging Area or with more than 80\% of the battery empty, the system charges 30\% more on the last ride to compensate for the cost required to recharge the car on-site.
+	\item[G14] If the User enables the money saving option, he/she can input his/her final destination and the System provides the address of the Charging Area where to leave the Car in order to get a Discount on the total Fee. The Charging Area is determined by the System to ensure a uniform distribution of Cars in the city and depends both on the destination of the User and on the availability of Sockets at the selected Charging Area. 
 \end{enumerate}
 
 
 \subsection{Intended Audience}
-This document is addressed to all the stakeholders in the \emph{PowerEnJoy} project. This includes, but is not limited to, the CEO, the development committee, product designers and engineers, quality assurance and marketing.
+This document is addressed to all the stakeholders involved in the \emph{PowerEnJoy} project. This includes, but it is not limited to, the development committee, product designers and engineers, quality assurance, who will decide if the requirements described in this document have met the intended system requirements.
 
+%TODO Migliorare
 \subsection{Product Scope}
 %TODO Add The World and the Machine here
-The \emph{PowerEnJoy} is a \textbf{Car-Sharing} service. 
-The \textbf{System} keeps track of \textbf{Car}s position, addresses \textbf{User}s to available \textbf{Car}s, locks \textbf{Car}s when not \textbf{In Use}, and charges the \textbf{User}s for use of the \textbf{Car}s. 
-The \textbf{System} also needs to keep track of the \textbf{Battery} level of the \textbf{Car}s and dispatch \textbf{Employee} to connect low-on-battery \textbf{Car}s to the power grid.
+The aim of the \emph{PowerEnJoy} project is to provide a \textit{Car-Sharing} Service which implements electric-powered cars only.
+This system will have to interface the Cars, Charging Areas, allowing Users to reserve, unlock, drive and park Cars, finally charging them the cost of the ride. 
+The System will keep track of Cars' position, battery level, possible damages, plugging state.
 
 \subsection{Definitions, Acronyms and Abbreviations}
 \subsubsection{Business terms glossary}
 \begin{itemize}
-	\item \emph{Account}
-	An account is a virtual representation of a User. The System can read and store information about a User by editing their Account.
+	\item \emph{Account} \\
+	An Account is a virtual representation of a User in the System. The System can read and store information about a User.
 	
-	\item \emph{Application}
-	%TODO
+	\item \emph{Application} \\
+	It's the software interface between the User and the System, which allows the User to access the System functionalities.
 	
-	\item \emph{Battery}
+	\item \emph{Battery} \\
 	A Battery powers a Vehicle. The charge state of the Battery can be anywhere between 0\% and 100\%, is reduced when the Vehicle is In Use, and increases when the Vehicle is Plugged to a Charging Area.
 
 	
-	\item \emph{Car}
-	An electric car owned by the Car-sharing service, rented to the User and tracked by the System. A Car has a status and a Plugged flag, the status can be:
+	\item \emph{Car} \\
+	An electric car owned by the Car-sharing service, rented to the User and tracked by the System.The Car communicates to the System its position, the status of its battery, its damages, the connection to an electrical socket and the number of seats occupied. A Car has a status and a Plugged flag, the status can be:
 	\begin{itemize}
 		\item \textit{In Use}, if the engine is turned on. In this state, it cannot be Reserved by an User.
 		\item \textit{Available}, if it can be Reserved by an User.
 		\item \textit{Reserved}, if an User has reserved it but has still not unlocked it.
-		\item \textit{Unavailable} if it can't be \textit{Reserved} by any User (for example due to damage, battery exhaustion, ...)
+		\item \textit{Unavailable} if it can't be \textit{Reserved} by any User (for example due to damage, battery exhaustion, mainteinance, ...)
 	\end{itemize}
-	In addition, The \textit{Plugged} flag indicate if the \emph{Car} is plugged or not to the power grid, while the 
+	Additionally, the \textit{Plugged} flag indicates if the {Car} is plugged or not to the socket of the Charging Area.
 	
-	\item \emph{Car-sharing}
+	\item \emph{Car-sharing} \\
 	A Car-sharing service allows Users to rent Cars for a limited amount of time, being charged a Fee according to time and possibly applying a Discount or an Increase.
+	
+	\item \emph{Charging Area} \\		
+	A special Parking Area where Cars plugs can be connected to the socket in order to recharge their Battery.	
 
-	\item \emph{Company}
-	The enterprise that want to built the System to provide a car-sharing services to its Users. It is the main stakeholder.
+	\item \emph{Company} \\
+	The enterprise that wants to build the System to provide a \textit{Car-Sharing} Service. It represents the main stakeholder.	
+	
+	\item \emph{Database} \\
+	A structure that holds all the information used by the System. For instance, a Database could hold records of every User, Car, every time a User rented a Car,and so on.
 
-	\item \emph{Company Area}
-	An area owned by the company. There are two kinds of Company Area in our system.
-	\begin{itemize}
-		\item \emph{Parking Area}
-		A place where the User can leave their Car and exit it to end the Ride. Parking Areas are predefined by the System.
-		\item \emph{Charging Area}
-		A special Parking Area where Cars can connect their plug to an available socket in order to recharge their Battery.		
-	\end{itemize}	
+	\item \emph{Discount} \\
+	A reduction in the Fee because of good behaviour on the part of the User, e.g. leaving the Cars plugged or bringing it back with a mostly-full battery. The actions that constitute good behaviour are determined ad detailed further in the document.
 
-	\item \emph{Database}
-	A structure that holds informations linked logically according to relationships. For instance, a Database could hold records of every registered User, every available Cars and every time a User rented a Vehicle.
+	\item \emph{Employee}\\
+	He's an employee of the Company which is charged of every kind of maintenance of the Car (Charging the Car battery on-site, moving a Car to a Charging Area and so on). The employees are handled by an External System
 
-	\item \emph{Discount}
-	A reduction in the Fee to be paid because of good behaviour on the part of the User, e.g. leaving the Cars plugged or bringing it back with a mostly-full battery. The actions that constitute good behaviour are determined ad detailed further in the document.
+	\item \emph{Fee}\\
+	The amount of money that the User will be charged for their usage of the Car-sharing service, or for making a Reservation that is not fulfilled.
 
-	\item \emph{Employee}
-	He's an employee of the Company which is charged of every kind of maintenance of the Car. (Charging the Car battery on-site, moving a Car to a Charging Area and so on). 
+	\item \emph{GPS}\\
+	Global Positioning System, it's widely used in our System.
 
-	\item \emph{Fee}
-	The amount of money that the User will be charged for their usage of the Car-sharing service, or for making a Reservation that is not used.
+	\item \emph{Surcharge}\\
+	An increase in the Fee caused by an improper behaviour on the part of the User, e.g. bringing the Cars back with a mostly-empty battery.
 
-	\item \emph{GPS}
-	Global Positioning System. A system that allows to precisely know the position of the device on which is installed. (Detect Car's, User's and Charging Area's position).
+	\item \emph{Parking Area}\\
+	A place where the User can leave their Car and exit it to end the Ride. Parking Areas are predefined by the System.
 
-	\item \emph{Surcharge}
-	An increase in the Fee to be paid because of improper behaviour on the part of the User, e.g. bringing the Cars back with a mostly-empty battery.
+	\item \emph{Passenger}\\
+	A person, different from the User, who travels in a Car together with an User. 
 
-	\item \emph{Passenger}
-	Someone (either User or not) who travels in a Cars rented by a User together with them.
+	\item \emph{Plug}\\
+	A part of the Car that can be inserted in a Socket of a Charging Area.
 
-	\item \emph{Plug}
-	A part of the Car that interfaces itself with a Socket of a Charging Area. If a Car's Plug is linked to a Charging Area's Socket, the Car is Plugged.
+	\item \emph{Ride}\\
+	Represents the travel done with the Car by the User. It starts from the moment the User ignites the engine of the Car and ends when the Car is parked in a Parking Area,the User and all the other passengers exit the Car.
 
-	\item \emph{Ride}
-	Represents the travel done with the Car by the User. It starts from the moment the User ignites the engine of the Car and ends when the Car is parked in a Parking Area and the User exits the Car.
+	\item \emph{Reservation}\\
+	A User performs a Reservation in order to book an Available Car for a maximum of 1 hour. In this time period the Car is assigned to the specific User only. An User can only have one active Reservation at time.
 
-	\item \emph{Reservation}
-	A User can make a Reservation in order to link themselves with an Available Car.
+	\item \emph{Socket}\\
+	A part of the Charging Area that can be connected with the Plug of a Car. 
 
-	\item \emph{Socket}
-	A part of the Charging Area that interfaces itself with the Plug of a Car. If a Car's Plug is linked to a Charging Area's Socket, the Car is Plugged.
+	\item \emph{System}\\
+	The software structure this document is about.
 
-	\item \emph{System}
-	The automated software structure this document is about.
-	It tracks Users and Vehicles and deals with all the details needed for Carsharing, from GPS mapping to charging Users with Fees.
+	\item \emph{User}\\
+	A person registered on the System, who has access to the Car-Sharing Service functionalities.
 
-	\item \emph{User}
-	A person registered on the System, who will use the Vehicles for a Fee.
-
-	\item \emph{Visitor}
-	A person who needs to complete the registration in order to become a User.
+	\item \emph{Visitor}\\
+	A person who needs to log in the System to access the Car-Sharing Service functionalities.
 \end{itemize}
 
 \subsubsection{External systems}
 \begin{itemize}
 	\item \emph{Banking System}
 	An external system that allows the System to charge the users for a Fee.
-		
-	\item \emph{Car System}
-	The Cars on-board system that allows to know, in every moment, their position, the status of their battery, the status of the engine, their damages, the connection to an electrical socket and the number of seats occupied.
-
+	
 	\item \emph{Mail System}
-	An external system that allows to send emails to the Users.
+	An external system that allows to send emails to Visitors and Users.
 
 	\item \emph{Mapping System}
 	An external system that is designed to capture, store, manipulate, analyze, manage, and present spatial or geographical data. 
-	It is used in particular to show the GPS position of Cars, Users and Company Areas on a map and get a specific GPS position from an address.
+	It is used in particular to show the GPS position of Cars, Users and Parking Areas on a map, check for existing addresses, and get the exact desired position in a specified address.
 	
-	\item \emph{Management System}
-	An external system that allows administrative access to the internal Database.
 \end{itemize}
 
 \subsubsection{Document specific terms}
 \begin{itemize}
-	\item \emph{Alloy}
+	\item \emph{Alloy} 
 	A descriptive language that allows to describe a set of structures through constraints.
 	\item \emph{DBMS.}
 	Data Base Management System. A software interface allowing to interact with the \emph{Database}.
