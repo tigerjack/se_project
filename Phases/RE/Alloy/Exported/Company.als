@@ -51,10 +51,10 @@ pred show() {
 	#Car > 2
 	#ParkingArea > 2
 	#User > 0
+	#DrivingData = 0
 /*
 	#GPSPoint = 0
 */
 }
 
-run show for 5 but 8 Int
-// but 0 Fee, 0 FixedFee, 0 TimeFee, 10 Vehicle
+run show for 3

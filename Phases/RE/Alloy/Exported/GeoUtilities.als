@@ -1,0 +1,4 @@
+module GeoUtilities
+
+sig Position {}
+

@@ -1,118 +1,76 @@
 module CarUsageFunctions
 open Cars
-open Users
+open Persons
+open BankingFunctions
+open Time
 
 /**
 	SIGNATURES
 */
-abstract sig CarsUsageData {}
 
-sig DrivingData extends CarsUsageData {
-	isDriving: User lone -> lone Car,
-	// The minutes passed from the driving start
-	ridingMinutes: Int,
-	// The range of minutes in which there is a passenger in the car
-	passengersMinutesRange: Int
+
+one sig ReservationData {
+	// for a given ReservingData and at a given Time, each Car is associated (i.e.
+	// reserved) by at most one User and viceversa
+	reservations: (User lone -> lone Car ) -> one Time
 }
+/*
 {
-	ridingMinutes > 0
-	passengersMinutesRange >= 0
+	User.(reservations.Time).currentState = Available
 }
-
-sig ReservationData extends CarsUsageData {
-	hasReserved: User lone -> lone Car,
-	// The time passed from the reservation start
-	reservationMinutes: Int
-}
-{
-	reservationMinutes > 0 and reservationMinutes <= 60
-}
-
-sig PluggingData {
-}
-
-sig EndingRideData {
-}
-
-/**
-	FACTS
 */
-fact drivenCarsStateShouldBeInUse {
-	all d: DrivingData, c: Car | (d.isDriving).c != none iff 
-		c.currentState = InUse
+one sig UsingCarStartTime {
+	// for a given ReservingData and at a given Time, each Car is associated (i.e.
+	// reserved) by at most one User and viceversa
+	usingDatas: (User lone -> lone Car ) -> one Time
 }
 
-fact reservedCarsStateShouldBeReserved {
-	all r: ReservationData, c: Car | (r.hasReserved).c != none iff 
-		c.currentState = Reserved
+/*
+fact carsInUseInUsingData {
+	all c: Car | one r: ReservingCarTime | c.currentState = InUse iff c in User.(r.reservations.Time)
 }
-
-/**
-	ASSERTS
 */
-assert allDrivenCarsStateIsInUse {
-	all c: Car | one d: DrivingData | c in User.(d.isDriving)
+fact twoDifferentUsersCantReserveTheSameCarAtTheSameTime {
+	all r: ReservationData, t: Time | no disj u1, u2: User | 
+		u1.(r.reservations.t) & u2.(r.reservations.t) = none
 }
 
-
-assert allDrivenCarsHaveADriver {
-	all c: Car, d: DrivingData | c in User.(d.isDriving) implies 
-		(d.isDriving).c != none
+//
+fact twoDifferentCarsCantBeReserveAtTheSameTimeByTheSameUser {
+	all r: ReservationData, t: Time | no disj u1, u2: User | 
+		u1.(r.reservations.t) & u2.(r.reservations.t) = none
 }
 
-
-
-check allDrivenCarsStateIsInUse for 5 but 7 Int
-check allDrivenCarsHaveADriver for 5 but 8 int
+fact ReservationsAndUsingDatasetAreDisjunct {
+	no ReservationData.reservations & UsingCarStartTime.usingDatas
+}
 
 /**
 	PREDICATES
 */
-
-/*
-pred canReserveACar[u: User, c: Car] {
-	all r: ReservationData | not u in (r.hasReserved).Car and 
-	(c.currentState = Available or c.currentState = Plugged)
+pred init() {
+	no (ReservationData.reservations).first and
+	no (UsingCarStartTime.usingDatas).first
 }
 
-
-pred addReservationData[r, r': ReservationData, u: User, c: Car] {
-	(r'.hasReserved = r.hasReserved + u -> c) &&
-	r.reservationMinutes = 0
+pred canReserveACar[u: User, c: Car, t: Time] {
+	c.currentState = Available and
+//	u not in Car.usedSeats and
+//	u not in DrivingCarStartTime.drivingDatas.t.Car and 
+	no u.((ReservationData.reservations).t) and
+	no ((ReservationData.reservations).t).c
 }
+run canReserveACar for 3
 
-/*
-pred addDrivingData[d, d': DrivingData, u: User, c: Car] {
-	
-	(r'.hasReserved = r.hasReserved + u -> c) &&
-	r.reservationMinutes = 0
-
+pred reserveACar[u: User, c: Car, t: Time, r, r': ReservationData] {
+//	canReserveACar[u, c, t] and
+	r'.reservations = r.reservations + (u -> c) -> t
 }
+run reserveACar for 3
 
-/*
-fun driveACar[u: User, c: Car]: DrivingData {
-
-}
-
-fun reserveACar[u: User, c: Car]: ReservationData {
-	
-}
-*/
-
-run canReserveACar for 3 but 8 Int
-run addReservationData for 3 but 8 Int
 
 pred show() {
-	#ReservationData > 0
-	#DrivingData > 0
-	#Car > 2
+	Car in User.(ReservationData.reservations.Time)
 }
 
-run show for 3 but 10 Int
-
-/*
-sig Timestamp{
-	// Fake bcz we only generates a small number of integers
-	fakeStamp: Int
-}
-*/
+run show for 3

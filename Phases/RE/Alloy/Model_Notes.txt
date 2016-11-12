@@ -1,3 +1,5 @@
+***	Questions
+
 ***	Alloy assumptions
 0.	ChargingArea extends ParkingArea!! (in Alloy, it means CA is a subset of PA)
 1.	All Int are fake (to say so) bcz when we run the model we generates only a
@@ -13,18 +15,24 @@
     S: Dovrei mettere "ParkedButNotChargingCars". Meglio specificare nelle 
     assumptions di Alloy cosa intendiamo per Parked o Charging.
     A: Alright
-5.	
+5.	Not interested in Visitor in our model
+6.	Positions are exact, so we don't have two cars or two users in the same 
+	position
   	
 *** Project assumptions
 **	Trasversal
+1.	GPS Positions of Areas are predefined and do not overlap
+2.	Cars can be in the positions of an area but not parked/charging only if they
+	are in use
 2.	Minutes are rounded up (if a user has driven for 30 seconds it gets rounded
 	up to 1 minute) 
 
 **	Cars
 1.	A car may be minor damaged but still available (the  employee has manually 
 	set the status to available again) ??
-2.	We have one kind of Plug, one kind of Socket.
-3.	Users can reserve Plugged and Available cars and no others. 
+2.	We have one kind of Plug, one kind of Socket and we are not interested in 
+	neither of them
+3.	Users can reserve only Available cars and no others. 
     A: NON E' IMPLICITO NEI REQUISITI?
     S: Yep ma non e` implicito in Alloy, dove devo specificare anche cose che 
     sembrano banali :S. Metto qua tutto giusto per avere conferme.
@@ -39,13 +47,13 @@
 	
 
 **	Areas
-1.	There is one parking area or charging area at a given address
+1.	There is one parking area or charging area at a given position.
 2.	Cars in a Parking Area can be Available, Reserved or Unavailable.
 	Cars in a Charging Area can also be Plugged.
 6.	All ParkingAreas (excluding ChargingArea) have a parkingCapacity > 0.
 7.	All ChargingAreas have a chargingCapacity > 0, but the parkingCapacity can
 	also be 0.
-7.	CarState = InUse implies that a Car can't be in a Parking/ChargingArea. 
+7.	CarState = InUse implies that a Car can't be in a Parking/ChargingSlot. 
     A: LO TOGLIEREI COME REQUISITO, UN TIZIO PUO' STARE FERMO NELLA PARKING AREA E COMUNQUE CI PAGA. IN PIU' SE QUESTO HA APPENA PRESO LA MACCHINA DA UNA PARKING AREA SICURO STA NELLA PARKING AREA PER QUALCHE SECONDO PER USCIRNE
     S: ok, il senso di questo e`: se una macchina e` in uso ed e` in una 
     ParkingArea la devo considerare o meno tra le ParkedCars? Detto in termini
@@ -54,5 +62,10 @@
     A: Effettivamente potremmo avere problemi in futuro con l'implementazione ( se tutte le macchine sono in uso ma parcheggiate, non 
     abbiamo posti liberi. Mettiamo come assumptions che dopo aver preso la macchina da una charging Area entro un minuto l'utente  	
     lascia il parcheggio.
+    S: metto che puo` essere nella position delle parking area
 8.	The company has at least 1 ChargingArea (eitherwise we can't have discount
 	and so on) and at least 1 Car.
+
+**	Usage
+1.	All *Datas refers to the current situation, not to previously stored data	
+2.		

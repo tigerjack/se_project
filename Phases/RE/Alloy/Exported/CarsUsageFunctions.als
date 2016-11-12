@@ -1,22 +1,33 @@
 module CarUsageFunctions
 open Cars
-open Users
+open Persons
+open BankingFunctions
 
 /**
 	SIGNATURES
 */
 abstract sig CarsUsageData {}
+abstract sig CarsUsageDataSet {}
+
+sig Minute {}
+
+one sig DrivingDatas extends CarsUsageDataSet {
+	dataset: User lone -> lone DrivingData
+}
 
 sig DrivingData extends CarsUsageData {
 	isDriving: User lone -> lone Car,
+//	car: one Car,
 	// The minutes passed from the driving start
-	ridingMinutes: Int,
+	ridingMinutes: seq Minute,
 	// The range of minutes in which there is a passenger in the car
-	passengersMinutesRange: Int
+	passengersAtTimeT: set Person,
+	currentTimeFee: one TimeFee
 }
 {
-	ridingMinutes > 0
-	passengersMinutesRange >= 0
+	#ridingMinutes > 0
+	#passengers < #car.availableSeats
+	
 }
 
 sig ReservationData extends CarsUsageData {
@@ -34,85 +45,17 @@ sig PluggingData {
 sig EndingRideData {
 }
 
-/**
-	FACTS
-*/
-fact drivenCarsStateShouldBeInUse {
-	all d: DrivingData, c: Car | (d.isDriving).c != none iff 
-		c.currentState = InUse
+fact allDrivingDataInDrivingDatas {
+	all d: DrivingData | d in DrivingDatas.dataset
 }
-
-fact reservedCarsStateShouldBeReserved {
-	all r: ReservationData, c: Car | (r.hasReserved).c != none iff 
-		c.currentState = Reserved
-}
-
-/**
-	ASSERTS
-*/
-assert allDrivenCarsStateIsInUse {
-	all c: Car | one d: DrivingData | c in User.(d.isDriving)
-}
-
-
-assert allDrivenCarsHaveADriver {
-	all c: Car, d: DrivingData | c in User.(d.isDriving) implies 
-		(d.isDriving).c != none
-}
-
-
-
-check allDrivenCarsStateIsInUse for 5 but 7 Int
-check allDrivenCarsHaveADriver for 5 but 8 int
 
 /**
 	PREDICATES
 */
-
-/*
 pred canReserveACar[u: User, c: Car] {
-	all r: ReservationData | not u in (r.hasReserved).Car and 
-	(c.currentState = Available or c.currentState = Plugged)
-}
-
-
-pred addReservationData[r, r': ReservationData, u: User, c: Car] {
-	(r'.hasReserved = r.hasReserved + u -> c) &&
-	r.reservationMinutes = 0
-}
-
-/*
-pred addDrivingData[d, d': DrivingData, u: User, c: Car] {
-	
-	(r'.hasReserved = r.hasReserved + u -> c) &&
-	r.reservationMinutes = 0
-
-}
-
-/*
-fun driveACar[u: User, c: Car]: DrivingData {
-
-}
-
-fun reserveACar[u: User, c: Car]: ReservationData {
 	
 }
-*/
 
-run canReserveACar for 3 but 8 Int
-run addReservationData for 3 but 8 Int
+pred show() {}
 
-pred show() {
-	#ReservationData > 0
-	#DrivingData > 0
-	#Car > 2
-}
-
-run show for 3 but 10 Int
-
-/*
-sig Timestamp{
-	// Fake bcz we only generates a small number of integers
-	fakeStamp: Int
-}
-*/
+run show for 3

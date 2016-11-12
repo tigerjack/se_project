@@ -1,54 +1,76 @@
 module Areas
-//open GPSUtilities
 open Cars
+open GeoUtilities
 
 /**
 	SIGNATURES
 */
-sig Address {}
+abstract sig CompanyCarSlot {}
+sig ParkingSlot, ChargingSlot extends CompanyCarSlot {}
 
 abstract sig CompanyArea {
-	address: one Address,
-// perimeter: one GPSPolygon
+	positions: some Position
 }
 
 sig ParkingArea extends CompanyArea {
-	parkingCapacity: Int,
-	parkedCars: set Car,
-//	May be useful in a while
-//	metersForNearestChargingStation: Int	
+	parkingSlots: set ParkingSlot,
+	parkedCars: set Car
 }
 {
-//	metersForNearestChargingStation > 0
-	parkingCapacity >= 0
-	#parkedCars <= parkingCapacity
+	#parkedCars <= #parkingSlots
 }
 
 sig ChargingArea extends ParkingArea {
-	chargingCapacity: Int,
+	chargingSlots: some ChargingSlot,
 	chargingCars: set Car
 }
 {	
-	// Note that even a charging area stores the distance from the
-	// nearest charging station
-	chargingCapacity > 0
-	#chargingCars <= chargingCapacity
-	#chargingCars + #parkedCars <= parkingCapacity
-	//A car can't be charging and parked at the same time
+	#chargingCars <= #chargingSlots
+	#parkedCars <= #parkingSlots
+	// A car can't be charging and parked at the same time
+	// bcz the two sets are disjoint
 	chargingCars & parkedCars = none
 }
-
 
 /**
 	FACTS
 */
-// This fact also enforce the uniqueness of area address
-fact areaAddressesAreAssociatedToExaxtlyOneCompanyArea {
-	all a: Address | one ar: CompanyArea | a in ar.address
+// Trivial
+fact parkingSlotsAreaAssociatedToExactlyOneArea {
+	all ps: ParkingSlot | one pa: ParkingArea | ps in pa.parkingSlots
 }
 
+fact chargingSlotsAreaAssociatedToExactlyOneArea {
+	all cs: ChargingSlot | one ca: ChargingArea | cs in ca.chargingSlots
+}
+
+// Areas do not overlap
+fact areaPositionsAreAssociatedToExaxtlyOneCompanyArea {
+//	all p: Position | one ar: CompanyArea | p in ar.positions
+	all disj a1, a2: CompanyArea | a1.positions & a2.positions = none
+}
+
+// Parked/Charging Cars in Areas position
+fact allParkedCarsAreInsideThoseAreaPositions {
+	all pa: ParkingArea, c: Car | c in pa.parkedCars implies 
+		c.carPosition in pa.positions
+}
+
+fact allChargingCarsAreInsideThoseAreaPositions {
+	all ca: ChargingArea, c: Car | c in ca.chargingCars implies 
+		c.carPosition in ca.positions
+}
+
+fact allCarsInsideAreasButNotParkedOrChargingAreInUse {
+	all c: Car |
+		(c.carPosition in ParkingArea.positions and 
+		 c not in (ParkingArea.parkedCars + ChargingArea.chargingCars)) implies
+		 c.currentState = InUse
+}
+
+// I.e. a ParkingArea has always a parkingCapacity > 0
 fact parkingCapacityZeroCanOnlyBeAssociatedToChargingArea {
-	all p: ParkingArea | p.parkingCapacity = 0 implies 
+	all p: ParkingArea | p.parkingSlots = none implies 
 		p in ChargingArea
 }
 
@@ -57,13 +79,17 @@ fact parkingCapacityZeroCanOnlyBeAssociatedToChargingArea {
 fact carStateAvailableOrReservedImpliesCarAtOneParkingArea {
 	all c: Car, pa: ParkingArea, ca: ChargingArea | 
 		(c.currentState = Available or c.currentState = Reserved) implies
-		(c in pa.parkedCars or 
-		c in ca.parkedCars or 
-		c in ca.chargingCars)
+		( (c in pa.parkedCars and c.carPosition in pa.positions) or 
+		  (c in ca.parkedCars and c.carPosition in ca.positions) or 
+		  (c in ca.chargingCars and c.carPosition in ca.positions))
 }
 
+fact carStateInUseImpliesPositionDifferentFromParkingArea {
+	all c: Car, pa: ParkingArea | c.currentState = InUse implies 
+		c.carPosition not in pa.positions
+}
 
-fact carStateInUseImpliesCarNotInParkingArea {
+fact carStateInUseImpliesCarNotInParkingOrChargingArea {
 	all c: Car, pa: ParkingArea, ca: ChargingArea |
 		c.currentState = InUse implies
 		(c not in pa.parkedCars and c not in ca.chargingCars)
@@ -72,9 +98,8 @@ fact carStateInUseImpliesCarNotInParkingArea {
 // If a car is plugged <=> it must be in one charging area
 fact carStatePluggedIffCarInOneChargingCars {
 	all c: Car | one ca: ChargingArea | 
-		c.plugged = False iff c in ca.chargingCars
+		c.pluggedStatus = PluggedOn iff c in ca.chargingCars
 }
-
 
 fact carParkedInOneParkingArea {
 	all pa1, pa2: ParkingArea | 
@@ -83,64 +108,47 @@ fact carParkedInOneParkingArea {
 		(ParkingArea.parkedCars & ChargingArea.chargingCars) = none
 }
 
-
-/*
-	all c: Car | some pa1, pa2: ParkingArea | 
-		(c in pa1.chargingCars and 
-		c in pa2.chargingCars) implies pa1 = pa2
-*/
-
-
 /**
 	ASSERTS
 */
+assert areaPositionsAreNotOverlapping {
+	all disj ca1, ca2: CompanyArea | ca1.positions & ca2.positions = none
+}
+check areaPositionsAreNotOverlapping for 10
+
 assert sameCarShouldNotBePluggedAtDifferentChargingArea {
 	all c: Car | one ca: ChargingArea | 
-		c.plugged = False implies
+		c.pluggedStatus = PluggedOn iff
 		c in ca.chargingCars
 }
+check sameCarShouldNotBePluggedAtDifferentChargingArea for 10
 
-check sameCarShouldNotBePluggedAtDifferentChargingArea for 5 but 8 Int
+assert sameCarShouldNotBeParkedAtDifferentParkingArea {
+	all disj p1, p2: ParkingArea | p1.parkedCars & p2.parkedCars = none
+}
+check sameCarShouldNotBeParkedAtDifferentParkingArea for 10
+
+// Bcz we assume disjoint sets
+assert sameCarShouldNotBeParkedAndChargingAtSameTime {
+	ParkingArea.parkedCars & ChargingArea.chargingCars = none
+}
+check sameCarShouldNotBeParkedAndChargingAtSameTime for 10
+
+assert carsParkedOrChargingAreInsideThoseAreasPositions {
+	all pa: ParkingArea, ca: ChargingArea | 
+		(pa.parkedCars.carPosition in pa.positions) and
+		(ca.chargingCars.carPosition in ca.positions)
+}
+check carsParkedOrChargingAreInsideThoseAreasPositions for 10
 
 /**
 	PREDICATES/FUNCTIONS
 */
 pred show() {
-	#Car > 0 
-	#ChargingArea > 0
-	#ParkingArea - #ChargingArea > 0
-	#Battery.statusPercentage = #Car
-	#ChargingArea.chargingCars > 0
-	#ParkingArea.parkedCars - #ChargingArea.parkedCars > 0
-	#Damage = 1
-	1 in Car.usedSeats
-	0 in Battery.statusPercentage
-	19 in Battery.statusPercentage
-	20 in Battery.statusPercentage
+//	#ChargingArea > 0
+//	#(ParkingArea - ChargingArea) > 0
+	#Car > 0
+//	#InUse > 0
 }
 
-run show for 3 but 8 Int
-
-
-/*
-	Operating areas are places where a user can pick a vehicle. 
-	It is composed by all the parking areas and vehicles of this specific zone
-*/
-/*
-sig Socket {}
-sig AreaCode extends Code {}
-
-sig OperatingArea extends Area {
-	vehicles: set Vehicle, 
-	parkingAreas: set ParkingArea
-}
-
-fact areaCodesAreAssociatedToOneArea
-{
-	all ac: AreaCode | one a: Area | ac in a.code
-}
-
-fact socketMustBeAssociatedToOneChargingArea {
-	all s: Socket | one ca: ChargingArea | s in ca.sockets
-}
-*/
+run show for 3
