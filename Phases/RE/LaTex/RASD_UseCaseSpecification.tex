@@ -13,9 +13,9 @@
 	
 	% The table itself
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
-	\textbf{Description} & The Visitor wants to create an account for the Car-Sharing Service. \\ \hline
+	\textbf{Description} & The \emph{Visitor} wants to create an \emph{Account} for the \emph{Car-Sharing} Service. \\ \hline
 	\textbf{Actors} & \emph{Visitor}.\\ \hline
-	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the \emph{Company's Car-Sharing}} WebSite/Application. \\ \hline
+	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the \emph{Company's Car-Sharing}WebSite/Application. \\ \hline
 	\textbf{Flow of events} & 
 		\begin{enumerate}
 			\item The \emph{Visitor} selects the function \textit{\textquotedblleft{Sign Up}\textquotedblright}.
@@ -41,7 +41,7 @@
 	
 	% The table itself
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
-	\textbf{Description} & The Visitor wants to activate his/her account. \\ \hline
+	\textbf{Description} & The \emph{Visitor} wants to activate his/her \emph{Account}. \\ \hline
 	\textbf{Actors} & \emph{Visitor}.\\ \hline
 	\textbf{Pre-Conditions} & The \emph{Visitor} has received the activation URL on his/her mail box. \\ \hline
 	\textbf{Flow of ev-ents} & 
@@ -67,7 +67,7 @@
 	
 	% The table itself
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
-	\textbf{Description} & The Visitor wants to log in the System. \\ \hline
+	\textbf{Description} & The \emph{Visitor} wants to log in the \emph{System}. \\ \hline
 	\textbf{Actors} & \emph{Visitor}.\\ \hline
 	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the Company's \emph{Car-Sharing WebSite/Application} \\ \hline
 	\textbf{Flow of events} & 
@@ -101,11 +101,13 @@
 		\item The \emph{User} selects the function \textit{\textquotedblleft{Log out}\textquotedblright} .
 		\item The \emph{System} performs the \emph{User}'s logout.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} shows the confirmation of the logout to the \emph{User}\\ \hline
+	\textbf{Post Conditions} & The \emph{System} shows the confirmation of the logout to the \emph{User}.
+	
 	The \emph{User} is now not able to use the \emph{System} functionalities dedicated to Users anymore (until he logs in again). \\ \hline
-	\textbf{Exceptions} & 
+	\textbf{Exceptions} &  \\
 %	\begin{itemize}
-%	\end{itemize} \\ \hline
+%	\end{itemize} \\ 
+\hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
@@ -118,181 +120,220 @@
 	
 	% The table itself
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
-	\textbf{Description} & The User wants to locate the avialable Cars. \\ \hline
+	\textbf{Description} & The \emph{User} wants to locate the avialable \emph{Cars}. \\ \hline
 	\textbf{Actors} & \emph{User}.\\ \hline
 	\textbf{Pre-Conditions} & The \emph{User} is logged in the \emph{System} \\ \hline
 	\textbf{Flow of events} & 
 	\begin{enumerate}
-		\item The \emph{User} selects the function \textit{\textquotedblleft{Locate Cars}\textquotedblright} .
-		\item The \emph{System} shows a text box asking the \emph{User} to provide an address near which he/she would like to see the \emph{Cars} whose state is \textit{Available}.
+		\item The \emph{User} selects the function \textit{\textquotedblleft{Locate Cars}\textquotedblright}.
+		\item The \emph{System} shows a text box asking the \emph{User} to provide an address near which they would like to see the \emph{Cars} whose state is \textit{Available}.
 		\item The \emph{User} inserts the desired address and selects the \textit{\textquotedblleft{Locate}\textquotedblright} function.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} shows the confirmation of the logout to the \emph{User}\\ \hline
-	The \emph{User} is now not able to use the \emph{System} functionalities dedicated to Users anymore (until he logs in again). \\ \hline
+	\textbf{Post Conditions} & The \emph{System} shows the \emph{User} a map containing all the \emph{Cars} whose state is Available and which are within a 5KM range from the provided address. \\ \hline
+	\textbf{Alternative Flow of Events} & The \emph{User} selects the function \textit{\textquotedblleft{Near Me}\textquotedblright} instead of inserting a specific address and sends their \emph{GPS Coordinates} to the \emph{System}. \\ \hline
 	\textbf{Exceptions} & 
-%	\begin{itemize}
-%	\end{itemize} \\ \hline
+	\begin{itemize}
+		\item The System does not find the inserted address and informs the User. The Flow of Events starts from point 1.
+		\item There are no available Cars in the specified address/User?s Position. The System informs the User. The Flow of Events start from point 1.
+	\end{itemize} \\ \hline
 \end{longtable}
-%%%%%OTHER USE CASES!!
-USE CASE : Locate available cars.
-Id:  UC5
+\stepcounter{UseCaseIdCounter}
 
-Description
-The User wants to locate a Car.
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Reserve Available Car}} % Table caption
+	\label{UC_ReserveCar}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The \emph{User} wants to reserve a \emph{Car}. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} is logged in the \emph{System}, the \emph{User} does not have another active reservation, the \emph{User} is not driving another \emph{Car}, and the System has found available \emph{Cars} when the \emph{User} activated the \textit{\textquotedblleft{Locate Available Cars}\textquotedblright} function. \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} chooses a specific \emph{Car} among those showed on the map.
+		\item The \emph{User} selects the function \textit{\textquotedblleft{Reserve this Car}\textquotedblright}.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{System} stores the \emph{Reservation} of the \emph{Car}, changing its status to \emph{Reserved}.
+The \emph{System} activates a countdown of 1 hour during which the \emph{User} will have the possibility to unlock the \emph{Reserved} \emph{Car}. \\ \hline
+	\textbf{Exceptions} & \\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
 
-Actors
-User.
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Unlock Car}} % Table caption
+	\label{UC_UnlockCar}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The \emph{User} wants the \emph{System} to open the doors of the \emph{Car} in order to enter it. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} is logged in the \emph{System} and has reserved a \emph{Car}. \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} activates the function\textit{\textquotedblleft{Unlock Car}\textquotedblright}.
+		\item The \emph{User} sends their GPS coordinates to the \emph{System}.
+		\item The \emph{System} checks that the GPS coordinates of the \emph{User} are within a 15 metres range from those of the \emph{Car} itself.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{System} has verified that the \emph{User} is nearby the car (within the specified distance range) and unlocks the \emph{Car}'s doors.
+	 
+The \emph{System} then changes the \emph{Car} status to \emph{In Use} and sets the \emph{Plugged} Flag to False.
 
-Pre-Condition
-The User must be logged into the System.
+The \emph{User} enters the \emph{Car}. \\ \hline
+	\textbf{Exceptions} & If one hour has passed since the reservation has been made and the \emph{User} hasn't unlocked the Car, either because he wasn't within the 15 meters distance range or didn't activate this function, then:
+	\begin{itemize}
+	\item The reservation expires, so that the \emph{User} cannot unlock the \emph{Car} anymore (unless they reserve it again).
+	\item The \emph{System} changes the \emph{Car}'s status to \emph{Available}.
+	\item The \emph{System} communicates to the \emph{Banking System} the \emph{Fee} to charge the \emph{User} (this sum amounts to 1 EUR).
+	\item The \emph{System} allows the \emph{User} to perform another reservation.
+	\end{itemize} \\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
 
-Flow of events
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Drive Car}} % Table caption
+	\label{UC_DriveCar}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The \emph{User} starts driving the \emph{Reserved} \emph{Car}. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} has unlocked the doors of the \emph{Car} and entered it. \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} starts the engine of the \emph{Car}.
+		\item The \emph{System} starts the Ride Timer which indicates the time usage of the \emph{Car}.
+		\item {[}Extension Point UC 9{]}
+		\item {[}Extension Point UC 12{]}
+		\item The \emph{System} calculates the current \emph{Fee} charged to the \emph{User} (calculated as a given amount of money per minute on the Ride Timer) while showing it on the on-board screen.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{User} drives the \emph{Car} \\ \hline
+	\textbf{Exceptions} & \\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
 
-1 The User selects the function ?Locate Cars?.
-2 The System shows a text box asking the User to provide an address near which he would like to see the Cars whose state is Available.
-3 The User inserts the desired address and selects the ?Locate? function.
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Drive With Passengers $<<$extends UC 8$>>$}} % Table caption
+	\label{UC_DriveWithPassengers}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The \emph{User} picks up \emph{Passengers} to share the ride with. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} is driving their \emph{Reserved} \emph{Car}. \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} picks up the \emph{Passengers}.
+		\item The \emph{Car} detects the presence and number of the \emph{Passengers}.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{User} is sharing the ride with their \emph{Passengers}.
+	
+	The \emph{System} stores the number of \emph{Passengers} who were picked up and whether they stayed in the \emph{Car} for at least 3 minutes.\\ \hline
+	\textbf{Exceptions} & \\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
 
-Post-Condition
-The System shows the User a map containing all the Cars, whose state is Available, which are inside a 5KM distance range from the provided address or User?s GPS position.
-Alternative flow of events
-3a 	The User selects the function ?Near me? instead of inserting a specific address and sends his/her GPS Coordinates to the System.
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{End Ride}} % Table caption
+	\label{UC_EndRide}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The \emph{User} ends the ride and the \emph{System} processes the \emph{Fee}. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} parks the \emph{Car} in one of the \emph{Parking Areas}. \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} exits the \emph{Car}.
+		\item The \emph{System} verifies that no one is in the \emph{Car}.
+		\item The \emph{System} checks the \emph{Battery} status. 
+		\item The \emph{System} checks, via the GPS coordinates, whether the \emph{User} has left the \emph{Car} within a 3KM distance range from the nearest \emph{Charging Area}.
+		\item The \emph{System} checks if the \emph{User} drove with \emph{Passengers} (UC9).
+		\item {[}Extension Point UC11{]}.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{System} locks the doors of the \emph{Car} and sets its status to \emph{Available}.
+	
+	The \emph{System} communicates to the \emph{Banking System} the final \emph{Fee} to charge the \emph{User}. \\ \hline
+	\textbf{Alternative Flow of Events} & 
+	\begin{itemize}
+		\item The \emph{Battery} status is higher than 50\%, the \emph{User} didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 20\% \emph{Discount} on the \emph{Fee} of the last ride and communicates it to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} did plug the \emph{Car} (UC11), the \emph{Battery} status is higher than or equal to 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), hence the System applies a 30\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} did plug the \emph{Car} (UC11), the \emph{Battery} status is lower than 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), hence the System doesn't apply any \emph{Discount} or \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} didn't plug the \emph{Car} (UC11), the \emph{Battery} status is higher than 50\%, they either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		% Even longtable can't handle tables this long
+		\end{itemize} \\ &
+		\begin{itemize}
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 10\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is lower than 20\%, the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), either did or didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is lower than 20\%, the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), either did or didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\end{itemize} \\ &
+		\begin{itemize}
+		\item The \emph{Battery} status is higher than 50\%, the \emph{User} either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.	
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+	\end{itemize} \\ \hline
+	\textbf{Exceptions} & If the \emph{Battery} status reaches 0\% of capacity or the \emph{Car} detects a major damage, the \emph{Car} stops and an assistance team is deployed. \\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
 
-Exceptions :
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Plug the Car $<<$extends UC 10$>>$}} % Table caption
+	\label{UC_PlugCar}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The \emph{User} plugs the \emph{Car} for recharging. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} has parked the \emph{Car} in one of the \emph{Charging Areas} designated by the \emph{System}. \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} plugs the \emph{Car} into a \emph{Socket} of the \emph{Charging Area}. 
+		\item The \emph{System} detects that the \emph{Car} has been plugged within 2 minutes since the \emph{User} got off the \emph{Car}.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{Battery} of the \emph{Car} is charging and the \emph{System} remembers the \emph{User}'s action for possible discounts.
+	
+The \emph{System} sets the \emph{Car}'s \emph{Plugged} flag to True.
+	\\ \hline
+	\textbf{Exceptions} & \\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
 
-4b	The System does not find the inserted address and informs the User. The Flow of Events starts from point 1.
-4c	There are no available Cars in the specified address/User?s Position. The System informs the User. The Flow of Events start from point 1.
-
-		
-USE CASE : Reserve available car.
-
-
-Id:  UC6
-
-
-Description
-The User wants to reserve a Car.
-
-Actors
-User
-
-Pre-Condition
-The User must be logged into the System and the System must have found cars when the User activated the ?Locate available cars? function. 
-
-
-Flow of events
-1. The User chooses a specific Car between the showed ones in the map.
-2. User selects the function ?Reserve this Car?.
-
-Post-Condition
-The System stores the Reservation of the Car, changing the Car status in Reserved.
-The System activates a countdown of 1 hour during which the User will have the possibility to unlock the reserved Car.
-
-
-USE CASE : Unlock Car.
-ID : UC9
-
-DESCRIPTION : The User wants to ask the System to open the doors of the Car in order  to enter it.
-PARTECIPATING ACTORS : User  
-PRE-CONDITION : The User must be logged in the System and must have reserved a car. 
-FLOW OF EVENTS : 
-1 The User activates the function ?Unlock Car?.
-2 The User  sends his/her GPS coordinates to the System; 
-3 The System checks that the GPS coordinates of the specific User ?s Reserved Car and the GPS coordinates of the User himself are in a 15 meters distance range. 
-EXCEPTIONS :
-If one hour has passed since the reservation has been done and the User didn?t unlock the Car because he wasn?t in the 15 meters distance range or didn?t activate this function :
-1. the reservation expires and the User cannot unlock the car anymore (unless with another reservation). 
-2. The System changes the Car status to Available.
-3. The System communicates to the Banking System the amount of money (corresponding to the fee of 1 EUR) to charge to the User.
-4. The System now allows the User to perform another reservation. 
-POST-CONDITION :  
-The System has verified that User is nearby the car (inside the specified distance range) and unlocks the Car doors. 
-The System now changes the Car status to In Use and sets the Plugged Field False. 
-The User enters the Car.
-
-
-
-USE CASE : Drive Car. 
-ID : UC10				
-DESCRIPTION  : The User starts to drive the reserved Car.
-PARTECIPATING ACTORS : User 
-PRE-CONDITION : The User has unlocked the doors of the car and entered the Car.
-FLOW OF EVENTS : 
-1 The User starts the engine of the Car.
-2 The System starts the Ride Timer which indicates the time usage of the Car.
-3 [Extension Point UC11].
-4 [Extension Point UC14].
-5 The System calculates the current fee charged to the User (calculated as a given amount of money per minute multiplied by the minutes of the Ride Timer) while showing it on the on-board screen.
-POST-CONDITION :  
-The User drives the Car. 
-
-
-
-
-USE CASE : Drive with Passengers.  <<extends UC10>>
-ID : UC 11
-DESCRIPTION : The User picks up passengers to share the ride with.
-PARTECIPATING ACTORS : User
-PRE-CONDITION : The User is driving his/her reserved Car.
-
-FLOW OF EVENTS : 
-1. The User picks up the desired passengers.
-2. The Car detects the number of passengers.
-
-POST-CONDITION :  
-The User is sharing the ride with his/her passengers.
-The System stores the number of passengers in the ride and if they stayed in the Car for at least 3 minutes.
-
-USE CASE : End ride.
-Id : UC12
-DESCRIPTION : The User ends the ride and the System processes the fee.
-PARTECIPATING ACTORS : User 
-PRE-CONDITION : The User parks the Car in one of the Parking Areas.
-FLOW OF EVENTS : 
-1. The User exits the Car.
-2. The System verifies that no one is in the car.
-3. The System checks the battery status. 
-4. The System checks, using the GPS coordinates, if the User has left the Car within a 3KM distance range from the nearest Charging Area.
-5. The System checks if the User drove with passengers (UC11).
-6. [Extension Point UC13].
-POST-CONDITION :  
-The System locks the doors of the Car and sets it as Available.
-The System communicates to the Banking System the final fee to charge to the User.
-ALTERNATIVE FLOW OF EVENTS:
-7a 	The battery status is higher than 50%, the User didn?t or did take at least 2 passengers with him for at least 3 minutes (UC11) , didn?t leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 20% discount on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-7b The User did plug the Car (UC13), the battery status is higher than or equal to 20%, he/she didn?t or did take at least 2 passengers with him for at least 3 minutes (UC11), hence the System applies a 30% discount on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-7c The User did plug the Car (UC13), the battery status is lower than 20%, he/she didn?t or did take at least 2 passengers with him for at least 3 minutes (UC11), didn?t plug the Car (UC13), hence the System doesn?t apply any discount or surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-7d The User didn?t plug the Car (UC13), the battery status is higher than 50%, he/she did or didn?t take at least 2 passengers with him for at least 3 minutes (UC11), did leave the Car at more than 3KM from the nearest Charging Area, hence the System applies a 10% surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-7e 	The battery status is between 20% and 50% (included), the User did take at least 2 passengers with him for at least 3 minutes (UC11) , didn?t leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 10% discount on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-7f The battery status is lower than 20%, the User did take at least 2 passengers with him for at least 3 minutes (UC11) , did or didn?t leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 20% surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-7g The battery status is between 20% and 50% (included), the User did take at least 2 passengers with him for at least 3 minutes (UC11) , did leave the Car at more than 3KM from the nearest Charging Area, hence the System applies a 20% surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-7h The battery status is lower than 20%, the User didn?t take at least 2 passengers with him for at least 3 minutes (UC11) , did or didn?t leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 30 % surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-7j The battery status is higher than 50%, the User did or didn?t take at least 2 passengers with him for at least 3 minutes (UC11) , did leave the Car at more than 3KM from the nearest Charging Area, didn?t plug the Car (UC13), hence the System applies a 10 % surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.	
-7k The battery status is between 20% and 50% (included), the User didn?t take at least 2 passengers with him for at least 3 minutes (UC11) , did leave the Car at more than 3KM from the nearest Charging Area, hence the System applies a 30% surcharge on the fee of the last ride and communicates to the Banking System the fee which will be charged to the User.
-
-EXCEPTIONS : 
-The Ride ends and the Car stops moving when the battery status reaches 0% of the full capacity or when the Car detects a major damage. 
-
-USE CASE : Plug the Car.  ( <<extends UC12>> )
-ID : UC13
-PARTECIPATING ACTORS : User 
-PRE-CONDITION : The User has parked the Car in one of the Charging Areas designated by the System. 
-FLOW OF EVENTS :
-1. The User plugs the Car into the socket of the Charging Area. 
-2. The System detects that the Car is plugged within 2 minutes since the User got off the Car.
-POST-CONDITION :  
-The battery of the Car is charging and the System stores the User?s action for possible discounts.
-The System sets the Car Plugged Field True.
-USE CASE : Enable Money Saving Option. ( <<Extends UC10>> )
-ID : UC14
-PARTECIPATING ACTORS : User 
-PRE-CONDITION : The User enables the Money Saving Option.
-FLOW OF EVENTS : 
-1. The System asks the User the address of his final destination showing a text box where to insert the address.
-2. The User provides the address to the System.
-
-POST-CONDITION :  
-The System computes an algorithm which takes in consideration the distribution of the cars in the city, the final destination of the User and the availability of power plugs in the Charging Area. The result of this algorithm will be sent to the User providing him the address of the Charging Area where to leave the Car. 
-(The User will still have to plug the Car in order to have a discount!)
-
-EXCEPTIONS : 
-If the Socket of the Charging Area has no more available plugs , the System informs the User and the Flow of Events starts from point 1.
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Enable Money Saving Option $<<$extends UC 8$>>$}} % Table caption
+	\label{UC_PlugCar}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The \emph{User} asks the \emph{System} to suggest them a \emph{Charging Area} where to leave the \emph{Car}. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} enables the \textit{\textquotedblleft{Money Saving}\textquotedblright} option. \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{System} asks the\emph{User} the destination address, providing them with a text box where to insert it.
+		\item The \emph{User} provides the address to the \emph{System}.
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{System} uses an algorithm which takes in consideration the distribution of the cars in the city, the final destination of the \emph{User} and the availability of power plugs in \emph{Charging Areas} to find the optimal \emph{Charging Area} for the \emph{User} to park their \emph{Car} in. The result of this algorithm will be sent to the \emph{User}, providing him the address of the \emph{Charging Area} where to leave the \emph{Car}. The \emph{User} will still have to plug the \emph{Car} in order to get a discount.
+	\\ \hline
+	\textbf{Exceptions} & If the \emph{Socket} of the \emph{Charging Area} has no more available plugs , the \emph{System} informs the \emph{User} and the Flow of Events starts from point 1.\\ \hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
