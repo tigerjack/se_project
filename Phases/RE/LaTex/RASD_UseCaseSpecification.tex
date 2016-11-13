@@ -15,7 +15,7 @@
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
 	\textbf{Description} & The \emph{Visitor} wants to create an \emph{Account} for the \emph{Car-Sharing} Service. \\ \hline
 	\textbf{Actors} & \emph{Visitor}.\\ \hline
-	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the \emph{Company's Car-Sharing}WebSite/Application. \\ \hline
+	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the \emph{Company's Car-Sharing} Application. \\ \hline
 	\textbf{Flow of events} & 
 		\begin{enumerate}
 			\item The \emph{Visitor} selects the function \textit{\textquotedblleft{Sign Up}\textquotedblright}.
@@ -27,7 +27,7 @@
 	\textbf{Exceptions} & 
 		\begin{itemize}
 		\item The \emph{System} recognizes invalid or missing data in the form compiled by the emph{Visitor}and informs him/her of the error. The flow of events restarts from point 1.
-		\item The Visitor inserts in the form a Social Security Number, or ID Card Number, or Driving License number, or Email Address, which is already present in the System. The System shows an error message saying that some of those credentials were already been inserted into the System for another account. The flow of events restarts from point 1.
+		\item The Visitor inserts in the form an ID Card Number, or Driving License number, or Email Address, which is already present in the System. The System shows an error message saying that some of those credentials were already been inserted into the System for another account. The flow of events restarts from point 1.
 		\end{itemize} \\ \hline
 \end{longtable}
 
@@ -44,7 +44,7 @@
 	\textbf{Description} & The \emph{Visitor} wants to activate his/her \emph{Account}. \\ \hline
 	\textbf{Actors} & \emph{Visitor}.\\ \hline
 	\textbf{Pre-Conditions} & The \emph{Visitor} has received the activation URL on his/her mail box. \\ \hline
-	\textbf{Flow of ev-ents} & 
+	\textbf{Flow of events} & 
 	\begin{enumerate}
 		\item The \emph{Visitor} opens the received activation URL.
 		\item The \emph{System} acknowledges that the Visitor has arrived in his/her activation Web Page and activates his/her account.
@@ -52,7 +52,7 @@
 	\textbf{Post Conditions} & The \emph{Visitor} is now become an \emph{User} which can access the \emph{System} using the credentials (Email, password) he provided during the registration phase. \\ \hline
 	\textbf{Exceptions} & 
 	\begin{itemize}
-		\item The Activation URL expires after 10 days it has been generated. The Visitor?s data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
+		The Activation URL expires after 10 days it has been generated. The Visitor's data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
 	\end{itemize} \\ \hline
 \end{longtable}
 
@@ -69,7 +69,8 @@
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
 	\textbf{Description} & The \emph{Visitor} wants to log in the \emph{System}. \\ \hline
 	\textbf{Actors} & \emph{Visitor}.\\ \hline
-	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the Company's \emph{Car-Sharing WebSite/Application} \\ \hline
+	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the Company's \emph{Car-Sharing Application}.
+	 The \emph{Visitor} has already activated his/her account (UC2) \\ \hline
 	\textbf{Flow of events} & 
 	\begin{enumerate}
 		\item The \emph{Visitor} selects the function \textit{\textquotedblleft{Login}\textquotedblright} .
@@ -79,7 +80,7 @@
 	\textbf{Post Conditions} & The \emph{System} verifies the existence of an account associated with that pair (Email,password) and logs the \emph{Visitor} in. The \emph{Visitor} has now become \emph{User}  \\ \hline
 	\textbf{Exceptions} & 
 	\begin{itemize}
-		\item The Activation URL expires after 10 days it has been generated. The Visitor?s data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
+	The System doesn’t find an account associated with that pair (Email, Password) and   shows an error message, the flow of events starts from point 1.
 	\end{itemize} \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
@@ -111,6 +112,31 @@
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
+
+\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+	% Some table settings
+	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
+	\caption{\textbf{Show Parking Areas}} % Table caption
+	\label{UC_Logout}%If later on you want to refer to this label, you can use this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
+	\textbf{Description} & The User wants to see the Parking Areas where he can possibly leave the Car. \\ \hline
+	\textbf{Actors} & \emph{User}.\\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} is logged in the \emph{System} \\ \hline
+	\textbf{Flow of events} & 
+	\begin{enumerate}
+		\item The \emph{User} selects the function \textit{\textquotedblleft{Show Parking Areas}\textquotedblright} .
+	\end{enumerate}	 \\ \hline
+	\textbf{Post Conditions} & The \emph{System} shows the \emph{User} a map with all the Parking Areas distributed around the city.
+	\textbf{Exceptions} &  \\
+	%	\begin{itemize}
+	%	\end{itemize} \\ 
+	\hline
+\end{longtable}
+\stepcounter{UseCaseIdCounter}
+
 \begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
@@ -120,7 +146,7 @@
 	
 	% The table itself
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
-	\textbf{Description} & The \emph{User} wants to locate the avialable \emph{Cars}. \\ \hline
+	\textbf{Description} & The \emph{User} wants to locate the available \emph{Cars}. \\ \hline
 	\textbf{Actors} & \emph{User}.\\ \hline
 	\textbf{Pre-Conditions} & The \emph{User} is logged in the \emph{System} \\ \hline
 	\textbf{Flow of events} & 
@@ -134,7 +160,7 @@
 	\textbf{Exceptions} & 
 	\begin{itemize}
 		\item The System does not find the inserted address and informs the User. The Flow of Events starts from point 1.
-		\item There are no available Cars in the specified address/User?s Position. The System informs the User. The Flow of Events start from point 1.
+		\item There are no available Cars in the specified address/User's Position. The System informs the User. The Flow of Events start from point 1.
 	\end{itemize} \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
@@ -331,9 +357,10 @@ The \emph{System} sets the \emph{Car}'s \emph{Plugged} flag to True.
 	\begin{enumerate}
 		\item The \emph{System} asks the\emph{User} the destination address, providing them with a text box where to insert it.
 		\item The \emph{User} provides the address to the \emph{System}.
+		\item The \emph{System} computes an algorithm which takes in consideration the distribution of the Cars in the city, the final destination of the \emph{User} and the availability of power plugs in the \emph{Charging Areas}.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} uses an algorithm which takes in consideration the distribution of the cars in the city, the final destination of the \emph{User} and the availability of power plugs in \emph{Charging Areas} to find the optimal \emph{Charging Area} for the \emph{User} to park their \emph{Car} in. The result of this algorithm will be sent to the \emph{User}, providing him the address of the \emph{Charging Area} where to leave the \emph{Car}. The \emph{User} will still have to plug the \emph{Car} in order to get a discount.
+	\textbf{Post Conditions} &  The result of this algorithm will be sent to the \emph{User}, providing him the address of the \emph{Charging Area} where to leave the \emph{Car}. The \emph{User} will still have to plug the \emph{Car} in order to get a discount.
 	\\ \hline
-	\textbf{Exceptions} & If the \emph{Socket} of the \emph{Charging Area} has no more available plugs , the \emph{System} informs the \emph{User} and the Flow of Events starts from point 1.\\ \hline
+	\textbf{Exceptions} & If the \emph{Socket} of the \emph{Charging Area} has no more available plugs while the \emph{User} is driving to reach it, the \emph{System} informs the \emph{User} and the Flow of Events starts from point 1.\\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
