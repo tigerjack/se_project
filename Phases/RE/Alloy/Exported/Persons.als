@@ -4,23 +4,25 @@ open GeoUtilities
 /**
 	SIGNATURES
 */
-abstract sig Person {
-	currentPosition: one Position
+sig Person {
+	// We assume that each Person is identified by only one point
+	personPoint: one Point
 }
-sig User, Passenger extends Person {}
+sig User extends Person {}
 
 /**
 	FACTS
 */
-fact usersPositionsDoNotOverlap {
-	all disj u1, u2: User | u1.currentPosition != u2.currentPosition
+fact personPositionsDoNotOverlap {
+	all disj p1, p2: Person | p1.personPoint != p2.personPoint
 }
+
 
 /**
 	ASSERTS
 */
 assert allUsersHaveDifferentPositions {
-	no disj u1, u2: User | u1.currentPosition = u2.currentPosition
+	no disj p1, p2: Person | p1.personPoint = p2.personPoint
 }
 check allUsersHaveDifferentPositions for 10
 
@@ -28,7 +30,8 @@ check allUsersHaveDifferentPositions for 10
 	PREDICATES/FUNCTIONS
 */
 pred show() {
-	#User > 0
+	#Person > 0
+	#Point = #Person
 }
 
 run show for 25

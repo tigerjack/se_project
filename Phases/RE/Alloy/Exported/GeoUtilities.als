@@ -1,4 +1,5 @@
 module GeoUtilities
 
-sig Position {}
+
+sig Point {}
 

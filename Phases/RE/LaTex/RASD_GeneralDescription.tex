@@ -66,30 +66,30 @@ External access to the Database provided to Employees and Administrators is unde
 The device used by the User should be able to establish an internet connection to the System using the Application. In addition, in order to perform the localization, reservation and unlocking of a Car the device must have installed a working GPS module. 
 
 \subsubsection{Design and Implementation Constraints}
-The system will employ the HTTP protocol in order to communicate with the Database, the external systems, and with the User through the Application. 
+The system will employ the HTTP(S) protocol in order to communicate with the Database, the external systems, and with the User through the Application. 
 
 \subsection{Assumptions and Dependencies}
 \begin{enumerate}
 	\item The User can only have one Account at time.
-	\item The Company can decide at any time to block an User from the access to the system (f.e. for improper behavior, unpaid bill, ...). The system does not provide this functionality, but has to cope with it.
-	\item In order to use the system functionalities, the User should provide valid Credit Card informations. The Credit Card should not necessarily belong to the same User registering.
-	\item We trust the data provided by the User during his/her registration on the System.
-	\item The Database in which the Cars, Parking Areas, Charging Areas, Users,etc, are stored is managed by an external Company, which is responsible for its security, reliability and availability.
-	\item There's an external company which manages the employees.
-	\item The Car has a set of sensors that can detect, in every moment, its position, the status of its battery, the status of the engine, its damages, the connection of its plug to an electrical socket and the number of seats occupied.
+	\item The Company can decide at any time to block an User from accessing to the System (f.e. for improper behavior, unpaid bill, ...). It will be done by employees or Administrators.
+	\item The User always provides real correct data in his/her registration form.
+	\item The Database in which the Cars, Parking Areas, Charging Areas, Users,etc, are stored, is owned and managed from the Company (and not by this System), which is responsible for its security, reliability and availability. Our System is provided by the Company with read/write access to this Database.
+	\item The Company is responsible for the employees and their actions.
+	\item The Car has a set of sensors that can detect, in every moment, its position, the status of its battery, the status of the engine, its damages, the connection of its plug to an electrical socket and the number of seats occupied. We assume that these sensors won't ever break down and that their measures are always correct.
+	\item The Car GPS always detects its position with absolute precision.
 	\item The User always enters the Car when he/she unlocks its doors.	
 	\item After a Car is Plugged, it will not be maliciously unplugged by the User himself/herself or by other people.
-	\item After the doors of the cars are unlocked by the User, he/she always enters the Car, ignites the engine and leave the Parking/Charging Area.
+	\item After the doors of the cars are unlocked by the User, he/she always enters the Car, ignites the engine and leave the Parking Area.
 	\item An User can park/stop the Car everywhere and leave the Car at anytime. However, the system will end the ride (i.e. stop charging the User) only if he/she turns the engine off inside a Parking Area.
-	\item When the User gets Passengers, the corresponding discount on the User's fee will be applied only if the passengers stay in the Car for more than 3 minutes.	
-	\item When a User will park the Car inside a Parking Area, it will always correctly use one of the free slots.
-	\item As soon as the Car battery status gets below 20\% of the full capacity AND the Car isn't in a Charging Area AND the Car state isn't \textit{In Use} OR \textit{Plugged}, there's always an Employee that immediately reaches the Car and recharges it on site; in the meanwhile the Car status is \textit{Unavailable}.	
-	\item When the Car battery status reaches the 0\% of the full capacity the Car stops working and is immediately set as \textit{Unavailable}.
+	\item When the User gets at least two Passengers, the corresponding discount on the User's fee will be applied only if the passengers stay together in the Car for more than 3 minutes. 
+	\item When a User will park the Car inside a Parking Area, it will always correctly use one and only one free slot.
+	\item As soon as the Car battery status gets below 20\% of the full capacity AND the Car isn't in a Charging Area AND the Car Status isn't \textit{In Use} OR \textit{Plugged}, there's always an Employee that immediately reaches the Car and recharges it on site; in the meanwhile the Car status is \textit{Unavailable}.	
+	\item When the Car is \textit{In Use} and the battery charge level reaches the 0\% of the full capacity the Car stops working and is immediately set as \textit{Unavailable}.
 	If the Car status is \textit{Unavailable}, the Car will be reached by an Employee to consider if the Car needs to be taken in the Company's workshop for repairs or just needs to be recharged.
 	\item The Car has the ability to detect if it has been damaged. 
-	\item If the Car status is \textit{In Use} when a \textit{Minor damage} is detected, the Car status will be set to \textit{Unavailable} at the end of the ride; if a \textit{Major damage} is detected the Car status is immediately set to \textit{Unavailable}. In both cases an employee will reach the car and cope with the damages, deciding if the Car can be immediately used again (sets it to \textit{Available}) and/or if the User should pay for the damages. 
-	\item A car which is \textit{Available} or \textit{Plugged} can be set as \textit{Unavailable} in every moment by an Employee. Our system do not offer this functionality, but has to cope with it.
-	\item A car which is \textit{Unavailable} can be set to \textit{Available} in every moment by an Employee. Our system do not offer this functionality, but has to cope with it.
+	\item If the Car status is \textit{In Use} when a \textit{Minor damage} is detected, the Car status will be set to \textit{Unavailable} at the end of the ride; if a \textit{Major damage} is detected the Car status is immediately set to \textit{Unavailable}. In both cases an employee will reach the car and cope with the damages, deciding if the Car can be immediately used again (sets it to \textit{Available}) or should be moved to the Company's workshop and/or if the User should pay for the damages. 
+	\item A car which is \textit{Available} or \textit{Plugged} can be set as \textit{Unavailable} in every moment by an Employee. This is done through another Company's System as it is not provided in this System.
+	\item A car which is \textit{Unavailable} can be set to \textit{Available} in every moment by an Employee.  This is done through another Company's System and it is not provided in this System.
 	\item If the Car has been left out of a Parking Area there will always be an employee which immediately reaches it, recharges it and move it to a Charging Area. 
 	\item Every fine received by the Company for improper use of the Car will be managed by the Company.
 	

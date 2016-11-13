@@ -14,12 +14,13 @@ sig Car {
 	currentState: one CarState,
 	pluggedStatus: one PluggedStatus,
 	engineStatus: one EngineStatus,
-	currentPosition: one Position
+	//N.B.: This means that every car in every moment occupies a range of points
+	carPoints: some Point
 }
 {
 
 	#usedSeats <= #availableSeats
-	usedSeats != none implies usedSeats & User != none
+//	usedSeats != none implies usedSeats & User != none
 	usedSeats != none implies currentState = InUse
 	currentState != none
 	currentState != InUse implies usedSeats = none
@@ -57,7 +58,7 @@ sig MajorDamage, MinorDamage extends Damage {}
 /*
 	FACTS
 */
-// Trivial
+// Trivial relations
 fact allEngineStatusAreAssociatedToSomeCar {
 	all es: EngineStatus | es in Car.engineStatus
 }
@@ -86,11 +87,15 @@ fact damagesMustBeAssociatedToACar {
 
 // Others
 fact carsPositionsDoNotOverlap {
-	all disj c1, c2: Car | c1.currentPosition != c2.currentPosition
+	all disj c1, c2: Car | c1.carPoints & c2.carPoints = none
 }
 
 fact personsAreNotUbiquituous {
-	all p: Person | one c: Car | p in c.usedSeats
+	all disj c1, c2: Car | no p: Person | p in c1.usedSeats and p in c2.usedSeats
+}
+
+fact personsInUsedSeatsHaveSamePositionOfCar {
+	all c: Car, p: Person | p in c.usedSeats iff p.personPoint in c.carPoints 
 }
 
 fact majorDamagesImpliesUnavailableCars {
@@ -103,7 +108,7 @@ fact majorDamagesImpliesUnavailableCars {
 	ASSERTS
 */
 assert allCarsHaveDifferentPositions {
-	no disj c1, c2: Car | c1.currentPosition = c2.currentPosition
+	all disj c1, c2: Car | no c1.carPoints & c2.carPoints
 }
 check allCarsHaveDifferentPositions for 10
 
@@ -115,7 +120,7 @@ check allPersonsCantBeInDifferentCars for 10
 
 assert allPersonsInACarMustHaveThatCarPosition {
 	all p: Person, c: Car | p in c.usedSeats implies 
-		p.currentPosition = c.currentPosition
+		p.personPoint in c.carPoints
 }
 
 assert allMajorDamagedCarsAreUnavailable {
@@ -140,11 +145,6 @@ assert allCarWithUsedSeatsShouldBeInUse {
 }
 check allCarWithUsedSeatsShouldBeInUse for 10
 
-assert allCarsNonEmptyUsedSeatsShouldHaveAtLeastAnUser {
-	all c: Car |  c.usedSeats != none implies c.usedSeats & User != none
-}
-check allCarsNonEmptyUsedSeatsShouldHaveAtLeastAnUser for 3
-
 assert allCarsNotInUseAndNotPluggedAndWithLowBatteryShouldBeUnavailable {
 	all c: Car | (c.batteryStatus = LowBattery and
 		c.currentState != InUse and
@@ -163,6 +163,12 @@ assert allEnginesOnAreAssociatedToInUseCars {
 }
 check allEnginesOnAreAssociatedToInUseCars for 3
 
+assert allUsedSeatsHaveSamePositionOfCars {
+	all c: Car | c.usedSeats != none implies 
+		c.usedSeats.personPoint in c.carPoints
+}
+check allUsedSeatsHaveSamePositionOfCars for 3
+
 
 /*
 	PREDICATES/FUNCTIONS
@@ -170,7 +176,6 @@ check allEnginesOnAreAssociatedToInUseCars for 3
 pred show() {
 	#Car > 0
 //	#Person > 1
-	#InUse = 0
 //	#(Car.currentState & Reserved) = #Car
 //	Car.currentState & Available = none
 /*
@@ -184,12 +189,14 @@ pred show() {
 	#Damage > 0
 */
 }
-run show for 5
+run show for 3
 
 pred showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery {
-	#Damage = 0
+	#Car > 0
 	#Unavailable = #Car
-	#HighBattery = #Car
+	#MajorDamage = 0
+	#LowBattery = 0
+	#Person = 0
 }
 run showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery for 3
 
@@ -202,6 +209,28 @@ run showCouldExistSomeAvailableCarWithMinorDamages for 3
 pred showCouldExistSomeInUseCarsWithEngineOff {
 	#Car > 0
 	#InUse = #Car
-	#EngineOn = #Car
+	#EngineOff = #Car
 }
 run showCouldExistSomeInUseCarsWithEngineOff for 3
+
+pred showCouldExistSomeInUseCarsWithEngineOnAndPersonsOutside {
+	#Car > 0
+	#InUse = #Car
+	#EngineOn = #Car
+	#Point = #Person
+	#Person > #Car
+}
+run showCouldExistSomeInUseCarsWithEngineOnAndPersonsOutside for 3
+
+pred showCouldExistSomeInUseCarsWithSeatsOccupiedByNonUsers {
+	#Car > 0
+	#Person > 0
+}
+run showCouldExistSomeInUseCarsWithSeatsOccupiedByNonUsers for 3
+
+
+pred showMorePersonsInOneCar {
+	#Car.usedSeats > 1
+	#Car = 1
+}
+run showMorePersonsInOneCar for 5
