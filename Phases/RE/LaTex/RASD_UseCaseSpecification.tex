@@ -52,7 +52,7 @@
 	\textbf{Post Conditions} & The \emph{Visitor} is now become an \emph{User} which can access the \emph{System} using the credentials (Email, password) he provided during the registration phase. \\ \hline
 	\textbf{Exceptions} & 
 	\begin{itemize}
-		The Activation URL expires after 10 days it has been generated. The Visitor's data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
+		\item The Activation URL expires after 10 days it has been generated. The Visitor's data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
 	\end{itemize} \\ \hline
 \end{longtable}
 
@@ -80,7 +80,7 @@
 	\textbf{Post Conditions} & The \emph{System} verifies the existence of an account associated with that pair (Email,password) and logs the \emph{Visitor} in. The \emph{Visitor} has now become \emph{User}  \\ \hline
 	\textbf{Exceptions} & 
 	\begin{itemize}
-	The System doesn’t find an account associated with that pair (Email, Password) and   shows an error message, the flow of events starts from point 1.
+	\item The System doesn’t find an account associated with that pair (Email, Password) and   shows an error message, the flow of events starts from point 1.
 	\end{itemize} \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
@@ -129,7 +129,7 @@
 	\begin{enumerate}
 		\item The \emph{User} selects the function \textit{\textquotedblleft{Show Parking Areas}\textquotedblright} .
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} shows the \emph{User} a map with all the Parking Areas distributed around the city.
+	\textbf{Post Conditions} & The \emph{System} shows the \emph{User} a map with all the Parking Areas distributed around the city. \\ \hline
 	\textbf{Exceptions} &  \\
 	%	\begin{itemize}
 	%	\end{itemize} \\ 
@@ -237,8 +237,8 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 	\begin{enumerate}
 		\item The \emph{User} starts the engine of the \emph{Car}.
 		\item The \emph{System} starts the Ride Timer which indicates the time usage of the \emph{Car}.
-		\item {[}Extension Point UC 9{]}
-		\item {[}Extension Point UC 12{]}
+		\item {[}Extension Point UC 10{]}
+		\item {[}Extension Point UC 13{]}
 		\item The \emph{System} calculates the current \emph{Fee} charged to the \emph{User} (calculated as a given amount of money per minute on the Ride Timer) while showing it on the on-board screen.
 	\end{enumerate}	 \\ \hline
 	\textbf{Post Conditions} & The \emph{User} drives the \emph{Car} \\ \hline
@@ -249,7 +249,7 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 \begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
-	\caption{\textbf{Drive With Passengers $<<$extends UC 8$>>$}} % Table caption
+	\caption{\textbf{Drive With Passengers $<<$extends UC 9$>>$}} % Table caption
 	\label{UC_DriveWithPassengers}%If later on you want to refer to this label, you can use this label. 
 	\\ \hline % end of row + new horizontal line
 	
@@ -288,29 +288,29 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 		\item The \emph{System} verifies that no one is in the \emph{Car}.
 		\item The \emph{System} checks the \emph{Battery} status. 
 		\item The \emph{System} checks, via the GPS coordinates, whether the \emph{User} has left the \emph{Car} within a 3KM distance range from the nearest \emph{Charging Area}.
-		\item The \emph{System} checks if the \emph{User} drove with \emph{Passengers} (UC9).
-		\item {[}Extension Point UC11{]}.
+		\item The \emph{System} checks if the \emph{User} drove with \emph{Passengers} (UC10).
+		\item {[}Extension Point UC12{]}.
 	\end{enumerate}	 \\ \hline
 	\textbf{Post Conditions} & The \emph{System} locks the doors of the \emph{Car} and sets its status to \emph{Available}.
 	
 	The \emph{System} communicates to the \emph{Banking System} the final \emph{Fee} to charge the \emph{User}. \\ \hline
 	\textbf{Alternative Flow of Events} & 
 	\begin{itemize}
-		\item The \emph{Battery} status is higher than 50\%, the \emph{User} didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 20\% \emph{Discount} on the \emph{Fee} of the last ride and communicates it to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{User} did plug the \emph{Car} (UC11), the \emph{Battery} status is higher than or equal to 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), hence the System applies a 30\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{User} did plug the \emph{Car} (UC11), the \emph{Battery} status is lower than 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), hence the System doesn't apply any \emph{Discount} or \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{User} didn't plug the \emph{Car} (UC11), the \emph{Battery} status is higher than 50\%, they either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is higher than 50\%, the \emph{User} didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 20\% \emph{Discount} on the \emph{Fee} of the last ride and communicates it to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} did plug the \emph{Car} (UC12), the \emph{Battery} status is higher than or equal to 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), hence the System applies a 30\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} did plug the \emph{Car} (UC12), the \emph{Battery} status is lower than 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), hence the System doesn't apply any \emph{Discount} or \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} didn't plug the \emph{Car} (UC12), the \emph{Battery} status is higher than 50\%, they either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
 		% Even longtable can't handle tables this long
 		\end{itemize} \\ &
 		\begin{itemize}
-		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 10\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{Battery} status is lower than 20\%, the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), either did or didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{Battery} status is lower than 20\%, the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), either did or didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 10\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is lower than 20\%, the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), either did or didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is lower than 20\%, the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), either did or didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
 		\end{itemize} \\ &
 		\begin{itemize}
-		\item The \emph{Battery} status is higher than 50\%, the \emph{User} either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC11), hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.	
-		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC9), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is higher than 50\%, the \emph{User} either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.	
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
 	\end{itemize} \\ \hline
 	\textbf{Exceptions} & If the \emph{Battery} status reaches 0\% of capacity or the \emph{Car} detects a major damage, the \emph{Car} stops and an assistance team is deployed. \\ \hline
 \end{longtable}
@@ -319,7 +319,7 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 \begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
-	\caption{\textbf{Plug the Car $<<$extends UC 10$>>$}} % Table caption
+	\caption{\textbf{Plug the Car $<<$extends UC 11$>>$}} % Table caption
 	\label{UC_PlugCar}%If later on you want to refer to this label, you can use this label. 
 	\\ \hline % end of row + new horizontal line
 	
@@ -344,7 +344,7 @@ The \emph{System} sets the \emph{Car}'s \emph{Plugged} flag to True.
 \begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
-	\caption{\textbf{Enable Money Saving Option $<<$extends UC 8$>>$}} % Table caption
+	\caption{\textbf{Enable Money Saving Option $<<$extends UC 9$>>$}} % Table caption
 	\label{UC_PlugCar}%If later on you want to refer to this label, you can use this label. 
 	\\ \hline % end of row + new horizontal line
 	
