@@ -1,3 +1,4 @@
+\subsection{Alloy}
 % Set Language
 \lstset{
   language={alloy},
@@ -29,13 +30,13 @@ Also, in our model we have used the \textit{Point} set in order to represents th
 On the other hand, we have simplified our model assuming that a Person is represented by a single Point.
 
 
-\subsection{Code}
+\subsubsection{Code}
 \lstinputlisting{../Alloy/Exported/Persons.als}
 \lstinputlisting{../Alloy/Exported/Cars.als}
 \lstinputlisting{../Alloy/Exported/Areas.als}
 \lstinputlisting{../Alloy/Exported/GeoUtilities.als}
 
-\subsection{Worlds}
+\subsubsection{Worlds}
 
 \begin{figure}[!htbp]
 \centering
@@ -43,7 +44,7 @@ On the other hand, we have simplified our model assuming that a Person is repres
 \caption{Persons}
 \label{fig:Persons}
 \end{figure}
-As we can see from \ref{fig:Persons}, we associate a single point to each person of our world.
+As we can see from Figure \ref{fig:Persons}, we associate a single point to each person of our world.
 
 \begin{figure}[!htbp]
 \centering
@@ -52,9 +53,9 @@ As we can see from \ref{fig:Persons}, we associate a single point to each person
 \label{fig:Cars1}
 \end{figure}
 \FloatBarrier
-The example in \ref{fig:Cars1} represent a possible world. As we can see, the Car represented is In Use, Plugged Off and with two Users occupying two of its five seats. Also, as we can see from the Position link, the Users are both inside the Car. 
+The example in Figure \ref{fig:Cars1} represent a possible world. As we can see, the Car represented is In Use, Plugged Off and with two Users occupying two of its five seats. Also, as we can see from the Position link, the Users are both inside the Car. 
 
-As we have previously said, this is not always the case: a Car, in our System, can be In Use, but with no person inside it. The world for this scenario is represented in \ref{fig:CarsNoneInside}. Another interesting aspect shown in this image is that, although no one is inside the Car, its engine is still on.
+As we have previously said, this is not always the case: a Car, in our System, can be In Use, but with no person inside it. The world for this scenario is represented in Figure \ref{fig:CarsNoneInside}. Another interesting aspect shown in this image is that, although no one is inside the Car, its engine is still on.
 
 \begin{figure}[!htbp]
 \centering
@@ -64,7 +65,7 @@ As we have previously said, this is not always the case: a Car, in our System, c
 \end{figure}
 \FloatBarrier
 
-Another meaningful aspect of our System is the possibility to have perfectly functioning cars whose status is Unavailable. This is surely due to some external Employee who have manually set the status of the Car for whatever reason. This world is shown in \ref{fig:PerfectCarsUnavailable}. 
+Another meaningful aspect of our System is the possibility to have perfectly functioning cars whose status is Unavailable. This is surely due to some external Employee who have manually set the status of the Car for whatever reason. This world is shown in Figure \ref{fig:PerfectCarsUnavailable}. 
 
 \begin{figure}[!htbp]
 \centering
@@ -74,9 +75,9 @@ Another meaningful aspect of our System is the possibility to have perfectly fun
 \end{figure}
 \FloatBarrier
 
-In the successive examples, we can see how things get complicated when we add Company Areas. In \ref{fig:Area1} we show a Car which is In Use and at the same time inside a Charging Area without occupying any of its charging slots. This does not come as a surprise: an User can still be inside an Area even if he/she is using the Car.
+In the successive examples, we can see how things get complicated when we add Company Areas. In Figure \ref{fig:Area1} we show a Car which is In Use and at the same time inside a Charging Area without occupying any of its charging slots. This does not come as a surprise: an User can still be inside an Area even if he/she is using the Car.
 
-\ref{fig:Area2}, instead, shows a Charging Area with a Car inside it. Differently from the previous example, in this world the Car is among the Charging Slots of the Charging Area. Its status, however, is Unavailable.
+Figure \ref{fig:Area2}, instead, shows a Charging Area with a Car inside it. Differently from the previous example, in this world the Car is among the Charging Slots of the Charging Area. Its status, however, is Unavailable.
 
 It is interesting to note the presence of a person inside the Charging Area.
 
@@ -97,7 +98,7 @@ It is interesting to note the presence of a person inside the Charging Area.
 \end{figure}
 \FloatBarrier
 
-\subsection{Executions}
+\subsubsection{Executions}
 In this section we simply shows that the executions of all checks in the different files have not shown the presence of counterexamples. On the other hand, the show predicates have always return valid instances. We may safely assume that our representation of the world under analysis is coherent.
 
 \begin{figure}[!htbp]

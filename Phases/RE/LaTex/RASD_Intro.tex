@@ -1,9 +1,6 @@
 \subsection{Purpose}
 This paper represents the \textbf{R}equirement \textbf{A}nalysis and \textbf{S}pecification \textbf{D}ocument of the \textit{System Under Development}, which will implement the \emph{PowerEnJoy Car-Sharing} Service. This document aims at explaining the functionalities of the System in terms of Functional Requirements, NonFunctional Requirements and Special Requirements, represented using both diagrams and natural language.
 
-%\newcounter{GoalCounter}
-%\stepcounter{GoalCounter}
-
 The above is a comprehensive list of functionalities provided by the System, that actually translates to a list of goals that the system should reach.
 
 \begin{enumerate}
@@ -35,12 +32,21 @@ The aim of the \emph{PowerEnJoy} project is to provide a \textit{Car-Sharing} Se
 This system will have to interface the Cars, Charging Areas, allowing Users to reserve, unlock, drive and park Cars, finally charging them the cost of the ride. 
 The System will keep track of Cars' position, battery level, possible damages, plugging state.
 
+An useful approach we have used in this phase is based on the distinction between world and machine requirements, as proposed by M. Jackson and P. Zave.
+
+In this approach, the machine represents the system to be developed, while the world is the environment in which the machine operates.
+The System under development will define the machine, but has no influence on the world.
+
+There is also a shared set of phenomena that specify, at a high level, the requirements of our System.
+
+The analysis led to the image represented in Figure \ref{fig:WorldMachine}.
 %TODO Add sth here
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{../The_world_and_the_machine.jpg}
 \caption{The World And The Machine}
 \end{figure}
+\label{fig:WorldMachine}
 \FloatBarrier
 
 \subsection{Definitions, Acronyms and Abbreviations}
