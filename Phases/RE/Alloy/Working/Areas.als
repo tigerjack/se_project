@@ -9,6 +9,8 @@ abstract sig CompanyCarSlot {}
 sig ParkingSlot, ChargingSlot extends CompanyCarSlot {}
 
 abstract sig CompanyArea {
+	// We assume that a CompanyArea is composed by a non empty set of Points
+	// This is enough for our modelation of the world
 	areaPoints: some Point
 }
 
@@ -28,7 +30,7 @@ sig ChargingArea extends ParkingArea {
 	#chargingCars <= #chargingSlots
 	#parkedCars <= #parkingSlots
 	// A car can't be charging and parked at the same time
-	// bcz the two sets are disjoint
+	// because the two sets are disjoint
 	chargingCars & parkedCars = none
 }
 
@@ -50,17 +52,19 @@ fact areaPositionsAreAssociatedToExaxtlyOneCompanyArea {
 	all disj a1, a2: CompanyArea | a1.areaPoints & a2.areaPoints = none
 }
 
-// Parked/Charging Cars in Areas position
+// Parked Cars are in Parking Areas position
 fact allParkedCarsAreInsideThoseAreaPositions {
 	all pa: ParkingArea, c: Car | c in pa.parkedCars implies 
 		c.carPoints in pa.areaPoints
 }
 
+//Charging Cars are in Charging Areas position
 fact allChargingCarsAreInsideThoseAreaPositions {
 	all ca: ChargingArea, c: Car | c in ca.chargingCars implies 
 		c.carPoints in ca.areaPoints
 }
 
+// If a Car is inside an Area but not occupying a slot, it should be in use
 fact allCarsInsideAreasButNotParkedOrChargingAreInUse {
 	all c: Car |
 		(c.carPoints in ParkingArea.areaPoints and 
@@ -75,24 +79,13 @@ fact parkingCapacityZeroCanOnlyBeAssociatedToChargingArea {
 }
 
 // N.B. Implies and not Iff bcz a car in a ParkingArea can also be 
-// Unavailable (or Plugged in a ChargingArea
+// Unavailable (or Plugged) in a ChargingArea
 fact carStateAvailableOrReservedImpliesCarAtOneParkingArea {
 	all c: Car, pa: ParkingArea, ca: ChargingArea | 
 		(c.currentState = Available or c.currentState = Reserved) implies
 		( (c in pa.parkedCars and c.carPoints in pa.areaPoints) or 
 		  (c in ca.parkedCars and c.carPoints in ca.areaPoints) or 
 		  (c in ca.chargingCars and c.carPoints in ca.areaPoints))
-}
-
-fact carStateInUseImpliesPositionDifferentFromParkingArea {
-	all c: Car, pa: ParkingArea | c.currentState = InUse implies 
-		c.carPoints not in pa.areaPoints
-}
-
-fact carStateInUseImpliesCarNotInParkingOrChargingArea {
-	all c: Car, pa: ParkingArea, ca: ChargingArea |
-		c.currentState = InUse implies
-		(c not in pa.parkedCars and c not in ca.chargingCars)
 }
 
 // If a car is plugged <=> it must be in one charging area
@@ -104,8 +97,13 @@ fact carStatePluggedIffCarInOneChargingCars {
 fact carParkedInOneParkingArea {
 	all pa1, pa2: ParkingArea | 
 		(pa1 != pa2 implies 
-		pa1.parkedCars & pa2.parkedCars = none) and
-		(ParkingArea.parkedCars & ChargingArea.chargingCars) = none
+			pa1.parkedCars & pa2.parkedCars = none)
+}
+
+fact carChargingInOneChargingArea {
+	all ca1, ca2: ChargingArea | 
+		(ca1 != ca2 implies 
+			ca1.chargingCars & ca2.chargingCars = none)
 }
 
 /**
@@ -130,7 +128,7 @@ check sameCarShouldNotBeParkedAtDifferentParkingArea for 10
 
 // Bcz we assume disjoint sets
 assert sameCarShouldNotBeParkedAndChargingAtSameTime {
-	ParkingArea.parkedCars & ChargingArea.chargingCars = none
+	no ParkingArea.parkedCars & ChargingArea.chargingCars
 }
 check sameCarShouldNotBeParkedAndChargingAtSameTime for 10
 
@@ -145,10 +143,8 @@ check carsParkedOrChargingAreInsideThoseAreasPositions for 10
 	PREDICATES/FUNCTIONS
 */
 pred show() {
-//	#ChargingArea > 0
-//	#(ParkingArea - ChargingArea) > 0
-	#Car > 0
-//	#InUse > 0
+	all p: Point | p in Person.personPoint or p in CompanyArea.areaPoints or
+		p in Car.carPoints
 }
 
 run show for 3

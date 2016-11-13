@@ -14,13 +14,12 @@ sig Car {
 	currentState: one CarState,
 	pluggedStatus: one PluggedStatus,
 	engineStatus: one EngineStatus,
-	//N.B.: This means that every car in every moment occupies a range of points
+	//This means that every car in every moment occupies a range of points
 	carPoints: some Point
 }
 {
 
 	#usedSeats <= #availableSeats
-//	usedSeats != none implies usedSeats & User != none
 	usedSeats != none implies currentState = InUse
 	currentState != none
 	currentState != InUse implies usedSeats = none
@@ -37,7 +36,6 @@ sig Car {
 }
 
 abstract sig BatteryStatus {}
-// Battery less than or greater than 20%
 sig LowBattery, HighBattery extends BatteryStatus {} 
 sig ZeroBattery extends LowBattery{}
 
@@ -175,22 +173,11 @@ check allUsedSeatsHaveSamePositionOfCars for 3
 */
 pred show() {
 	#Car > 0
-//	#Person > 1
-//	#(Car.currentState & Reserved) = #Car
-//	Car.currentState & Available = none
-/*
-	#InUse > 0
-	#Unavailable > 0
-	#Reserved > 0
-	#Available > 0
-
-	#MajorDamage > 0
-	#MinorDamage > 0
-	#Damage > 0
-*/
 }
 run show for 3
 
+// A car may be perfectly functioning but still unavailable (the external  
+// employee has manually set the status to Unavailable) 
 pred showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery {
 	#Car > 0
 	#Unavailable = #Car
@@ -200,12 +187,15 @@ pred showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery {
 }
 run showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery for 3
 
+// A car may have minor damages but still available (the external  
+// employee has manually set the status to Available)
 pred showCouldExistSomeAvailableCarWithMinorDamages {
 	#MinorDamage = #Car
 	#Available = #Car
 }
 run showCouldExistSomeAvailableCarWithMinorDamages for 3
 
+// It does mean that a User has turned the engine off outside a parking area
 pred showCouldExistSomeInUseCarsWithEngineOff {
 	#Car > 0
 	#InUse = #Car
@@ -213,6 +203,7 @@ pred showCouldExistSomeInUseCarsWithEngineOff {
 }
 run showCouldExistSomeInUseCarsWithEngineOff for 3
 
+// Same as before, all the people have left the car, even it is still in use
 pred showCouldExistSomeInUseCarsWithEngineOnAndPersonsOutside {
 	#Car > 0
 	#InUse = #Car
@@ -222,13 +213,16 @@ pred showCouldExistSomeInUseCarsWithEngineOnAndPersonsOutside {
 }
 run showCouldExistSomeInUseCarsWithEngineOnAndPersonsOutside for 3
 
-pred showCouldExistSomeInUseCarsWithSeatsOccupiedByNonUsers {
+// Not only users have access to the car. We ensure that a User reserve a Car, 
+// but we don't know if he/she will use it.
+pred showCouldExistSomeInUseCarsWithAllSeatsOccupiedByNonUsers {
 	#Car > 0
 	#Person > 0
+	#User = 0
 }
-run showCouldExistSomeInUseCarsWithSeatsOccupiedByNonUsers for 3
+run showCouldExistSomeInUseCarsWithAllSeatsOccupiedByNonUsers for 3
 
-
+// Show that different people can be in the same car
 pred showMorePersonsInOneCar {
 	#Car.usedSeats > 1
 	#Car = 1

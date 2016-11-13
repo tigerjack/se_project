@@ -191,6 +191,8 @@ pred show() {
 }
 run show for 3
 
+// A car may be perfectly functioning but still unavailable (the external  
+// employee has manually set the status to Unavailable) 
 pred showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery {
 	#Car > 0
 	#Unavailable = #Car
@@ -200,12 +202,15 @@ pred showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery {
 }
 run showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery for 3
 
+// A car may have minor damages but still available (the external  
+// employee has manually set the status to Available)
 pred showCouldExistSomeAvailableCarWithMinorDamages {
 	#MinorDamage = #Car
 	#Available = #Car
 }
 run showCouldExistSomeAvailableCarWithMinorDamages for 3
 
+// It does mean that a User has turned the engine off outside a parking area
 pred showCouldExistSomeInUseCarsWithEngineOff {
 	#Car > 0
 	#InUse = #Car
@@ -213,22 +218,28 @@ pred showCouldExistSomeInUseCarsWithEngineOff {
 }
 run showCouldExistSomeInUseCarsWithEngineOff for 3
 
-pred showCouldExistSomeInUseCarsWithEngineOnAndPersonsOutside {
+// Same as before, all the people have left the car, even it is still in use
+pred showCouldExistSomeInUseCarsWithEngineOnAndAllPersonsOutside {
 	#Car > 0
 	#InUse = #Car
 	#EngineOn = #Car
-	#Point = #Person
-	#Person > #Car
+	#Person > 0
+	#Damage = 0
+	#CarSeat = #Car
+	#Car.usedSeats = 0
 }
-run showCouldExistSomeInUseCarsWithEngineOnAndPersonsOutside for 3
+run showCouldExistSomeInUseCarsWithEngineOnAndAllPersonsOutside for 3
 
-pred showCouldExistSomeInUseCarsWithSeatsOccupiedByNonUsers {
+// Not only users have access to the car. We ensure that a User reserve a Car, 
+// but we don't know if he/she will use it.
+pred showCouldExistSomeInUseCarsWithAllSeatsOccupiedByNonUsers {
 	#Car > 0
 	#Person > 0
+	#User = 0
 }
-run showCouldExistSomeInUseCarsWithSeatsOccupiedByNonUsers for 3
+run showCouldExistSomeInUseCarsWithAllSeatsOccupiedByNonUsers for 3
 
-
+// Show that different people can be in the same car
 pred showMorePersonsInOneCar {
 	#Car.usedSeats > 1
 	#Car = 1
