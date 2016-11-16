@@ -9,7 +9,7 @@ open Persons
 sig Car {
 	batteryStatus: one BatteryStatus,
 	availableSeats: some CarSeat,
-	usedSeats: set Person,
+	insidePersons: set Person,
 	damages: set Damage,
 	currentState: one CarState,
 	pluggedStatus: one PluggedStatus,
@@ -19,10 +19,10 @@ sig Car {
 }
 {
 
-	#usedSeats <= #availableSeats
-	usedSeats != none implies currentState = InUse
+	#insidePersons <= #availableSeats
+	insidePersons != none implies currentState = InUse
 	currentState != none
-	currentState != InUse implies usedSeats = none
+	currentState != InUse implies insidePersons = none
 	currentState = InUse implies pluggedStatus = PluggedOff
 	(currentState in Reserved + Available) implies 
 		batteryStatus = HighBattery
@@ -89,11 +89,11 @@ fact carsPositionsDoNotOverlap {
 }
 
 fact personsAreNotUbiquituous {
-	all disj c1, c2: Car | no p: Person | p in c1.usedSeats and p in c2.usedSeats
+	all disj c1, c2: Car | no p: Person | p in c1.insidePersons and p in c2.insidePersons
 }
 
-fact personsInUsedSeatsHaveSamePositionOfCar {
-	all c: Car, p: Person | p in c.usedSeats iff p.personPoint in c.carPoints 
+fact personsInInsidePersonsHaveSamePositionOfCar {
+	all c: Car, p: Person | p in c.insidePersons iff p.personPoint in c.carPoints 
 }
 
 fact majorDamagesImpliesUnavailableCars {
@@ -112,12 +112,12 @@ check allCarsHaveDifferentPositions for 10
 
 assert allPersonsCantBeInDifferentCars {
 	all disj c1, c2: Car | no p: Person |
-		p in c1.usedSeats and p in c2.usedSeats
+		p in c1.insidePersons and p in c2.insidePersons
 }
 check allPersonsCantBeInDifferentCars for 10
 
 assert allPersonsInACarMustHaveThatCarPosition {
-	all p: Person, c: Car | p in c.usedSeats implies 
+	all p: Person, c: Car | p in c.insidePersons implies 
 		p.personPoint in c.carPoints
 }
 
@@ -138,10 +138,10 @@ assert noCarInUseHaveZeroBattery {
 }
 check noCarInUseHaveZeroBattery for 10
 
-assert allCarWithUsedSeatsShouldBeInUse {
-	all c: Car | c.usedSeats != none implies c.currentState = InUse
+assert allCarWithInsidePersonsShouldBeInUse {
+	all c: Car | c.insidePersons != none implies c.currentState = InUse
 }
-check allCarWithUsedSeatsShouldBeInUse for 10
+check allCarWithInsidePersonsShouldBeInUse for 10
 
 assert allCarsNotInUseAndNotPluggedAndWithLowBatteryShouldBeUnavailable {
 	all c: Car | (c.batteryStatus = LowBattery and
@@ -161,11 +161,11 @@ assert allEnginesOnAreAssociatedToInUseCars {
 }
 check allEnginesOnAreAssociatedToInUseCars for 3
 
-assert allUsedSeatsHaveSamePositionOfCars {
-	all c: Car | c.usedSeats != none implies 
-		c.usedSeats.personPoint in c.carPoints
+assert allInsidePersonsHaveSamePositionOfCars {
+	all c: Car | c.insidePersons != none implies 
+		c.insidePersons.personPoint in c.carPoints
 }
-check allUsedSeatsHaveSamePositionOfCars for 3
+check allInsidePersonsHaveSamePositionOfCars for 3
 
 
 /*
@@ -224,7 +224,7 @@ run showCouldExistSomeInUseCarsWithAllSeatsOccupiedByNonUsers for 3
 
 // Show that different people can be in the same car
 pred showMorePersonsInOneCar {
-	#Car.usedSeats > 1
+	#Car.insidePersons > 1
 	#Car = 1
 }
 run showMorePersonsInOneCar for 5
