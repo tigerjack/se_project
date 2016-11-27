@@ -6,32 +6,30 @@ open GeoUtilities
 */
 sig Person {
 	// We assume that each Person is identified by only one point
-	personPoint: one Point
+	personGpsVolume: one GpsVolume
 }
 sig User extends Person {}
-
-/**
-	FACTS
-*/
-fact personPositionsDoNotOverlap {
-	all disj p1, p2: Person | p1.personPoint != p2.personPoint
-}
-
-
-/**
-	ASSERTS
-*/
-assert allUsersHaveDifferentPositions {
-	no disj p1, p2: Person | p1.personPoint = p2.personPoint
-}
-check allUsersHaveDifferentPositions for 10
 
 /**
 	PREDICATES/FUNCTIONS
 */
 pred show() {
-	#Person > 0
-	#Point = #Person
+	#Person > 3
 }
+run show for 6
 
-run show for 25
+pred showCouldExistOverlappingPersons() {
+	#Person > 1
+	#User = 0
+	some disj p1, p2: Person | 
+		p1.personGpsVolume = p2.personGpsVolume
+	GpsVolume in Person.personGpsVolume
+}
+run showCouldExistOverlappingPersons for 2
+
+pred showCouldExistNearbyPersons() {
+	#Person > 1	
+	some disj p1, p2: Person | 
+		p1.personGpsVolume.gpsPoints & p2.personGpsVolume.gpsPoints != none
+}
+run showCouldExistNearbyPersons for 4

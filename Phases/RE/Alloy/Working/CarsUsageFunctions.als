@@ -5,6 +5,12 @@ open Time
 //open Areas
 
 /**
+	The main problem here is that, introducing a dynamic behavior, we should
+	introduce the concept of time for all other entities. F.e., in our world, a 
+	Car can only be in one given state
+*/
+
+/**
 	SIGNATURES
 */
 abstract sig CarUsageTimes {
@@ -13,12 +19,14 @@ abstract sig CarUsageTimes {
 
 one sig ReservationDataStartTime extends CarUsageTimes {}
 {
-	User.(timeDatas.Time).currentState = Reserved
+	all t: Time |
+		User.(timeDatas.t).currentState - Reserved = none
 }
 
 one sig UsingDataStartTime extends CarUsageTimes {}
 {
-	User.(timeDatas.Time).currentState = InUse
+	all t: Time |
+		User.(timeDatas.t).currentState - InUse = none
 }
 
 
@@ -45,14 +53,11 @@ fact anUserCanBeInOnlyOneCarUsageTimes {
 		      u.(CarUsageTimes.timeDatas.t2)
 }
 
-
 fact aCarCanBeInOnlyOneCarUsageTimes { 
 	all c: Car | all disj t1, t2: Time |
 		no (CarUsageTimes.timeDatas.t1).c & 
 		      (CarUsageTimes.timeDatas.t2).c
 }
-
-
 
 fact ifACarIsInUsingSetItCantBeInReservedSetAndViceversa {
 	 no
@@ -63,15 +68,14 @@ fact ifACarIsInUsingSetItCantBeInReservedSetAndViceversa {
 
 ///////////
 fact carsInUseInUsingDataStartTime {
-	all c: Car |
+	all c: Car, t: Time |
 		c.currentState = InUse iff
-		c in User.(UsingDataStartTime.timeDatas.Time)  
+		c in User.(UsingDataStartTime.timeDatas.t)  
 }
 
-
 fact carsReservedInReservationDataStartTime {
-	all c: Car | 
-		c in User.(ReservationDataStartTime.timeDatas.Time) iff 
+	all c: Car, t: Time | 
+		c in User.(ReservationDataStartTime.timeDatas.t) iff 
 		c.currentState = Reserved
 }
 /**
@@ -106,11 +110,14 @@ pred show() {
 }
 run show for 10
 
-/*
 pred init() {
 	no (ReservationDataStartTime.timeDatas).first and
 	no (UsingDataStartTime.timeDatas).first
 }
+run init for 2
+
+/*
+
 
 pred canReserveACar[u: User, c: Car, t: Time] {
 	c.currentState = Available and

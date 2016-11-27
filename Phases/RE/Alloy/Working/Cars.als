@@ -1,5 +1,5 @@
 module Cars
-open util/boolean
+//open util/boolean
 open GeoUtilities
 open Persons
 
@@ -8,22 +8,18 @@ open Persons
 */
 sig Car {
 	batteryStatus: one BatteryStatus,
-	availableSeats: some CarSeat,
-	usedSeats: set Person,
+	carSeats: some CarSeat,
+	usedSeats: Person lone -> lone carSeats,
 	damages: set Damage,
 	currentState: one CarState,
 	pluggedStatus: one PluggedStatus,
 	engineStatus: one EngineStatus,
-	//N.B.: This means that every car in every moment occupies a range of points
-	carPoints: some Point
+	carGpsVolume: one GpsVolume
 }
 {
-
-	#usedSeats <= #availableSeats
-//	usedSeats != none implies usedSeats & User != none
-	usedSeats != none implies currentState = InUse
+	(usedSeats.carSeats) != none implies currentState = InUse
 	currentState != none
-	currentState != InUse implies usedSeats = none
+	currentState != InUse implies (usedSeats.carSeats) = none
 	currentState = InUse implies pluggedStatus = PluggedOff
 	(currentState in Reserved + Available) implies 
 		batteryStatus = HighBattery
@@ -38,17 +34,17 @@ sig Car {
 
 abstract sig BatteryStatus {}
 // Battery less than or greater than 20%
-sig LowBattery, HighBattery extends BatteryStatus {} 
-sig ZeroBattery extends LowBattery{}
+lone sig LowBattery, HighBattery extends BatteryStatus {} 
+lone sig ZeroBattery extends LowBattery{}
 
 abstract sig EngineStatus {}
-sig EngineOn, EngineOff extends EngineStatus {}
+lone sig EngineOn, EngineOff extends EngineStatus {}
 
 abstract sig PluggedStatus {}
-sig PluggedOn, PluggedOff extends PluggedStatus {}
+lone sig PluggedOn, PluggedOff extends PluggedStatus {}
 
 abstract sig CarState {}
-sig Available, Unavailable, Reserved, InUse extends CarState {}
+lone sig Available, Unavailable, Reserved, InUse extends CarState {}
 
 sig CarSeat {}
 
@@ -77,7 +73,7 @@ fact allCarStatesMustBeAssociatedToSomeCars {
 }
 
 fact allCarSeatsMustBeAssociatedToOneCar {
-	all cs: CarSeat | one c: Car | cs in c.availableSeats
+	all cs: CarSeat | one c: Car | cs in c.carSeats
 }
 
 fact damagesMustBeAssociatedToACar {
@@ -86,16 +82,26 @@ fact damagesMustBeAssociatedToACar {
 
 
 // Others
+//Maybe not true
+/*
 fact carsPositionsDoNotOverlap {
-	all disj c1, c2: Car | c1.carPoints & c2.carPoints = none
+	all disj c1, c2: Car | 
+	//symmetric difference
+	 (c1.carGpsVolume.gpsPoints + c2.carGpsVolume.gpsPoints) -
+	 (c1.carGpsVolume.gpsPoints & c2.carGpsVolume.gpsPoints) != none
 }
+*/
 
 fact personsAreNotUbiquituous {
-	all disj c1, c2: Car | no p: Person | p in c1.usedSeats and p in c2.usedSeats
+	all disj c1, c2: Car | no p: Person | 
+		p in (c1.usedSeats).CarSeat and 
+		p in (c2.usedSeats).CarSeat
 }
 
+
 fact personsInUsedSeatsHaveSamePositionOfCar {
-	all c: Car, p: Person | p in c.usedSeats iff p.personPoint in c.carPoints 
+	all c: Car, p: Person | p in (c.usedSeats).CarSeat implies 
+		p.personGpsVolume.gpsPoints & c.carGpsVolume.gpsPoints != none 
 }
 
 fact majorDamagesImpliesUnavailableCars {
@@ -107,20 +113,23 @@ fact majorDamagesImpliesUnavailableCars {
 /**
 	ASSERTS
 */
+// Is it possible that 2 cars have same position in our world?
+/*
 assert allCarsHaveDifferentPositions {
-	all disj c1, c2: Car | no c1.carPoints & c2.carPoints
+	all disj c1, c2: Car | 
+		no c1.carGpsVolume.gpsPoints & c2.carGpsVolume.gpsPoints
 }
-check allCarsHaveDifferentPositions for 10
-
+check allCarsHaveDifferentPositions for 5
+*/
 assert allPersonsCantBeInDifferentCars {
 	all disj c1, c2: Car | no p: Person |
-		p in c1.usedSeats and p in c2.usedSeats
+		p in (c1.usedSeats).CarSeat and p in (c2.usedSeats).CarSeat
 }
 check allPersonsCantBeInDifferentCars for 10
 
 assert allPersonsInACarMustHaveThatCarPosition {
-	all p: Person, c: Car | p in c.usedSeats implies 
-		p.personPoint in c.carPoints
+	all p: Person, c: Car | p in (c.usedSeats).CarSeat implies 
+		p.personGpsVolume.gpsPoints & c.carGpsVolume.gpsPoints != none
 }
 
 assert allMajorDamagedCarsAreUnavailable {
@@ -141,7 +150,7 @@ assert noCarInUseHaveZeroBattery {
 check noCarInUseHaveZeroBattery for 10
 
 assert allCarWithUsedSeatsShouldBeInUse {
-	all c: Car | c.usedSeats != none implies c.currentState = InUse
+	all c: Car | (c.usedSeats).CarSeat != none implies c.currentState = InUse
 }
 check allCarWithUsedSeatsShouldBeInUse for 10
 
@@ -164,8 +173,9 @@ assert allEnginesOnAreAssociatedToInUseCars {
 check allEnginesOnAreAssociatedToInUseCars for 3
 
 assert allUsedSeatsHaveSamePositionOfCars {
-	all c: Car | c.usedSeats != none implies 
-		c.usedSeats.personPoint in c.carPoints
+	all c: Car | (c.usedSeats).CarSeat != none implies 
+		(c.usedSeats).(c.carSeats).personGpsVolume.gpsPoints & 
+		 c.carGpsVolume.gpsPoints != none
 }
 check allUsedSeatsHaveSamePositionOfCars for 3
 
@@ -173,24 +183,6 @@ check allUsedSeatsHaveSamePositionOfCars for 3
 /*
 	PREDICATES/FUNCTIONS
 */
-pred show() {
-	#Car > 0
-//	#Person > 1
-//	#(Car.currentState & Reserved) = #Car
-//	Car.currentState & Available = none
-/*
-	#InUse > 0
-	#Unavailable > 0
-	#Reserved > 0
-	#Available > 0
-
-	#MajorDamage > 0
-	#MinorDamage > 0
-	#Damage > 0
-*/
-}
-run show for 3
-
 // A car may be perfectly functioning but still unavailable (the external  
 // employee has manually set the status to Unavailable) 
 pred showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery {
@@ -199,8 +191,16 @@ pred showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery {
 	#MajorDamage = 0
 	#LowBattery = 0
 	#Person = 0
+	GpsVolume in (Car.carGpsVolume + Person.personGpsVolume)
+
 }
 run showCouldExistSomeUnavailableCarWithNoMajorDamageAndHighBattery for 3
+
+pred showCouldExistSomeCarWithLoweBattery {
+	#Car > 0
+	#LowBattery > 0
+}
+run showCouldExistSomeCarWithLoweBattery for 3
 
 // A car may have minor damages but still available (the external  
 // employee has manually set the status to Available)
@@ -227,8 +227,9 @@ pred showCouldExistSomeInUseCarsWithEngineOnAndAllPersonsOutside {
 	#Damage = 0
 	#CarSeat = #Car
 	#Car.usedSeats = 0
+	GpsVolume in (Car.carGpsVolume + Person.personGpsVolume)
 }
-run showCouldExistSomeInUseCarsWithEngineOnAndAllPersonsOutside for 3
+run showCouldExistSomeInUseCarsWithEngineOnAndAllPersonsOutside for 6
 
 // Not only users have access to the car. We ensure that a User reserve a Car, 
 // but we don't know if he/she will use it.
@@ -244,4 +245,26 @@ pred showMorePersonsInOneCar {
 	#Car.usedSeats > 1
 	#Car = 1
 }
-run showMorePersonsInOneCar for 5
+run showMorePersonsInOneCar for 7
+
+pred show() {
+	#Car > 0
+	#Person > 0
+	#GpsVolume > 1
+	#Car.damages < 3
+//	#Point = 0
+//	#Person > 1
+//	#(Car.currentState & Reserved) = #Car
+//	Car.currentState & Available = none
+/*
+	#InUse > 0
+	#Unavailable > 0
+	#Reserved > 0
+	#Available > 0
+
+	#MajorDamage > 0
+	#MinorDamage > 0
+	#Damage > 0
+*/
+}
+run show for 2

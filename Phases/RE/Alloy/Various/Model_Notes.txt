@@ -1,56 +1,55 @@
 ***	Alloy assumptions
 0.	ChargingArea extends ParkingArea!! (in Alloy, it means CA is a subset of PA)
-1.	All Int are fake (to say so) bcz when we run the model we generates only a
-	small amount of integers. However, this model is consistent.	
-2.	Id codes and emails are not relevant for our Alloy model
-3.	Not interested in Plugs or Socket type bcz we assume only one kind of 
-	Plug/Socket connector. Not interested in batteries neither, but we use them
-	bcz it helps to have them in the Visualizer.
-4.	ChargingCars and ParkedCars are two disjoint sets.
-    A: CONTINUO A PENSARE CHE BISOGNI CAMBIARE IL NOME DI "PARKED CARS", E' TROPPO MISLEADING
-    S: Dovrei mettere "ParkedButNotChargingCars". Meglio specificare nelle 
-    assumptions di Alloy cosa intendiamo per Parked o Charging.
-    A: Alright
-5.	
+1.	Id codes and emails are not relevant for our Alloy model
+4.	ChargingCars and ParkedCars are two disjoint sets. It implies, among other 
+	things, that the ParkingCapacity is not necessarily greater than 
+	ChargingCapacity. 
+5.	Not interested in Visitor in our model
+6.	Positions are exact for CompanyArea because they are predefined.
+	So we assume that each CompanyArea is defined by a set of GpsPoint denoting
+	its area.
+	However, in the real world, positions are approximated for Persons and Cars.
+	For this reason, we introduced the concept of GpsVolume, consisting of 
+	various GpsPoints, and that should be read as "the volume that a Person/Car
+	can occupy at a given moment basing on their GPS coordinates".
+	Of course, we have can have different Persons and/or Cars in the same
+	GpsVolume. 
+	To model the fact that persons or cars are nearby we say that they have to
+	share at least one GpsPoint. So if a Person is inside a Car he/she should
+	have some GpsPoint in common with it; the same concept applies for Cars 
+	inside CompanyAreas.
   	
 *** Project assumptions
 **	Trasversal
-2.	Minutes are rounded up (if a user has driven for 30 seconds it gets rounded
+1.	GPS Positions of Areas are predefined and do not overlap
+2.	Cars can be in the positions of an area but not parked/charging only if they
+	are in use
+3.	Minutes are rounded up (if a user has driven for 30 seconds it gets rounded
 	up to 1 minute) 
 
 **	Cars
-1.	A car may be minor damaged but still available (the  employee has manually 
-	set the status to available again) ??
-2.	We have one kind of Plug, one kind of Socket.
-3.	Users can reserve Plugged and Available cars and no others. 
-    A: NON E' IMPLICITO NEI REQUISITI?
-    S: Yep ma non e` implicito in Alloy, dove devo specificare anche cose che 
-    sembrano banali :S. Metto qua tutto giusto per avere conferme.
-    A: Alright
+1.	A car may be minor damaged but still available.
+2.	We have one kind of Plug, one kind of Socket, one kind of Battery and we are
+	not interested in none of them.
+3.	Users can reserve only Available cars and no others. 
 4.	An "Available" or "Plugged" car can always be set to Unavailable by an 
     Employee or directly by the System, despite the fact that its battery 
     is below 20% or it has a serious damage. 
-    In other words Unavailable not implies always a SeriousDamage or Battery 
-    below 20%, but also other choices from the Company (f.e. maintenance, 
-    we don't know)
-	
+    In other words Unavailable not implies always a SeriousDamage or LowBattery,
+    but also other choices from the Company (f.e. maintenance, we don't know)
 	
 
 **	Areas
-1.	There is one parking area or charging area at a given address
-2.	Cars in a Parking Area can be Available, Reserved or Unavailable.
-	Cars in a Charging Area can also be Plugged.
-6.	All ParkingAreas (excluding ChargingArea) have a parkingCapacity > 0.
+1.	There is one parking area or charging area at a given position.
+2.	Cars in a ParkingSlot can be Available, Reserved or Unavailable.
+	Cars in a ChargingSlot should be PluggedOn.
+3.	All ParkingAreas (excluding ChargingArea) have a parkingCapacity > 0.
 7.	All ChargingAreas have a chargingCapacity > 0, but the parkingCapacity can
 	also be 0.
-7.	CarState = InUse implies that a Car can't be in a Parking/ChargingArea. 
-    A: LO TOGLIEREI COME REQUISITO, UN TIZIO PUO' STARE FERMO NELLA PARKING AREA E COMUNQUE CI PAGA. IN PIU' SE QUESTO HA APPENA PRESO LA MACCHINA DA UNA PARKING AREA SICURO STA NELLA PARKING AREA PER QUALCHE SECONDO PER USCIRNE
-    S: ok, il senso di questo e`: se una macchina e` in uso ed e` in una 
-    ParkingArea la devo considerare o meno tra le ParkedCars? Detto in termini
-    alloyani, la stessa macchina puo` essere contemporaneamente InUse e tra le
-    parkedCars o tra le chargingCars di un Area?
-    A: Effettivamente potremmo avere problemi in futuro con l'implementazione ( se tutte le macchine sono in uso ma parcheggiate, non 
-    abbiamo posti liberi. Mettiamo come assumptions che dopo aver preso la macchina da una charging Area entro un minuto l'utente  	
-    lascia il parcheggio.
+7.	CarState = InUse implies that a Car can't be in a Parking/ChargingSlot. 
 8.	The company has at least 1 ChargingArea (eitherwise we can't have discount
 	and so on) and at least 1 Car.
+
+**	Usage
+1.	All *Datas refers to the current situation, not to previously stored data	
+2.		

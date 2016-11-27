@@ -77,7 +77,7 @@
   numbers=none,
   firstnumber=1,
   numberstyle=\tiny,
-  stepnumber=2,
+  stepnumber=1,
   basicstyle=\scriptsize\ttfamily,
   commentstyle=\itshape,
   keywordstyle=\bfseries,
@@ -90,12 +90,48 @@
     
 % paragraph
 \lstnewenvironment{alloy}[1][]{%
-  \lstset{language=alloy,
-    floatplacement={tbp},captionpos=b,
-    xleftmargin=8pt,xrightmargin=8pt,basicstyle=\ttfamily,#1}}{}
+  \lstset{
+    language=alloy,
+    basicstyle=\small\ttfamily, % Global Code Style
+    captionpos=t, % Position of the Caption (t for top, b for bottom)
+    extendedchars=true, % Allows 256 instead of 128 ASCII characters
+    tabsize=2, % number of spaces indented when discovering a tab 
+    columns=fixed, % make all characters equal width
+    keepspaces=true, % does not ignore spaces to fit width, convert tabs to spaces
+    showstringspaces=false, % lets spaces in strings appear as real spaces
+    breaklines=true, % wrap lines if they don't fit
+    frame=trbl, % draw a frame at the top, right, left and bottom of the listing
+    frameround=tttt, % make the frame round at all four corners
+    framesep=4pt, % quarter circle size of the round corners
+    numbers=left, % show line numbers at the left
+    numberstyle=\color{numbersRed}\tiny\ttfamily, % style of the line numbers
+    commentstyle=\color{eclipseGreen}, % style of comments
+    keywordstyle=\color{eclipsePurple}, % style of keywords
+    stringstyle=\color{eclipseBlue}, % style of strings
+    floatplacement={tbp},
+    xleftmargin=2pt,xrightmargin=2pt,
+    #1}}{}
 
 % paragraph from file
 \newcommand{\alloyfile}[1]{
-  \lstinputlisting[language=alloy,%
-    frame=lines,xleftmargin=8pt,xrightmargin=8pt,basicstyle=\ttfamily,columns=fixed]{#1}
+  \lstinputlisting[
+  language=alloy,%
+  basicstyle=\small\ttfamily, % Global Code Style
+  captionpos=t, % Position of the Caption (t for top, b for bottom)
+  extendedchars=true, % Allows 256 instead of 128 ASCII characters
+  tabsize=2, % number of spaces indented when discovering a tab 
+  columns=fixed, % make all characters equal width
+  keepspaces=true, % does not ignore spaces to fit width, convert tabs to spaces
+  showstringspaces=false, % lets spaces in strings appear as real spaces
+  breaklines=true, % wrap lines if they don't fit
+  frame=trbl, % draw a frame at the top, right, left and bottom of the listing
+  frameround=tttt, % make the frame round at all four corners
+  framesep=4pt, % quarter circle size of the round corners
+  numbers=left, % show line numbers at the left
+  numberstyle=\color{numbersRed}\tiny\ttfamily, % style of the line numbers
+  commentstyle=\color{eclipseGreen}, % style of comments
+  keywordstyle=\color{eclipsePurple}, % style of keywords
+  stringstyle=\color{eclipseBlue}, % style of strings
+  frame=lines,
+  xleftmargin=2pt,xrightmargin=2pt]{#1}
 }
