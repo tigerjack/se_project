@@ -1,0 +1,26 @@
+//Repository
+CarRepo
+	Car findById(long Id)
+	List<CarDAO> findByGpsLatitudeAndGpsLongitude(float GpsLatitude, float GpsLongitude)
+	List<CarDAO> findByBatteryLevelGreaterThanAndStatus(int batteryLevel, String carStatus)
+	
+DamageRepo	
+	List<DamageDAO> findByCarId(Long carId)
+
+UserRepo
+	UserDAO findByEmail(String email)
+	
+ReservationRepo
+	ReservationDAO findByReservingUserAndReservedCarAndIsActiveTrue(UserDAO user, CarDAO car)
+	ReservationDAO findByReservingUserAndIsActiveTrue(UserDAO user)
+	ReservationDAO findByReservedCarAndIsActiveTrue(CarDAO car)
+		
+	
+DrivingRepo
+	DrivingDAO findByDrivingUserAndDrivenCarAndIsActiveTrue(UserDAO user, CarDAO car)
+	DrivingDAO findByDrivingUserAndIsActiveTrue(UserDAO user)
+	DrivingDAO findByDrivenCarAndIsActiveTrue(CarDAO car)
+	List<DrivingDAO> findAll()
+	
+	
+

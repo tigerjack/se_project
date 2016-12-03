@@ -1,0 +1,164 @@
+// Need interface to MailSystem
+class UserService {
+	// Manage registration, login
+}
+
+class UnlockService {
+	
+	unlockCar(User user, GpsLatitude userLatitude, GpsLongitude userLongitude) {
+		// Retrieve active reservation for user ...
+		ReservationDAO reservation = 
+			findByReservingUserAndIsActiveTrue(user)
+		Car car = reservation.getReservedCar()
+		GpsLatitude carLatitude = CarSystem.getGpsLatitude(car)
+		GpsLongitude carLongitude = CarSystem.getGpsLongitude(car)
+		
+		// UNLOCK_CARS_NEARBY_RANGE set in XML File
+		if (MappingUtilities.isInsideCircle(userLatitude, userLongitude, 
+			UNLOCK_CARS_NEARBY_RANGE, car.gpsLatitude, car.gpsLongitude)) {
+				CarSystem.unlockCar(car)
+			}
+		else // not possible to unlock car
+	}	
+}
+
+class DrivingService {
+	@Autowired
+	ReservationRepository r, DrivingRepository d, 
+	UserRepository u, CarRepository c, 
+	BankingRepository b
+	
+	driveCar(CarDAO car, UserDAO user) {
+		ReservationDAO reservation = 
+			findByReservingUserAndReservedCarAndIsActiveTrue(user, car)
+		// if the above is null, exception
+		
+		// get timer for reservation from application context and stop it		
+		
+		// store driving data		
+		DrivingDAO driving = new DrivingDAO(getCurrentTime(), true, car, user)
+		d.save(driving)
+		
+		// Start async task to send the current fee to the car
+		class CurrentFeeTimerTask extends TimerTask {
+			CarSystem.print(evaluateMinuteFee())
+		}
+		
+		// Run every minute
+		new Timer().schedule(new CurrentFeeTimerTask, 0, 1000)
+		
+		// Start async task to retrieve number of passengers for the car every
+		// minute, in order to possibly apply a discount on the final fee		
+		
+		// Store the timer for driving in application context			
+	}
+	
+	endRide(DrivingDAO driving) {
+		// get timer for driving from application context and stop it
+		
+		Fee tempFee = evaluateMinuteFee()
+		
+		// wait 2 minutes to check if the user plug the car
+		
+		Fee finalFee = evaluateFinalFee(drivingDAO, tempFee)
+		BankingDAO banking = new BankingDAO(finalFee, false, driving, 
+				null, driving.getDrivingUser())
+		b.save(banking)
+	}
+	
+	Float evaluateMinuteFee() {...} // Return minute_fee * minutes
+	Float evaluateFinalFee(DrivingDAO driving, Fee startFee) {...} 
+	// From the driving and the startFee, apply discount or surcharge basing on
+	// 
+}
+
+class ManageReservationServlet {
+	@Autowired
+	ReservationRepository r, DrivingRepository d, 
+	UserRepository u, CarRepository c, 
+	BankingRepository b
+	
+	boolean reserveCar(CarDAO car, UserDAO user) {
+		if (r.findByReservingUserAndIsActiveTrue(user) == null &&
+			r.findByReservedCarAndIsActiveTrue(car) == null &&
+			d.findByReservedCarAndIsActiveTrue(car) == null &&
+			d.findByReservingUserAndIsActiveTrue(user) == null)
+			
+			{
+				ReservationDAO reservation = 
+					new ReservationDAO(currentTime, user, car)
+				r.save(reservation)
+				
+				// start async thread ReservationTimer for r
+				Timer timer = new Timer()
+				
+				// store timer for reservation in application context				
+			}
+	}
+	
+	class ReservationTimerExpiredListener implements Listener {
+		onReservationExpires(ReservationDAO reservation) {
+			BankingDAO banking = new BankingDAO(1, false, null, reservation, 
+				reservation.getUser())
+			reservation.setIsActive(false)
+			reservation.setTimeEnd(getCurrentTime)
+			reservation.setBanking(banking)
+			b.save(banking)
+			r.save(reservation)
+		}
+	}
+}
+
+CarsLiveDataService {
+	List<Car> getAvailableCarsNearby(Float gpsLatitude, Float gpsLongitude) {
+		List<CarDAO> availableCars = findByBatteryLevelGreaterThanAndStatus(20, CAR_STATUS_AVAILABLE)
+		
+		List<CarDAO> nearbyAvailableCars = new List<Car>()
+		for (CarDAO car: availableCars) {
+			// LOCATE_CARS_RANGE SET IN XML_FILE
+			if (MappingUtilities.isInsideCircle(gpsLatitude, gpsLongitude, 
+				LOCATE_CARS_NEARBY_RANGE, car.gpsLatitude, car.gpsLongitude)) {
+					nearbyAvailableCars.add(car)
+				}				
+		}
+		return nearbyAvailableCars;
+					
+	}
+	
+	List<Car> getAvailableCarsNearby(String address) {
+		return this.getAvailableCarsNearby(
+			MappingSystem.getLatitudeByAddress(address),
+			MappingSystem.getLongitudeByAddress(address))
+	}
+}	
+
+static class MappingUtilities {
+	static boolean isInsideCircle(Float gpsCentralLatitude, Float gpsCentralLongitude,
+					int radius, Float gpsLatitude, Float gpsLongitude) {
+			MappingSystem.GpsPosition centralPosition = new MappingSystem.GpsPosition(
+				gpsCentralLatitude, gpsCentralLongitude)
+			MappingSystem.GpsPosition givenPosition = new MappingSystem.GpsPosition(
+				gpsLatitude, gpsLongitude)
+	
+			return (MappingSystem.isInsideCircle (centralPosition, radius, givenPosition)
+	}
+}
+
+// Need to connect to the mapping system
+class MappingService {
+	showMapWithCar(List<CarDAO> Car) {
+		// for every car, get gps position and send informations to client.
+		// Client will indipendently plot a map, while this function is needed
+		// to show the position of the cars on the map.
+	}
+	
+	showMapWithArea(List<AreaDAO> Area) {
+	// As the previous one, but for map
+	}
+}
+
+// Need to connect to the banking system
+BankingService {
+	// Has a chronjob to periodically send all the banking information that has
+	// not been processed to the banking system	
+}

@@ -1,0 +1,76 @@
+// All annotates with @Entity
+
+class UserDAO {
+	Long id
+	String email
+	String ssn
+	String drivingLicense
+		List<ReservationDAO> reservations
+		List<DrivingDAO> drivings
+}
+	
+class CarDAO {
+	Long id
+	String plateNumber
+	Float gpsLatitude
+	Float gpsLongitude
+	boolean engineOn
+	boolean pluggedOn
+	Int batteryLevel
+	String status
+		List<DamageDAO> damages
+		List<ReservationDAO> reservations
+		List<DrivingDAO> drivings
+		List<BankingDAO> bankings
+}
+					
+class DamageDao {
+	Long id
+	boolean isMajorDamage
+	String descriptionText
+	Long timeDetected
+	Long timeSolved
+		CarDAO damagedCar
+}
+	
+class ReservationDao {
+	//constructor
+	public ReservationDao(Long timeStart, boolean isActive, CarDAO car, 
+		UserDAO user)
+	Long id
+	Long timeStart
+	Long timeEnd		// 0 init value
+	boolean isActive
+		CarDAO reservedCar
+		UserDAO reservingUser
+		BankingDAO banking // null init value
+}
+					
+class DrivingDao {
+	//constructor
+	public DrivingDao(Long timeStart, boolean isActive, CarDAO car, 
+		UserDAO user)
+	
+	Long id
+	Long timeStart
+	Long timeEnd		// 0 init value
+	boolean hasPassengerDiscount // false init value
+	boolean isActive
+		CarDAO drivenCar
+		UserDAO drivingUser
+		BankingDAO banking // null init value
+}
+
+class BankingDao {
+	//constructor
+	public DrivingDao(Int finalFee, boolean payed, DrivingDAO d, 
+		ReservationDAO r, UserDAO u) {...}
+
+	Long id
+	Float finalFee
+	boolean isPayed
+	boolean hasBeenProcessed
+		DrivingDAO	driving
+		ReservationDAO reservation
+		UserDAO user
+}		

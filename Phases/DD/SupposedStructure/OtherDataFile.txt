@@ -1,0 +1,34 @@
+Fee.xml
+	feePerDrivingMinutes = [Float] <!-- EURO, decided by Company-->
+	feeFixedPerUnsuccesfulReservation = 1 <!-- EURO -->
+	
+	passengersDiscountPercentage = 10 <!-- from 0 to 100 -->
+	passengersNumberForDiscount = 2
+	passengersTimeForDiscount = 3 <!-- minutes -->
+	<!-- The two above means that, in order to apply for a passenger discount,
+	the user should pick at leass 2 passenger for at least 3 minutes-->
+	
+	highBatteryDiscountPercentage = 20 <!-- from 0 to 100 -->
+	highBatteryPercentageForDiscount = 50 <!-- from 0 to 100 -->
+	<!-- The two above means that, in order to apply for an high battey discount,
+	the user should leave the car with more than 50% of battery charge-->
+	
+	pluggedCarDiscountPercentage = 30  <!-- from 0 to 100 -->
+	pluggingCarTime = 2 <!-- minutes -->
+	
+	awayFromChargingAreaSurchargePercentage =  30 <!-- from 0 to 100 -->
+	awayFromChargingAreaMeters =  3000 <!-- meters -->
+	<!-- The two above means that, in order to get surcharged because they have
+	left a car away from a charging area, the users should have left the car at
+	a distance greater than 3000 meters from the nearest charging area -->
+	
+	lowBatterySurchargePercentage =  30 <!-- from 0 to 100 -->
+	lowBatteryPercentageForSurcharge = 20 <!-- from 0 to 100 -->
+	<!-- The two above means that, in order to get surcharged for a low battey
+	lever, the user should leave the car with less than 20% of battery charge-->
+	
+CarsConfig.xml
+	locateCarNearbyRange = 5000 <!-- in meters -->
+	unlockCarNearbyRange = 15 <!-- in meters -->
+	batteryPercentageAvailable = 20 <!-- from 0 to 100>
+	

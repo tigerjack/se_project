@@ -1,0 +1,37 @@
+// Every servlet is mapped to a specific URL.
+// According to the REST style, each url is associated to a specific resource.
+// We should also distinguish if the requests came from a mobile client or web
+// client.
+// We give only a simple example of usage with 
+
+
+@RestController
+class CarUsageServlet {
+	@Autowired CarService cs
+	
+	@RequestMapping(method="GET", value="/logged/cars/nearby/*)
+	public List<CarDAO> getNearbyCars(
+		@RequestParameter(value="client") String client,
+		@RequestParameter(value="userGpsLatitude") GpsLatitude userLatitude, 
+		@RequestParameter(value="userGpsLongitude")	GpsLongitude userLongitude) {
+			cs.getAvailableCarsNearby(userLatitude, userLongitude)
+			// If mobile client, send JSON Data to client
+			
+			// If web client, invoke appropriate JSP and send HTML+JS to client
+	}
+	
+	//Others
+	getNearbyCarsMapWithMarkers(...)
+	reserveCar(...)
+	unlockCar(...)
+	
+}
+
+// We also need to use the Spring Security Framework to use security in our
+// application. Basically, we must retrieve the user list and allow the access
+// to specific URLs only to users in this list.
+// Apart from login and registration pages, all the paths in our application
+// must be secured. We can choose, for example, to secure all the paths 
+// starting with "/logged/*"
+
+
