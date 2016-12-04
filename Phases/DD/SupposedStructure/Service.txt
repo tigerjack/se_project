@@ -1,42 +1,159 @@
-// Need interface to MailSystem
+// Need interface to MailSystemServiceInterface, UserPOJO, UserRepository
+@Service
 class UserService {
-	// Manage registration, login
+	@Autowired UserRepository u, MailSystemServiceInterface m
+	
+	createNewUser(String email, String ssn, String drivingLicense) {
+		// Check if user is already registred, otherwise ...
+		UserPOJO user = new UserPOJO(email, ssn, drivingLicense, false)
+		u.save(user)
+		
+		// We will generate a random activation URL specific for the user.
+		// Then, we store the pair (activation-url, user) in the application
+		// context for 24 hours.
+		// Then, we will send this url to the MailSystem, which in turn will
+		// send the mail to the user
+		Mail mail = new Mail(...)
+		m.sendMailToUser(user.getEmail, mail)
+	} 
+	
+	confirmUser(String url) {
+		// getActivationUrl from application context,
+		// invoke user.setHasConfirmed = True and store the data
+	}
 }
 
-class UnlockService {
+@Service
+// Need interface to MailSystem
+class MailSystemServiceInterface {
+	sendMailToUser(String email, Mail mail) {
+		MailSystem.sendMail(email, subject, text) 
+	}
+}
+
+
+// Need interface to CarSystemServiceInterface, MappingSystemServiceInterface and CarRepositoty
+@Service
+class CarService {
+	@Autowired MappingSystemServiceInterface ms, CarRepository c
 	
+	List<Car> getAvailableCarsNearby(Float gpsLatitude, Float gpsLongitude) {
+		List<CarPOJO> availableCars = c.findByBatteryLevelGreaterThanAndStatus(20, CAR_STATUS_AVAILABLE)
+		
+		List<CarPOJO> nearbyAvailableCars = new List<Car>()
+		for (CarPOJO car: availableCars) {
+			// LOCATE_CARS_NEARBY_RANGE SET IN XML_FILE
+			if (MappingSystemServiceInterface.isInsideCircle(gpsLatitude, gpsLongitude, 
+				LOCATE_CARS_NEARBY_RANGE, car.gpsLatitude, car.gpsLongitude)) {
+					nearbyAvailableCars.add(car)
+				}				
+		}
+		return nearbyAvailableCars;
+					
+	}
+	
+	List<Car> getAvailableCarsNearby(String address) {
+		return this.getAvailableCarsNearby(
+			MappingSystemServiceInterface.getLatitudeByAddress(address),
+			MappingSystemServiceInterface.getLongitudeByAddress(address))
+	}
+}
+
+
+// Need interface to MappingSystemServiceInterface
+@Service
+class MappingService {
+	@Autowired CarRepository c, AreaRepository a
+	
+	showMapWithCars(List<CarPOJO> cars) {
+		// For each car in list 
+			// Retrieve GpsLatitude and Longitude
+			// Create a GpsMarker with this two and 
+			// Append the GpsMarker to a list
+			
+		// Invoke MappingSystemServiceInterface.showMapWithMarker(listGpsMarkers)	
+	}
+
+	showMapWithArea(List<AreaPOJO> areas) {
+		// As the previous one, but for areas
+	}
+
+}
+
+// Need interface to MappingSystem
+@Service
+class MappingSystemServiceInterface {
+	
+	showMapWithMarker(List<GPSMarker> Car) {
+		// for every marker, get gps position and send informations to client.
+		// Client will indipendently plot a map, while this function is needed
+		// to show the position of the markers on the map.
+	}
+	
+	boolean isInsideCircle(Float gpsCentralLatitude, Float gpsCentralLongitude,
+					int radius, Float gpsLatitude, Float gpsLongitude) {
+			MappingSystem.GpsPosition centralPosition = new MappingSystem.GpsPosition(
+				gpsCentralLatitude, gpsCentralLongitude)
+			MappingSystem.GpsPosition givenPosition = new MappingSystem.GpsPosition(
+				gpsLatitude, gpsLongitude)
+	
+			return (MappingSystem.isInsideCircle (centralPosition, radius, givenPosition)
+	}
+	
+	GpsLatitude getLatitudeByAddress(String address) {
+		MappingSystem.getLatitudeByAddress(address)
+	}
+	GpsLongitude getLongitudeByAddress(String address) {
+		MappingSystem.getLongitudeByAddress(address)
+	}
+}
+
+
+// Need interface to CarSystem
+@Service
+class CarSystemServiceInterface {
+	GpsPositiom retrieveGpsPositionOfCar(String plateNumber) {
+		CarSystem.retrievePosition(plateNumber)
+		// Convert the previous position to a valid GPSPosition and return it
+	}
+}
+
+@Service
+class UnlockService {
+	@Autowired ReservationRepository r, MappingSystemServiceInterface m	
 	unlockCar(User user, GpsLatitude userLatitude, GpsLongitude userLongitude) {
 		// Retrieve active reservation for user ...
-		ReservationDAO reservation = 
-			findByReservingUserAndIsActiveTrue(user)
-		Car car = reservation.getReservedCar()
-		GpsLatitude carLatitude = CarSystem.getGpsLatitude(car)
-		GpsLongitude carLongitude = CarSystem.getGpsLongitude(car)
+		ReservationPOJO reservation = 
+			r.findByReservingUserAndIsActiveTrue(user)
+		CarPOJO car = reservation.getReservedCar()
+		GpsLatitude carLatitude = CarSystemServiceInterface.getGpsLatitude(car)
+		GpsLongitude carLongitude = CarSystemServiceInterface.getGpsLongitude(car)
 		
 		// UNLOCK_CARS_NEARBY_RANGE set in XML File
-		if (MappingUtilities.isInsideCircle(userLatitude, userLongitude, 
+		if (MappingSystemServiceInterface.isInsideCircle(userLatitude, userLongitude, 
 			UNLOCK_CARS_NEARBY_RANGE, car.gpsLatitude, car.gpsLongitude)) {
-				CarSystem.unlockCar(car)
+				CarService.unlockCar(car)
 			}
 		else // not possible to unlock car
 	}	
 }
 
+@Service
 class DrivingService {
 	@Autowired
 	ReservationRepository r, DrivingRepository d, 
 	UserRepository u, CarRepository c, 
 	BankingRepository b
 	
-	driveCar(CarDAO car, UserDAO user) {
-		ReservationDAO reservation = 
-			findByReservingUserAndReservedCarAndIsActiveTrue(user, car)
+	driveCar(CarPOJO car, UserPOJO user) {
+		ReservationPOJO reservation = 
+			r.findByReservingUserAndReservedCarAndIsActiveTrue(user, car)
 		// if the above is null, exception
 		
 		// get timer for reservation from application context and stop it		
 		
 		// store driving data		
-		DrivingDAO driving = new DrivingDAO(getCurrentTime(), true, car, user)
+		DrivingPOJO driving = new DrivingPOJO(getCurrentTime(), true, car, user)
 		d.save(driving)
 		
 		// Start async task to send the current fee to the car
@@ -53,40 +170,40 @@ class DrivingService {
 		// Store the timer for driving in application context			
 	}
 	
-	endRide(DrivingDAO driving) {
+	endRide(DrivingPOJO driving) {
 		// get timer for driving from application context and stop it
 		
 		Fee tempFee = evaluateMinuteFee()
 		
 		// wait 2 minutes to check if the user plug the car
 		
-		Fee finalFee = evaluateFinalFee(drivingDAO, tempFee)
-		BankingDAO banking = new BankingDAO(finalFee, false, driving, 
+		Fee finalFee = evaluateFinalFee(drivingPOJO, tempFee)
+		BankingPOJO banking = new BankingPOJO(finalFee, false, driving, 
 				null, driving.getDrivingUser())
 		b.save(banking)
 	}
 	
 	Float evaluateMinuteFee() {...} // Return minute_fee * minutes
-	Float evaluateFinalFee(DrivingDAO driving, Fee startFee) {...} 
-	// From the driving and the startFee, apply discount or surcharge basing on
-	// 
+	Float evaluateFinalFee(DrivingPOJO driving, Fee startFee) {...} 
+	// From the driving and the startFee, apply discount or surcharge
 }
 
-class ManageReservationServlet {
+@Service
+class ReservationService {
 	@Autowired
 	ReservationRepository r, DrivingRepository d, 
 	UserRepository u, CarRepository c, 
 	BankingRepository b
 	
-	boolean reserveCar(CarDAO car, UserDAO user) {
+	boolean reserveCar(CarPOJO car, UserPOJO user) {
 		if (r.findByReservingUserAndIsActiveTrue(user) == null &&
 			r.findByReservedCarAndIsActiveTrue(car) == null &&
-			d.findByReservedCarAndIsActiveTrue(car) == null &&
-			d.findByReservingUserAndIsActiveTrue(user) == null)
+			d.findByDrivenCarAndIsActiveTrue(car) == null &&
+			d.findByDrivingUserAndIsActiveTrue(user) == null)
 			
 			{
-				ReservationDAO reservation = 
-					new ReservationDAO(currentTime, user, car)
+				ReservationPOJO reservation = 
+					new ReservationPOJO(currentTime, user, car)
 				r.save(reservation)
 				
 				// start async thread ReservationTimer for r
@@ -97,8 +214,8 @@ class ManageReservationServlet {
 	}
 	
 	class ReservationTimerExpiredListener implements Listener {
-		onReservationExpires(ReservationDAO reservation) {
-			BankingDAO banking = new BankingDAO(1, false, null, reservation, 
+		onReservationExpires(ReservationPOJO reservation) {
+			BankingPOJO banking = new BankingPOJO(1, false, null, reservation, 
 				reservation.getUser())
 			reservation.setIsActive(false)
 			reservation.setTimeEnd(getCurrentTime)
@@ -109,56 +226,17 @@ class ManageReservationServlet {
 	}
 }
 
-CarsLiveDataService {
-	List<Car> getAvailableCarsNearby(Float gpsLatitude, Float gpsLongitude) {
-		List<CarDAO> availableCars = findByBatteryLevelGreaterThanAndStatus(20, CAR_STATUS_AVAILABLE)
-		
-		List<CarDAO> nearbyAvailableCars = new List<Car>()
-		for (CarDAO car: availableCars) {
-			// LOCATE_CARS_RANGE SET IN XML_FILE
-			if (MappingUtilities.isInsideCircle(gpsLatitude, gpsLongitude, 
-				LOCATE_CARS_NEARBY_RANGE, car.gpsLatitude, car.gpsLongitude)) {
-					nearbyAvailableCars.add(car)
-				}				
-		}
-		return nearbyAvailableCars;
-					
-	}
-	
-	List<Car> getAvailableCarsNearby(String address) {
-		return this.getAvailableCarsNearby(
-			MappingSystem.getLatitudeByAddress(address),
-			MappingSystem.getLongitudeByAddress(address))
-	}
-}	
 
-static class MappingUtilities {
-	static boolean isInsideCircle(Float gpsCentralLatitude, Float gpsCentralLongitude,
-					int radius, Float gpsLatitude, Float gpsLongitude) {
-			MappingSystem.GpsPosition centralPosition = new MappingSystem.GpsPosition(
-				gpsCentralLatitude, gpsCentralLongitude)
-			MappingSystem.GpsPosition givenPosition = new MappingSystem.GpsPosition(
-				gpsLatitude, gpsLongitude)
 	
-			return (MappingSystem.isInsideCircle (centralPosition, radius, givenPosition)
-	}
-}
-
-// Need to connect to the mapping system
-class MappingService {
-	showMapWithCar(List<CarDAO> Car) {
-		// for every car, get gps position and send informations to client.
-		// Client will indipendently plot a map, while this function is needed
-		// to show the position of the cars on the map.
-	}
-	
-	showMapWithArea(List<AreaDAO> Area) {
-	// As the previous one, but for map
-	}
-}
 
 // Need to connect to the banking system
-BankingService {
+@Service
+class BankingSystemServiceInterface {
 	// Has a chronjob to periodically send all the banking information that has
 	// not been processed to the banking system	
+}
+
+@Service
+class ChronJobs {
+	// execute other application-level chronjobs
 }

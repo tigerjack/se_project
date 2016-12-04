@@ -1,26 +1,29 @@
-//Repository
-CarRepo
+@Repository
+CarRepository
 	Car findById(long Id)
-	List<CarDAO> findByGpsLatitudeAndGpsLongitude(float GpsLatitude, float GpsLongitude)
-	List<CarDAO> findByBatteryLevelGreaterThanAndStatus(int batteryLevel, String carStatus)
-	
-DamageRepo	
-	List<DamageDAO> findByCarId(Long carId)
+	List<CarPOJO> findByGpsLatitudeAndGpsLongitude(float GpsLatitude, float GpsLongitude)
+	List<CarPOJO> findByBatteryLevelGreaterThanAndStatus(int batteryLevel, String carStatus)
 
-UserRepo
-	UserDAO findByEmail(String email)
-	
-ReservationRepo
-	ReservationDAO findByReservingUserAndReservedCarAndIsActiveTrue(UserDAO user, CarDAO car)
-	ReservationDAO findByReservingUserAndIsActiveTrue(UserDAO user)
-	ReservationDAO findByReservedCarAndIsActiveTrue(CarDAO car)
+@Repository	
+DamageRepository	
+	List<DamagePOJO> findByCarId(Long carId)
+
+@Repository
+UserRepository
+	UserPOJO findByEmail(String email)
+
+@Repository	
+ReservationRepository
+	ReservationPOJO findByReservingUserAndReservedCarAndIsActiveTrue(UserPOJO user, CarPOJO car)
+	ReservationPOJO findByReservingUserAndIsActiveTrue(UserPOJO user)
+	ReservationPOJO findByReservedCarAndIsActiveTrue(CarPOJO car)
 		
-	
-DrivingRepo
-	DrivingDAO findByDrivingUserAndDrivenCarAndIsActiveTrue(UserDAO user, CarDAO car)
-	DrivingDAO findByDrivingUserAndIsActiveTrue(UserDAO user)
-	DrivingDAO findByDrivenCarAndIsActiveTrue(CarDAO car)
-	List<DrivingDAO> findAll()
+@Repository	
+DrivingRepository
+	DrivingPOJO findByDrivingUserAndDrivenCarAndIsActiveTrue(UserPOJO user, CarPOJO car)
+	DrivingPOJO findByDrivingUserAndIsActiveTrue(UserPOJO user)
+	DrivingPOJO findByDrivenCarAndIsActiveTrue(CarPOJO car)
+	List<DrivingPOJO> findAll()
 	
 	
 
