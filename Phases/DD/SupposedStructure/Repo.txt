@@ -1,22 +1,25 @@
-//Repository
-CarRepo
+@Repository
+CarRepository
 	Car findById(long Id)
 	List<CarPOJO> findByGpsLatitudeAndGpsLongitude(float GpsLatitude, float GpsLongitude)
 	List<CarPOJO> findByBatteryLevelGreaterThanAndStatus(int batteryLevel, String carStatus)
-	
-DamageRepo	
+
+@Repository	
+DamageRepository	
 	List<DamagePOJO> findByCarId(Long carId)
 
-UserRepo
+@Repository
+UserRepository
 	UserPOJO findByEmail(String email)
-	
-ReservationRepo
+
+@Repository	
+ReservationRepository
 	ReservationPOJO findByReservingUserAndReservedCarAndIsActiveTrue(UserPOJO user, CarPOJO car)
 	ReservationPOJO findByReservingUserAndIsActiveTrue(UserPOJO user)
 	ReservationPOJO findByReservedCarAndIsActiveTrue(CarPOJO car)
 		
-	
-DrivingRepo
+@Repository	
+DrivingRepository
 	DrivingPOJO findByDrivingUserAndDrivenCarAndIsActiveTrue(UserPOJO user, CarPOJO car)
 	DrivingPOJO findByDrivingUserAndIsActiveTrue(UserPOJO user)
 	DrivingPOJO findByDrivenCarAndIsActiveTrue(CarPOJO car)

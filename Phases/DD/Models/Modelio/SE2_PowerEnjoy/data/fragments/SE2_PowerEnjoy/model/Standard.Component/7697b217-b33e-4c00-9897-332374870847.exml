@@ -1,7 +1,13 @@
 <?xml version="1.0" ?>
+<<<<<<< HEAD
 <!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="JSON Resolvers" version="4">
   <OBJECT>
     <ID name="JSON Resolvers" mc="Standard.Component" uid="7697b217-b33e-4c00-9897-332374870847"/>
+=======
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Secured Servlets" version="4">
+  <OBJECT>
+    <ID name="Secured Servlets" mc="Standard.Component" uid="7697b217-b33e-4c00-9897-332374870847"/>
+>>>>>>> modelio_2
     <PID name="Mobile Controllers" mc="Standard.Component" uid="0c089f6a-12f5-4d35-a9c8-fe51c9218f78"/>
     <ATTRIBUTES>
       <ATT name="IsActive">false</ATT>
@@ -11,9 +17,109 @@
       <ATT name="IsLeaf">false</ATT>
       <ATT name="IsRoot">false</ATT>
       <ATT name="Visibility">Public</ATT>
+<<<<<<< HEAD
       <ATT name="Name"><![CDATA[JSON Resolvers]]></ATT>
       <ATT name="status">1970354901745664</ATT>
     </ATTRIBUTES>
     <DEPENDENCIES></DEPENDENCIES>
+=======
+      <ATT name="Name"><![CDATA[Secured Servlets]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="InternalStructure">
+        <OBJECT>
+          <ID name="Port" mc="Standard.Port" uid="4d0092a9-a2f7-4826-aa62-4943ea8fe4be"/>
+          <ATTRIBUTES>
+            <ATT name="IsBehavior">false</ATT>
+            <ATT name="IsService">true</ATT>
+            <ATT name="IsConjugated">false</ATT>
+            <ATT name="Direction">None</ATT>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[Port]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <COMP relation="Provided">
+              <OBJECT>
+                <ID name="ProvidedInterface" mc="Standard.ProvidedInterface" uid="ef915f44-fccf-4db0-8ba0-9cbb4e3213e9"/>
+                <ATTRIBUTES>
+                  <ATT name="Name"><![CDATA[ProvidedInterface]]></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <COMP relation="OwnedNaryEnd">
+              <OBJECT>
+                <ID name="" mc="Standard.NaryConnectorEnd" uid="1f183a10-3579-4823-999d-fc3552978c18"/>
+                <ATTRIBUTES>
+                  <ATT name="IsOrdered">false</ATT>
+                  <ATT name="IsUnique">false</ATT>
+                  <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+                  <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <COMP relation="NaryLink">
+                    <OBJECT>
+                      <ID name="" mc="Standard.NaryConnector" uid="137bbd99-7e53-44a9-96a6-415f4bb69445"/>
+                      <ATTRIBUTES>
+                        <ATT name="Name"></ATT>
+                        <ATT name="status">1970354901745664</ATT>
+                      </ATTRIBUTES>
+                      <DEPENDENCIES>
+                        <COMP relation="NaryLinkEnd">
+                          <OBJECT>
+                            <ID name="" mc="Standard.NaryConnectorEnd" uid="01e5efe6-6d9d-4f0e-8c23-66154520d56c"/>
+                            <ATTRIBUTES>
+                              <ATT name="IsOrdered">false</ATT>
+                              <ATT name="IsUnique">false</ATT>
+                              <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+                              <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+                              <ATT name="Name"></ATT>
+                              <ATT name="status">1970354901745664</ATT>
+                            </ATTRIBUTES>
+                            <DEPENDENCIES>
+                              <COMP relation="NaryLink">
+                                <COMPID name="" mc="Standard.NaryConnector" uid="137bbd99-7e53-44a9-96a6-415f4bb69445"/>
+                              </COMP>
+                              <LINK relation="Consumer">
+                                <REFOBJ>
+                                  <ID name="RequiredInterface" mc="Standard.RequiredInterface" uid="487a03d5-db58-4243-b5bd-960e6d5fb262"/>
+                                </REFOBJ>
+                              </LINK>
+                            </DEPENDENCIES>
+                          </OBJECT>
+                          <COMPID name="" mc="Standard.NaryConnectorEnd" uid="1f183a10-3579-4823-999d-fc3552978c18"/>
+                        </COMP>
+                      </DEPENDENCIES>
+                    </OBJECT>
+                  </COMP>
+                  <LINK relation="Provider">
+                    <REFOBJ>
+                      <ID name="ProvidedInterface" mc="Standard.ProvidedInterface" uid="ef915f44-fccf-4db0-8ba0-9cbb4e3213e9"/>
+                    </REFOBJ>
+                  </LINK>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <COMP relation="OwnedElement">
+        <COMPID name="LoginServlet" mc="Standard.Class" uid="4f942f2b-d2e2-432b-b6d3-d16bde800648"/>
+        <COMPID name="RegistrationServlet" mc="Standard.Class" uid="4a5c9c2d-56f3-48d5-8feb-fd0008c48bf9"/>
+        <COMPID name="LocateNearbyCarsServlet" mc="Standard.Class" uid="856eabb4-0d7f-48b5-a6f7-c7609588da27"/>
+        <COMPID name="ReserveCarServlet" mc="Standard.Class" uid="75c2d267-9532-470f-9c53-1fafd17133ce"/>
+        <COMPID name="UnlockCarsServlet" mc="Standard.Class" uid="ab64654d-ac7e-4c5e-a3bd-ca9c87b15256"/>
+        <COMPID name="LocateAreasServlet" mc="Standard.Class" uid="1ef82393-fd9b-408e-b25a-21c5b00f79dc"/>
+      </COMP>
+    </DEPENDENCIES>
+>>>>>>> modelio_2
   </OBJECT>
 </EXT>

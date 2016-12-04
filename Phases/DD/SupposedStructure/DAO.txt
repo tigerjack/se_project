@@ -1,0 +1,90 @@
+// All annotates with @Entity
+
+@Entity
+class UserPOJO {
+	// constructor
+	public UserPOJO (String email, String ssn, String drivingLicense, 
+		boolean hasConfirmed)
+	
+	Long id
+	String email
+	String ssn
+	String drivingLicense
+	boolean hasConfirmed // default false
+		List<ReservationPOJO> reservations
+		List<DrivingPOJO> drivings
+}
+	
+@Entity	
+class CarPOJO {
+	// constructor
+	public CarPOJO (plateNumber,	String status)
+
+	Long id
+	String plateNumber
+	Float gpsLatitude
+	Float gpsLongitude
+	boolean engineOn
+	boolean pluggedOn
+	Int batteryLevel
+	String status
+		List<DamagePOJO> damages
+		List<ReservationPOJO> reservations
+		List<DrivingPOJO> drivings
+		List<BankingPOJO> bankings
+}
+
+@Entity					
+class DamageDao {
+	Long id
+	boolean isMajorDamage
+	String descriptionText
+	Long timeDetected
+	Long timeSolved
+		CarPOJO damagedCar
+}
+
+@Entity	
+class ReservationDao {
+	//constructor
+	public ReservationDao(Long timeStart, boolean isActive, CarPOJO car, 
+		UserPOJO user)
+	Long id
+	Long timeStart
+	Long timeEnd		// 0 init value
+	boolean isActive
+		CarPOJO reservedCar
+		UserPOJO reservingUser
+		BankingPOJO banking // null init value
+}
+
+@Entity					
+class DrivingDao {
+	//constructor
+	public DrivingDao(Long timeStart, boolean isActive, CarPOJO car, 
+		UserPOJO user)
+	
+	Long id
+	Long timeStart
+	Long timeEnd		// 0 init value
+	boolean hasPassengerDiscount // false init value
+	boolean isActive
+		CarPOJO drivenCar
+		UserPOJO drivingUser
+		BankingPOJO banking // null init value
+}
+
+@Entity
+class BankingDao {
+	//constructor
+	public DrivingDao(Int finalFee, boolean payed, DrivingPOJO d, 
+		ReservationPOJO r, UserPOJO u) {...}
+
+	Long id
+	Float finalFee
+	boolean isPayed
+	boolean hasBeenProcessed
+		DrivingPOJO	driving
+		ReservationPOJO reservation
+		UserPOJO user
+}		
