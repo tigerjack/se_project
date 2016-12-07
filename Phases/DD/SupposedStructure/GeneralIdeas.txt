@@ -4,7 +4,22 @@ Services.
 Repositories are used to manage CRUD operations on DB and also implements 
 specific queries on DB entities.
  
-Controllers are used to intercept request, manage request to specific servlets,
+Controllers are used to intercept request, forward request to specific servlets,
  invoke services.
  
-Services are used to manage business logic (algorithm, ...)
+Services are used to manage business logic (algorithm, ...). We have two kind of
+services: Internal and External.
+Internal are used to handle PowerEnjoy logic (checkUserData(username, password),
+getCarInsideRange(5km), enableMoneySavingOption(), ...)
+External are used as a facade to external systems (f.e. MappingSystemService 
+could have a method #isInsideRange(gpsPosition, centralPosition, 5km) which will
+ call the appropriate MappingSystem method(s))
+ 
+ 
+ 
+*** Servlets
+Respond with JSON data
+For a RESTful web service the desired response for a successful authentication 
+should be 200 OK.
+Failed Authentication should return 401.
+

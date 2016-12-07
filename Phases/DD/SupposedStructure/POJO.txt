@@ -1,12 +1,16 @@
 // All annotates with @Entity
 
 class UserPOJO {
+	//constructor
+	public ReservationPOJO(Long timeStart, boolean isActive, CarPOJO car, 
+		UserPOJO user)
+
 	Long id
 	String email
 	String ssn
 	String drivingLicense
-		List<ReservationPOJO> reservations
-		List<DrivingPOJO> drivings
+		+	List<ReservationPOJO> reservations
+		+	List<DrivingPOJO> drivings
 }
 	
 class CarPOJO {
@@ -18,37 +22,36 @@ class CarPOJO {
 	boolean pluggedOn
 	Int batteryLevel
 	String status
-		List<DamagePOJO> damages
-		List<ReservationPOJO> reservations
-		List<DrivingPOJO> drivings
-		List<BankingPOJO> bankings
+		+	List<DamagePOJO> damages
+		+	List<ReservationPOJO> reservations
+		+	List<DrivingPOJO> drivings
 }
 					
-class DamageDao {
+class DamagePOJO {
 	Long id
 	boolean isMajorDamage
 	String descriptionText
 	Long timeDetected
 	Long timeSolved
-		CarPOJO damagedCar
+		+	CarPOJO damagedCar
 }
 	
-class ReservationDao {
+class ReservationPOJO {
 	//constructor
-	public ReservationDao(Long timeStart, boolean isActive, CarPOJO car, 
+	public ReservationPOJO(Long timeStart, boolean isActive, CarPOJO car, 
 		UserPOJO user)
 	Long id
 	Long timeStart
 	Long timeEnd		// 0 init value
 	boolean isActive
-		CarPOJO reservedCar
-		UserPOJO reservingUser
-		BankingPOJO banking // null init value
+		+	CarPOJO reservedCar
+		+	UserPOJO reservingUser
+		+	BankingPOJO bankingData // null init value
 }
 					
-class DrivingDao {
+class DrivingPOJO {
 	//constructor
-	public DrivingDao(Long timeStart, boolean isActive, CarPOJO car, 
+	public DrivingPOJO(Long timeStart, boolean isActive, CarPOJO car, 
 		UserPOJO user)
 	
 	Long id
@@ -58,19 +61,18 @@ class DrivingDao {
 	boolean isActive
 		CarPOJO drivenCar
 		UserPOJO drivingUser
-		BankingPOJO banking // null init value
+		BankingPOJO bankingData // null init value
 }
 
-class BankingDao {
+class BankingPOJO {
 	//constructor
-	public DrivingDao(Int finalFee, boolean payed, DrivingPOJO d, 
+	public DrivingPOJO(Int finalFee, boolean payed, DrivingPOJO d, 
 		ReservationPOJO r, UserPOJO u) {...}
 
 	Long id
 	Float finalFee
-	boolean isPayed
+	boolean hasBeenPayed
 	boolean hasBeenProcessed
 		DrivingPOJO	driving
 		ReservationPOJO reservation
-		UserPOJO user
 }		
