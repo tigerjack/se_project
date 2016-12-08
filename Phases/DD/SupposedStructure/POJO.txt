@@ -57,7 +57,11 @@ class DrivingPOJO {
 	Long id
 	Long timeStart
 	Long timeEnd		// 0 init value
-	boolean hasPassengerDiscount // false init value
+	boolean hasPassengersDiscount // false init value
+--	boolean hasHighBatteryDiscount
+	boolean hasPluggedCarDiscount
+	boolean hasAwayFromChargingAreaSurcharge
+	boolean hasLowBatterySurcharge
 	boolean isActive
 		CarPOJO drivenCar
 		UserPOJO drivingUser
@@ -75,4 +79,4 @@ class BankingPOJO {
 	boolean hasBeenProcessed
 		DrivingPOJO	driving
 		ReservationPOJO reservation
-}		
+}
