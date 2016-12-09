@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{algorithm2e}
 
 \title{Design Document}
 \author{Enrico Migliorini, Alessandro Paglialonga, Simone Perriello}
@@ -47,16 +48,18 @@ The Model macrocomponent would be made up of many different components, each rep
 \subsection{Motivation for MVC}
 The Model-View-Controller design pattern is a tried and tested paradigm that has proved itself to be effective and efficient. By separating the application in three macrocomponents, it allows for full encapsulation, with all the related advantages: each component can be changed without hassle, since they only need to present a coherent interface to the other ones, and it is easy to perform integration testing even if one or more components haven't been fully implemented.
 
-For web applications such as the ones we are developing, the MVC paradigm comes naturally, since these applications are naturally divided in three main components: a GUI running from the user's browser or their smartphone is the View macrocomponent, the Server-side code is the Controller, while the internal SQL database (integrated, in our case, by external APIs) is the Model.
+For web applications such as the ones we are developing, the MVC paradigm comes naturally, since these applications are naturally divided in three main components: a GUI running from the user's smartphone is the View macrocomponent, the Server-side code is the Controller, while the internal SQL database (integrated, in our case, by external APIs) is the Model.
 
 \subsection{Motivation for the Server-Client approach}
-We mentioned above that we are using a client web application the user will interact with, while a large server will perform most of the computation. This is called \emph{Server-Client approach}, and it is used in most web application.
+We mentioned above that we are using a client mobile application the user will interact with, while a large server will perform most of the computation. This is called \emph{Server-Client approach}, and it is used in most web application.
 
-There are several reasons to choose this approach over having every instance of the application fulfill the duties of both the View and Controller macrocomponents: first and foremost, the client application can be kept lightweight, allowing it to be used even on low-spec platforms like older PCs or smartphones. Since the client needs to perform close to no computation, only handling communications, the application can easily run on most platforms.
+There are several reasons to choose this approach over having every instance of the application fulfill the duties of both the View and Controller macrocomponents: first and foremost, the client application can be kept lightweight, allowing it to be used even on low-end smartphones. Since the client needs to perform close to no computation, only handling communications, the application can easily run on most platforms.
 
 Another advantage is that if every client application processed its requests at the same time, there would be a significant chance of collision: for example, two users could reserve the same car at the same time. With a server-side application, collisions can be readily detected and resolved.
 
 Finally, having a centralized server application allows for much quicker communication with the company database, which is necessarily centralized, possibly even located on the same machine.
+
+Other than for the mobile application, the Server-Client approach will be used to manage communication between the server and the Cars: every Car will be outfitted with a small computation unit tasked with collating sensor data. It will be this Car system that will calculate, update and show the current Fee, detect damage, check for the presence of Passengers and communicate with the Server when the Ride ends, either because the User wants to or because the Car has sustained major damage.
 
 \subsection{Component View}
 *TODO*
@@ -73,6 +76,8 @@ The Model, View and Controller macrocomponents communicate with each other throu
 The communication between the thin client making up the View and the server-side Controller application is set up according to the REpresentational State Transfer set of constraints. Data exchange is made through the HTTP protocol, using SSL to provide encryption of sensible data.
 
 Complying with the REST constraints allowed not only for simple component design, but also for intermediate layers such as firewalls or proxies. That is because the stateless nature of the system means that every request sent by the client contains all the necessary information for processing, not relying on server-side information. Furthermore, using a RESTful service allows us to design a uniform interface, easily allowing for future scalability.
+
+The communication between the Cars and the Servers will be REST-compliant as well.
 
 \subsubsection{API queries}
 Part of the Model macrocomponent is made up by a database handled by the Society, which will interact with the Controller through a query language like SQL.
@@ -93,7 +98,51 @@ NGINX is an open source reverse proxy that can also act as an HTTP server. It ca
 
 \clearpage
 \section{Algorithm Design}
-This is to be thought about
+In this section, the two most complex algorithms in the System will be explained.
+\subsection{LocateAvailableCars}
+This is the algorithm that, given a start position, finds all the available cars in a square centered on that position.
+The bounds are calculated via the formula\\
+\verb&new_latitude = latitude&$\pm$\verb&(dy*k)&\\
+\verb&new_longitude = longitude&$\pm$\verb&(dx*k)/cos(latitude*pi/180)&
+
+The constant $k$ is equal to $\frac{180}{\pi\cdot r}$, where $r$ is the radius of the Earth, approximately 6378 kilometers. The $dx$ and $dy$ values are the offset in longitude and latitude, and can be changed from their default value of 5 km. However, this conversion is only accurate if these values are small compared to $r$.
+
+\begin{algorithm}[H]
+ \KwData{a starting position startPos}
+ \KwResult{a list of cars}
+ bounds = calculateBounds(startPos)\\ 
+ cars = SQLQuery(cars which are positioned within the bounds)\\ 
+ \textbf{return} cars
+\end{algorithm}
+
+\subsection{Money Saving Option}
+In order to find the optimal Charging Area where to park the car, the System will need some kind of metrics to evaluate the possible choices. Therefore, this algorithm will assign a score to each Charging Area within reasonable distance of the user (default 1 km) and return the address of the one with the highest score. The \verb+calculateBounds()+ function is shown in the above subsection.
+
+The weights $W_l$, $W_m$ and $W_n$ are defined, defaulting to values of 100, 5 and 10 respectively.
+
+\begin{algorithm}[H]
+ \KwData{a starting position destPos}
+ \KwResult{the address of a Charging Area}
+ bounds = calculateBounds(destPos)\\ 
+ areas = SQLQuery(Charging Areas within the bounds)\\ 
+ set maxScore to minus infinity\\ 
+ set bestArea to NONE\\ 
+ \ForEach{a in areas}{
+  set score to 10\\  
+  score = score - distance(destPos, a.position())/$W_l$\\ 
+  score = score + (a.freeSockets/a.totalSockets)$\cdot W_m$\\
+  score = score - (a.parkedCars/a.totalSpots)$\cdot W_n$\\  
+  \If{freeSockets == 0}{
+   set score to minus infinity
+   }
+  \If{score $>$ maxScore}{
+   set bestArea to a
+   }
+  }
+ 
+ \textbf{return} bestArea.address
+\end{algorithm}
+
 \clearpage
 \section{User Interface}
 Mockups, UX diagrams?
