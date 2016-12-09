@@ -15,7 +15,8 @@ getCarInsideRange(5km), enableMoneySavingOption(), ...)
 External are used as a facade to external systems (f.e. MappingSystemService 
 could have a method #isInsideRange(gpsPosition, centralPosition, 5km) which will
  call the appropriate MappingSystem method(s))
- 
+
+Cars send data only as strins using HTTP messages. 
  
  
 *** Servlets
@@ -30,4 +31,15 @@ Test http://jsonplaceholder.typicode.com/
 
 *** JPA Repositories
 http://docs.spring.io/spring-data/jpa/docs/1.5.0.RELEASE/reference/html/jpa.repositories.html
+
+Main methods:
+void 	delete(ID id)
+void 	delete(T entity)
+boolean 	exists(ID id)
+Iterable<T> 	findAll()
+T 	findOne(ID id)
+<S extends T> S 	save(S entity)
+
+*** Nginx
+https://www.nginx.com/resources/glossary/reverse-proxy-server/
 
