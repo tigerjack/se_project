@@ -293,8 +293,10 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 	\end{enumerate}	 \\ \hline
 	\textbf{Post Conditions} & The \emph{System} locks the doors of the \emph{Car} and sets its status to \emph{Available}.
 	
-	The \emph{System} communicates to the \emph{Banking System} the final \emph{Fee} to charge the \emph{User}. \\ \hline
-	\textbf{Alternative Flow of Events} & 
+	The \emph{System} communicates to the \emph{Banking System} the final \emph{Fee} to charge the \emph{User}. 
+	
+	The \emph{System} asks the \emph{Mail System} to forward the drive details to the \emph{User} email address. \\ \hline
+		\textbf{Alternative Flow of Events} &
 	\begin{itemize}
 		\item The \emph{Battery} status is higher than 50\%, the \emph{User} didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 20\% \emph{Discount} on the \emph{Fee} of the last ride and communicates it to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
 		\item The \emph{User} did plug the \emph{Car} (UC12), the \emph{Battery} status is higher than or equal to 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), hence the System applies a 30\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
