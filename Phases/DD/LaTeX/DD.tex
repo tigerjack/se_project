@@ -3,6 +3,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{algorithm2e}
+\usepackage{calc}
+\usepackage{enumitem}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \title{Design Document}
 \author{Enrico Migliorini, Alessandro Paglialonga, Simone Perriello}
@@ -87,6 +93,16 @@ However, parts of the Model rely on external services: the Maps component, for i
 \subsection{The Spring Framework}
 Spring is an open-source, modular application framework generally used to build web applications on top of the Java EE platform. It provides a plethora of functionalities, from high-level servlet control to security services, that can be used by Java-based web applications. One core feature of Spring is that it can be used on any deployment platform: therefore the development team can focus on building the application without being constrained by the target platform's specifications, and the application could be easily deployed to a different target with minimal effort.
 
+Spring is focused on the Inversion of Control pattern, according to which the programmer should not create objects, rather specify how objects should be created, then delegate that responsibility to an external object or service. This is extremely useful because, according to the Java Persistence Standard, objects will need to be dynamically created at runtime.
+
+Spring allows to use annotations to classify the servlets that we are creating into several stereotypes: here are the ones that we are using.
+\begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries @Repository}]
+	\item[@Entity] This stereotype marks persistent entities, called POJOs, which can be accessed by Controllers, Repositories, and Services, as well as by the mobile client. Users, Cars, and Reservations are examples of objects that can be represented as POJOs, making up a Persistent Layer that can be provided information by a Data Access Layer (explained below).
+	\item[@Repository] Repositories control access to databases, retrieving the information needed to create Entities. Repositories manage database and API queries, providing a Data Access Layer to control information and exchange it with the Persistence Layer.
+	\item[@Controller] Controllers are used for connecting the client to the server, managing HTTP requests, and invoking Services. Their function is to translate HTTP requests to functions and viceversa, providing an interface for client-server communication. For the Car and Mobile clients, which have more responsibilities than the simple Web Client, a specialization \textbf{@RESTController} will be used, allowing us to provide a simple RESTful interface.
+	\item[@Service] Services make up the Business Logic Layer. We provide two specializations of Service, \textbf{@InternalService} and \textbf{@ExternalService}: the former will handle internal logic, such as gathering relevant information to send to the Client, performing checks on Cars and Users, or calculating the optimal Charging Areas for users using the Money Saving Option, while the latter will provide an interface for the external services such as Mapping or Banking. Services will interact with Controllers for client-server communication and with Repositories for data access and modification.
+\end{description}
+
 \subsection{Server Specifications}
 \subsubsection{Tomcat}
 While Spring provides tool for working with servlets, they would be implemented through the Apache Tomcat container and HTTP server. An open source project, Tomcat has been extensively tested and is known for its stability, performance and scalability, also providing excellent documentation and community support. Furthermore, there is an edition focused for Java EE, called TomEE, which integrates flawlessly with Spring.
@@ -139,13 +155,66 @@ The weights $W_l$, $W_m$ and $W_n$ are defined, defaulting to values of 100, 5 a
    set bestArea to a
    }
   }
- 
  \textbf{return} bestArea.address
 \end{algorithm}
 
 \clearpage
 \section{User Interface}
-Mockups, UX diagrams?
+\subsection{Mockups}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../UI/LoginScreen}
+        \caption{Login Screen}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../UI/RegisterScreen}
+        \caption{Register Screen}
+    \end{subfigure}
+\end{figure}
+The Login and Register Screens are the only parts of the application that are accessible to Visitors. Registration can also be performed through the Company website, or Web Client. A User who logs in can access the Main Screen.\clearpage
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../UI/MainScreen}
+        \caption{Main Screen}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../UI/MapScreen}
+        \caption{Map Screen}
+    \end{subfigure}
+\end{figure}
+The Main Screen allows the User to view Cars near either their position or an address of their choice. From the Main Screen, the application shifts to the Map Screen, where all the eligible Cars are shown on a map, together with the position of the User. From this screen, the User can select one of the Cars shown and reserve it.\clearpage
+
+\begin{figure}[h!]
+    \centering
+    \hspace{-2cm}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../UI/UnlockScreen}
+        \caption{Unlock Screen}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.64\textwidth}
+        \includegraphics[width=\textwidth]{../UI/RideScreen}
+        \caption{Ride Screen}
+    \end{subfigure}
+\end{figure}
+After reserving a Car, the application will pass to the Unlock Screen, containing a map showing the User's position and that of the reserved Car. When the system detects that the User is close enough to the Car, the Unlock Car button becomes available.
+
+While the Car is In Use, the application shifts to the Ride Screen, showing a map with the position of the User and allowing them to show on it the available Parking Areas or select the Money Saving Option to be notified of the optimal Charging Area where to park the Car. \clearpage
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.9\textwidth]{../UI/CarScreen}
+	\caption{Car Screen}
+\end{figure}
+
+The Car will have an internal computer showing a map of the area, the current Fee (not including any discount the User might be eligible for) and an "End Ride" button. Not pressing the button when leaving the Car will leave it In Use for a predetermined amount of time, allowing the User to leave the Car for a while if necessary (e.g. going to buy things without worrying that someone other might reserve the Car). When the End Ride button is pressed, the Car will check to be parked in a Parking Area, then communicate all relevant data to the server.
+
 \clearpage
 \section{Requirements Traceability}
 We need the Component Diagram for that.
