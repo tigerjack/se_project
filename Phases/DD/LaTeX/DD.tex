@@ -67,8 +67,39 @@ Finally, having a centralized server application allows for much quicker communi
 
 Other than for the mobile application, the Server-Client approach will be used to manage communication between the server and the Cars: every Car will be outfitted with a small computation unit tasked with collating sensor data. It will be this Car system that will calculate, update and show the current Fee, detect damage, check for the presence of Passengers and communicate with the Server when the Ride ends, either because the User wants to or because the Car has sustained major damage.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Overview}
+	\caption{An overview of the System}
+\end{figure}
+
+\clearpage
 \subsection{Component View}
-*TODO*
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Component}
+	\caption{The Components of the System}
+\end{figure}
+The above image shows the various System components and their relationship with each other. The following diagrams, on the other hand, show the Class Diagrams for various parts of the System.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/CarClient_Class}
+	\caption{The Car Client}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/MobileClient_Class}
+	\caption{The Mobile Client}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/WebClient_Class}
+	\caption{The Web Client}
+\end{figure}
+
 \subsection{Deployment View}
 *TODO*
 \subsection{Runtime View}
@@ -124,22 +155,16 @@ Furthermore, in order to minimize the chance of someone forgetting to press the 
 \clearpage
 \section{Algorithm Design}
 In this section, the two most complex algorithms in the System will be explained.
-\subsection{LocateAvailableCars}
+\subsection{Build Square}
 %TODO Simone:Penso che l'algoritmo puoi chiamarlo tipo buildSquare() perche` non lo usiamo solo per localizzare car, ma anche quando facciamo unlock (per vedere se User e` vicino alla car), quando facciamo end ride (il server deve controllare che siamo in una safe area, ecc.)
-This is the algorithm that, given a start position, finds all the available cars in a square centered on that position.
+This is the algorithm that, given a start position, returns a set of GPS coordinate bouns that form a dX * dY rectangle centered on that position
 The bounds are calculated via the formula\\
 \verb&new_latitude = latitude&$\pm$\verb&(dy*k)&\\
 \verb&new_longitude = longitude&$\pm$\verb&(dx*k)/cos(latitude*pi/180)&
 
-The constant $k$ is equal to $\frac{180}{\pi\cdot r}$, where $r$ is the radius of the Earth, approximately 6378 kilometers. The $dx$ and $dy$ values are the offset in longitude and latitude, and can be changed from their default value of 5 km. However, this conversion is only accurate if these values are small compared to $r$.
+The constant $k$ is equal to $\frac{180}{\pi\cdot r}$, where $r$ is the radius of the Earth, approximately 6378 kilometers. The $dx$ and $dy$ values are the offset in longitude and latitude. It should be noted that this conversion is only accurate if these values are small compared to $r$.
 
-\begin{algorithm}[H]
- \KwData{a starting position startPos}
- \KwResult{a list of cars}
- bounds = calculateBounds(startPos)\\ 
- cars = SQLQuery(cars which are positioned within the bounds)\\ 
- \textbf{return} cars
-\end{algorithm}
+This algorithm is used several times in the project. One example is when the System locates the available Cars near the User, another is when it checks whether the User is close enough to the Car to unlock it.
 
 \subsection{Money Saving Option}
 In order to find the optimal Charging Area where to park the car, the System will need some kind of metrics to evaluate the possible choices. Therefore, this algorithm will assign a score to each Charging Area within reasonable distance of the user (default 1 km) and return the address of the one with the highest score. The \verb+calculateBounds()+ function is shown in the above subsection.
@@ -166,7 +191,31 @@ The weights $W_l$, $W_m$ and $W_n$ are defined, defaulting to values of 100, 5 a
    }
   }
  \textbf{return} bestArea.address
+
+\end{algorithm}
 %TODO Simone: dobbiamo aggiungere l'algoritmo per il calcolo della finale fee (i vari casi di surcharge e disount)
+\subsection{Calculate Final Fee}
+This algorithm is used to calculate the final Fee that a User will have to pay, comprehensive of surcharges and discounts.
+
+\begin{algorithm}[H]
+ \KwData{a DrivingPOJO object containing details about a Ride}
+ \KwResult{the final Fee}
+ startFee = (Ride.timeEnd - Ride.timeStart)*feePerMinute\\
+ feeMultiplier = 1\
+ \If{Ride.hasPassengerDiscount}{
+  feeMultiplier = 0.9
+ }
+ \If{Ride.hasHighBatteryDiscount}{
+  feeMultiplier = 0.8
+ }
+ \If{Ride.hasPluggedCarDiscount}{
+  feeMultiplier = 0.7
+ }
+ \If{Ride.hasAwayFromChargingAreaSurcharge {\bf or} Ride.hasLowBatterySurcharge}{
+  feeMultiplier = feeMultiplier + 0.3
+ }
+ \textbf{return} startFee*feeMultiplier
+
 \end{algorithm}
 
 \clearpage
