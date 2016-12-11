@@ -32,17 +32,31 @@ The System will keep track of Cars' position, battery level, possible damages, p
 
 As for the User Interface, we adopted the \emph{thin client} approach, meaning that most of the computation will be performed on a powerful, central server (\emph{fat client}), while the application (\emph{thin client}) will only collect, communicate and display data.
 \subsection{Glossary}
-TODO Copy-paste that of the RASD + MVC, HTTP, SSL, servlet e simili
+Most of the terms used here have already been explained in the Glossary of the RASD. In addition, we introduce the following.
+\begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries Servlet}]
+	\item[Client] A small computer, acting in accordance to the Server.
+	\item[MVC] Model-View-Controller paradigm. Explained in detail in \ref{MVC}.
+	\item[SSL] Secure Socket Layer. A widely-used security technology for encrypting links.
+	\item[Server] A Large, networked computer, accessible by Clients.
+	\item[Servlet] A Java program extending the capabilities of a Server, e.g. allowind it to work with one or more Clients.
+\end{description}
 \subsection{Reference Documents}
 \begin{itemize}
 	\item RASD for this project
 \end{itemize}
 \subsection{Document structure}
-Sort of a more detailed index. TODO Add l8r.
+The main part of this document is the Architectural Design section, where the specifics of the System are shown in detail, from a Component view to a description of the various protocols used and server specifications.
+
+After that is the Algorithm Design section, where the three most tricky algorithms are explained.
+
+The User Interface section shows several mockups of a User Interface, together with UX diagrams.
+
+Finally, the Requirements Traceability section connects the stakeholder's requirements to the design decisions.
 
 \clearpage
-\section{Architectural design}
+\section{Architectural Design}
 \subsection{Overview}
+\label{MVC}
 The System will be built according to the Model-View-Controller design pattern, being divided in three separate macrocomponents interacting with each other.
 
 The User Application will make up the View macrocomponent. It will display data from the Model and tell the Controller the actions to perform. It would interface with the rest of the system through a Java servlet, allowing information to be transferred seamlessly over a networked connection.
@@ -78,9 +92,10 @@ Other than for the mobile application, the Server-Client approach will be used t
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{../Images/Component}
-	\caption{The Components of the System}
+	\caption{Component Diagram}
 \end{figure}
-The above image shows the various System components and their relationship with each other. The following diagrams, on the other hand, show the Class Diagrams for various parts of the System.
+The above image shows the various System components and their relationship with each other. The following diagrams show the Class Diagrams for various parts of the System.
+We then have a diagram showing the relationships between the POJOs, the Objects that make up the Persistence layer, and finally one for the tasks that are constantly running on the Server.
 
 \begin{figure}[h]
 	\centering
@@ -100,12 +115,191 @@ The above image shows the various System components and their relationship with 
 	\caption{The Web Client}
 \end{figure}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/POJOs}
+	\caption{POJO Objects}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/BackgroundTasks}
+	\caption{Background Tasks}
+\end{figure}
+\clearpage
+
 \subsection{Deployment View}
-*TODO*
+The following diagram shows the deployment view of the whole System. The server specifications are described in \ref{server}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Deployment}
+	\caption{Deployment Diagram}
+\end{figure}
+
+The following diagrams, on the other hand, show how the various components interface and connect to each other.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/CarClient_Communication}
+	\caption{The Car Client Communication}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/MobileAuth_Communication}
+	\caption{Communication for Authentication}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/MobileClient_SecuredCommunication}
+	\caption{The Mobile Client Communication}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/WebClient_Communication}
+	\caption{The Web Client Communication}
+\end{figure}
+\clearpage
+
 \subsection{Runtime View}
-*TODO*
+\subsubsection{Registration}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Registration}
+	\caption{Registration}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Registration_Mobile}
+	\caption{Registration from Mobile}
+\end{figure}
+
+The Visitor wants to register to this platform to have access to the PowerEnjoy services.
+We decided to give the option to register both via mobileapp and via browser. 
+In the MobileApp case the data are sent through JSON while in the browser we return data through JSP.
+\begin{enumerate}
+	\item[1.] The Visitor fills the registration form writing their DrivingLicenseNumber, NumberIDCard , email, password and others non-mandatory data (e.g. date of birth). This data will be sent via the POST HTTP method.
+	\item[2-3.] The System performs a SQL Query to the Database and checks if there are already other accounts with the same email, DrivingLicenseNumber or NumberIDCard. In this way we are sure the Visitor has one account only. If there is another account with those credentials we show an error message to the Visitor, inviting them to login.
+	\item[4.] If nothing went wrong we insert a new tuple with the Visitor's Data into the Table USERS. 
+\end{enumerate}
+\clearpage
+\subsubsection{Confirm Mail}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Confirm_Email}
+	\caption{Email Confirmation}
+\end{figure}
+
+The User will open the URL received in their mail to confirm his account. This action can only be performed via a Web Browser.
+\begin{enumerate}
+	\item[1.] The DataBase checks the existence of the tuple of the corresponding User from the Table USERS.
+	\item[2.] We update the field concerning the confirmation of the account in the tuple of the corresponding User from the Table USERS.
+\end{enumerate}
+\clearpage
+\subsubsection{Login}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Login}
+	\caption{Login}
+\end{figure}
+
+The User can perform this action via mobileAPP only.Moreover this action is required for all the incoming actions.
+\begin{enumerate}
+	\item[1.] The User inserts his credentials (email, password) to log in the System.
+	\item[2.] We perform a SQL query to check if there exists a tuple with the user provided data (email and password). We update the field concerning the confirmation of the account in the tuple of the corresponding User from the Table USERS.
+\end{enumerate}
+\clearpage
+\subsubsection{Show Areas}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Show_Areas}
+	\caption{Show Areas}
+\end{figure}
+The User can perform this action only via mobileAPP.
+\begin{enumerate}
+	\item[1.] GET(``/secured/area/locate/{city}?token=…'')
+	\item[2.] We perform a SQL query to select the Areas that have a value of 'city' corresponding to the received Position.
+\end{enumerate}
+\clearpage
+\subsubsection{Locate Cars}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Locate_Cars}
+	\caption{Locate Cars}
+\end{figure}
+The User can perform this action only via mobileAPP.
+\begin{enumerate}
+	\item[1.] GET(``/secured/cars/locate\_nearby/{gpsPosition}?token=…'')
+	\item[2.] We perform a SQL query to select the Cars and select those which have GPS coordinates within the required bounds.
+\end{enumerate}
+\clearpage
+\subsubsection{Reserve Car}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Reserve_Car}
+	\caption{Reserve Car}
+\end{figure}
+\begin{enumerate}
+	\item[1.] PUT(``/secured/car/reserve/{carid}'',body(``reservation=…token=…''))
+	\item[2-5.] We perform 4 queries to see if the User has already another active reservation or they're actually driving a previously reserved car, moreover we check if meanwhile the chosen car has been reserved by another user. In the first query we select the users filtering the userid in the Reservation table, in the second one we select the users filtering the usedif in the Driving table, in the third query we select the cars filtering the carid in the Reservation table, in the fourth query we select cars filtering the carID in the Driving table.
+\end{enumerate}
+\clearpage
+\subsubsection{Unlock Car}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Unlock_Car}
+	\caption{Unlock Car}
+\end{figure}
+The User can perform this action only via MobileAPP, after performing ReserveCar.
+\begin{enumerate}
+	\item[1.] PUT(“/unlock/{reservationid}”,body(“reservation=…token=..”))
+	\item[2.] We perform a SQL query to check if the User is nearby the car. We previously built a GPS User’s coordinates square so we check if the car GPS coordinates are inside this square to unlock the Car.
+\end{enumerate}
+\clearpage
+\subsubsection{Drive Car}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Drive_Car}
+	\caption{Drive Car}
+\end{figure}
+For this Action the MobileApp is not required.
+We take as an assumption that when a Major Damage happens the people will leave the car.
+\begin{enumerate}
+	\item[1.] We perform a SQL query to check if the Car is inside a SafeArea. We previously built a GPS Car’s coordinates square so we check if the Area GPS coordinates are inside this square and so if the Car is regularly parked.
+	\item[2.] We perform a SQL query to check if the Car is inside a SafeArea. We previously built a GPS Car’s coordinates square so we check if the Area GPS coordinates are inside this square and so if the Car is regularly parked.
+\end{enumerate}
+\clearpage
+\subsubsection{End Ride}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/End_Ride}
+	\caption{End Ride}
+\end{figure}
+For this Action the MobileApp is not required.
+\begin{enumerate}
+	\item[1.] We perform a SQL query to check if the Car is too far from a ChargingArea. We previously built a GPS Car’s coordinates square so we check if the Area GPS coordinates are outside this square and so if should apply a surcharge to the User’s fee.
+	\item[2.] We perform a SQL query to store the Car damage in the Car Table of the Database.
+\end{enumerate}
+\clearpage
+\subsubsection{Money Saving Option}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Sequence_Final/Money_Saving}
+	\caption{Money Saving Option}
+\end{figure}
+The User can perform this action via MobileAPP only.
+We take as an assumption that there's a background task in the system which constantly retrieve data from the Areas.
+\begin{enumerate}
+	\item[1.] We perform a SQL query to return the Areas which are inside a determined size square from the User’s desired address.
+\end{enumerate}
+\clearpage
+
+
 \subsection{Component Interfaces}
-*TODO*
+The System is based on the Spring framework (see \ref{Spring}) and uses its interfaces. For the rest, the Class Diagrams should provide all the necessary information.
 
 \subsection{Protocols}
 The Model, View and Controller macrocomponents communicate with each other through a number of protocols:
@@ -121,7 +315,22 @@ Part of the Model macrocomponent is made up by a database handled by the Society
 
 However, parts of the Model rely on external services: the Maps component, for instance, will send requests to an external API to obtain maps for the desired location, and in the same way the Banking component will process payment by sending requests to an external banking system's API. All communication between the APIs and the Controller will make use of the HTTP protocol.
 
+\subsection{Architectural Style}
+The application will be divided into several layers:
+\begin{enumerate}
+	\item Database
+	\item Repositories (Data Access Layer)
+	\item Entities (Persistence Layer)
+	\item Services (Business Logic Layer)
+	\item Controllers (Communication Layer)
+	\item Thin Client
+\end{enumerate}
+All layers except Thin Client make up the Server Tier.
+
+The components that make up these layers will be explained in the next subsection.
+
 \subsection{The Spring Framework}
+\label{Spring}
 Spring is an open-source, modular application framework generally used to build web applications on top of the Java EE platform. It provides a plethora of functionalities, from high-level servlet control to security services, that can be used by Java-based web applications. One core feature of Spring is that it can be used on any deployment platform: therefore the development team can focus on building the application without being constrained by the target platform's specifications, and the application could be easily deployed to a different target with minimal effort.
 
 Spring is focused on the Inversion of Control pattern, according to which the programmer should not create objects, rather specify how objects should be created, then delegate that responsibility to an external object or service. This is extremely useful because, according to the Java Persistence Standard, objects will need to be dynamically created at runtime.
@@ -135,6 +344,7 @@ Spring allows to use annotations to classify the servlets that we are creating i
 \end{description}
 
 \subsection{Server Specifications}
+\label{server}
 \subsubsection{Tomcat}
 While Spring provides tool for working with servlets, they would be implemented through the Apache Tomcat container and HTTP server. An open source project, Tomcat has been extensively tested and is known for its stability, performance and scalability, also providing excellent documentation and community support. Furthermore, there is an edition focused for Java EE, called TomEE, which integrates flawlessly with Spring.
 
@@ -142,6 +352,11 @@ While Spring provides tool for working with servlets, they would be implemented 
 In order to manage requests, allowing the server to be easily contacted by the clients is paramount. In order to do that, an easy way is introducing an intermediary called a reverse proxy, tasked with retrieving resources according to incoming requests, reducing the risk of overloading the server.
 
 NGINX is an open source reverse proxy that can also act as an HTTP server. It can be set to integrate flawlessly with Tomcat and enables the server to manage thousands of simultaneous connections without any drop in performance. Again, NGINX has an extensive documentation and community support.
+
+\subsubsection{Forward Proxy and Firewall}
+In order to contact External Services, the System sends requests through a forward proxy. This ensures that the System will present a unified outbound interface for HTTP requests. We chose to use tinyproxy for that, because it's lightweight and compatible with Tomcat.
+
+We also assume that the Company will protect its database with a Firewall. It is worth noting that they will have to add the Application servers to the list of trusted addresses.
 
 \subsection{Scenarios}
 During the writing of this document, a case has been repeatedly brought forward and analyzed: that is, what happens when a User wants to leave the car for a relatively short amount of time and not have someone reserve it, possibly leaving them without a ride?
@@ -279,7 +494,26 @@ When the End Ride button is pressed, the Car will check to be parked in a Parkin
 
 \clearpage
 \section{Requirements Traceability}
-We need the Component Diagram for that.
+\begin{enumerate}
+	\item[G1] The System should allow the registration of the Visitors with their credentials and payment informations.
+	\item[-] The Client allows to do that through the Register Screen.
+	\item[G2] The System should allow all Users to use all the functionalities reserved to them.
+	\item[-] All User functionalities are accessible through the Mobile Client.
+	\item[G3] The System should be able to give each User the list of all the available cars in a range of 5KM from his/her GPS position or a specific address.
+	\item[G4] The System should allow each of its Users to reserve a Car whose state is Available.
+	\item[G5] If an User has reserved a Car and he/she did not unlock it within 1 hour from the reservation, the System sets the Car state as Available, the reservation expires and the user pays a fixed Fee of 1 EUR.  
+	\item[G6] The system should allow each User to unlock a previously reserved Car when he/she is in a distance range of 15 meters from the same Car.
+	\item[G7] The system should allow each User to drive a Car which he/she has previously unlocked.
+	\item[G8] The System should be able to know the time usage of the Car, misured in minutes.
+	\item[G9] The System should allow Users to know where are the Parking Areas.
+	\item[G10] The system should allow each User to end the ride in a Parking Area.
+	\item[G11] If the System detects the User took at least two other passengers onto the Car, the system applies a discount of 10\% on the last ride. 
+	\item[G12] If a Car is left with no more than 50\% of the battery empty, the System applies a discount of 20\% on the last ride. 
+	\item[G13] If a Car is left at special parking areas where they can be recharged and the User takes care of plugging the Car into the power grid, the System applies a discount of 30\% on the last ride. 
+	\item[G14] If a Car is left at more than 3 KM from the nearest Charging Area or with more than 80\% of the battery empty, the system charges 30\% more on the last ride to compensate for the cost required to recharge the car on-site.
+	\item[G15] If the User enables the money saving option, he/she can input his/her final destination and the System provides the address of the Charging Area where to leave the Car in order to get a Discount on the total Fee. The Charging Area is determined by the System to ensure a uniform distribution of Cars in the city and depends both on the destination of the User and on the availability of Sockets at the selected Charging Area. 
+\end{enumerate}
+
 \clearpage
 \section{Hours of work}
 
