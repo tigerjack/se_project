@@ -184,7 +184,14 @@
 	\end{enumerate}	 \\ \hline
 	\textbf{Post Conditions} & The \emph{System} stores the \emph{Reservation} of the \emph{Car}, changing its status to \emph{Reserved}.
 The \emph{System} activates a countdown of 1 hour during which the \emph{User} will have the possibility to unlock the \emph{Reserved} \emph{Car}. \\ \hline
-	\textbf{Exceptions} & \\ \hline
+	\textbf{Exceptions} & If one hour has passed since the reservation has been made and the \emph{User} hasn't unlocked the Car, either because he wasn't within the 15 meters distance range or didn't activate this function, then:
+		\begin{itemize}
+		\item The reservation expires, so that the \emph{User} cannot unlock the \emph{Car} anymore (unless they reserve it again).
+		\item The \emph{System} changes the \emph{Car}'s status to \emph{Available}.
+		\item The \emph{System} communicates to the \emph{Banking System} the \emph{Fee} to charge the \emph{User} (this sum amounts to 1 EUR).
+		\item The \emph{System} asks the \emph{Mail System} to forward the reservation details to the \emph{User} email address. 
+		\item The \emph{System} allows the \emph{User} to perform another reservation.
+		\end{itemize} \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
@@ -211,13 +218,8 @@ The \emph{System} activates a countdown of 1 hour during which the \emph{User} w
 The \emph{System} then changes the \emph{Car} status to \emph{In Use} and sets the \emph{Plugged} Flag to False.
 
 The \emph{User} enters the \emph{Car}. \\ \hline
-	\textbf{Exceptions} & If one hour has passed since the reservation has been made and the \emph{User} hasn't unlocked the Car, either because he wasn't within the 15 meters distance range or didn't activate this function, then:
-	\begin{itemize}
-	\item The reservation expires, so that the \emph{User} cannot unlock the \emph{Car} anymore (unless they reserve it again).
-	\item The \emph{System} changes the \emph{Car}'s status to \emph{Available}.
-	\item The \emph{System} communicates to the \emph{Banking System} the \emph{Fee} to charge the \emph{User} (this sum amounts to 1 EUR).
-	\item The \emph{System} allows the \emph{User} to perform another reservation.
-	\end{itemize} \\ \hline
+	\textbf{Exceptions} & %TODO User not near range, system not unlock the car
+	\\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 

@@ -125,6 +125,7 @@ Furthermore, in order to minimize the chance of someone forgetting to press the 
 \section{Algorithm Design}
 In this section, the two most complex algorithms in the System will be explained.
 \subsection{LocateAvailableCars}
+%TODO Simone:Penso che l'algoritmo puoi chiamarlo tipo buildSquare() perche` non lo usiamo solo per localizzare car, ma anche quando facciamo unlock (per vedere se User e` vicino alla car), quando facciamo end ride (il server deve controllare che siamo in una safe area, ecc.)
 This is the algorithm that, given a start position, finds all the available cars in a square centered on that position.
 The bounds are calculated via the formula\\
 \verb&new_latitude = latitude&$\pm$\verb&(dy*k)&\\
@@ -165,6 +166,7 @@ The weights $W_l$, $W_m$ and $W_n$ are defined, defaulting to values of 100, 5 a
    }
   }
  \textbf{return} bestArea.address
+%TODO Simone: dobbiamo aggiungere l'algoritmo per il calcolo della finale fee (i vari casi di surcharge e disount)
 \end{algorithm}
 
 \clearpage
