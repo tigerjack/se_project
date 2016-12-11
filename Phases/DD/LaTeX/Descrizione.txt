@@ -1,0 +1,49 @@
+Registration/Registration Mobile :
+ The Visitor wants to register to this platform to have access to the PowerEnjoy services.
+We decided to give the option to register both via mobileapp and via browser. 
+In the MobileApp case the data sents are JSON while in the browser we return data in jsp to the browser.
+1 : The Visitor fills the registration form writing its DrivingLicenseNumber, NumberIDCard , email, password and others non-mandatory data (e.g. date of birth). This data will be sent via the POST HTTP method.
+2-3: The System performs a SQL Query to the Database and checks if there are already other accounts with the same email, DrivingLicenseNumber or NumberIDCard. In this way we are sure the Visitor has one account only. If there exists another account with those credentials we return the error to the Visitor.
+4 : If nothing went wrong we insert a new tuple with the Visitor’s Data into the Table USERS. 
+Confirm Mail :
+The User will open the URL received in its mail to confirm his account. This action can only be performed via Web Browser. 
+1 : The DataBase checks the existence of the tuple of the corresponding User from the Table USERS.
+2 : We update the field concerning the confirmation of the account in the tuple of the corresponding User from the Table USERS.
+Login :
+The User can perform this action via mobileAPP only.Moreover this action is required for all the incoming actions.
+1 : The User inserts his credentials (email, password) to log in the System.
+2 : We perform a SQL query to check if there exists a tuple with the user provided data (email and password)
+LocateAreas:
+The User can perform this action via mobileAPP only.
+1 : GET(“/secured/area/locate/(city)?token=…”)
+2 : We perform a SQL query to Select the Areas which field “city” corresponds to the city of the User.
+LocateCars:
+The User can Perform this action via mobileAPP only.
+1 : GET(“/secured/cars/locate_nearby/{gpsPosition}?token=…”)
+2 : We perform a SQL query to return the nearby Cars. We select the Cars which GPS coordinates are between the given GPS coordinates built square.
+ReserveCar:
+The User can perform this action via mobileAPP only and  after performing LocateCars.
+The system will launch a background task which will check the 1-hour timeout. If we have the time-out the system gets notified by this task and proceeds as expressed in the diagram.
+1 :  PUT(“/secured/car/reserve/{carid}”,body(“reservation=…token=…”))
+2-3-4-5 We perform 4 queries to see if the User has already another active reservation or he’s actually driving a previously reserved car, moreover we check if meanwhile the chosen car has been reserved by another user. In the first query we Select the users filtering the userid in the reservationTable, in the second one we select the users filtering the usedif in the Driving Table, in the third query we select the cars filtering the carid in the reservation table, in the fourth query we select cars filtering the carid in the driving table.
+6 : We insert a new table concerning a reservation in the Reservation Table.
+UnlockCar:
+The User can perform this action via MobileAPP only and after performing ReserveCar.
+1: PUT(“/unlock/{reservationid}”,body(“reservation=…token=..”))
+2: We perform a SQL query to check if the User is nearby the car. We previously built a GPS User’s coordinates square so we check if the car GPS coordinates are inside this square to unlock the Car.
+DriveCar:
+For this Action the MobileApp is not required.
+We take as an assumption that when a Major Damage happens the people will leave the car.
+1: We perform a SQL query to check if the Car is inside a SafeArea. We previously built a GPS Car’s coordinates square so we check if the Area GPS coordinates are inside this square and so if the Car is regularly parked.
+2 : We perform a SQL query to set the Car status as unavailable as a MajorDamage occurred.
+EndRide:
+For this Action the MobileApp is not required.
+1: We perform a SQL query to check if the Car is too far from a ChargingArea. We previously built a GPS Car’s coordinates square so we check if the Area GPS coordinates are outside this square and so if should apply a surcharge to the User’s fee.
+2 : We perform a SQL query to store the Car damage in the Car Table of the Database.
+MoneySavingOption:
+The User can perform this action via MobileAPP only.
+We take as an assumption that rhere's a background task in the system which constantly retrieve data from the Areas.
+1 : We perform a SQL query to return the Areas which are inside a determined size square from the User’s desired address. 
+
+
+
