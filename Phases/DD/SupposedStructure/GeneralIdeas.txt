@@ -1,6 +1,7 @@
 Pojo are global entities accessible from Controllers, Repositories and 
 Services. Mobile clients can also access this objects. In every case, the only
-way to modify a Pojo is by using its getters/setters method.
+way to modify a Pojo is by using its getters/setters method. It has to be made 
+serializable, so it is more a java bean than a pojos.
 
 Repositories are used to manage CRUD operations on DB and also implements 
 specific queries on DB entities.
@@ -17,6 +18,12 @@ could have a method #isInsideRange(gpsPosition, centralPosition, 5km) which will
  call the appropriate MappingSystem method(s))
 
 Cars send data only as strins using HTTP messages. 
+
+*** Pojo, bean, orm, dao, repository
+http://stackoverflow.com/questions/4037251/dao-vs-ormhibernate-pattern
+http://stackoverflow.com/questions/1394265/what-is-the-difference-between-a-javabean-and-a-pojo
+http://stackoverflow.com/questions/24990400/spring-dao-vs-spring-orm-vs-spring-jdbc
+http://debasishg.blogspot.it/2007/02/domain-driven-design-use-orm-backed.html
  
 *** Proxies
 http://stackoverflow.com/a/366212/2326627 
