@@ -2,25 +2,28 @@
 The functionality for the various users.
 \subsubsection {Requirements List}
 \begin{enumerate}[label=\textbf{R\arabic*}]
-\item PowerEnjoy shall provide Users with the ability to access all the System functionalities reserved to them.
-\item PowerEnjoy shall support Users in locating Available Cars within a range of 5 Km from a specific position.
-\item PowerEnjoy shall support Users in locating Parking Areas and their free parking slots.
-\item PowerEnjoy shall support Users in locating Charging Areas and their free parking slots and free charging sockets.
-\item PowerEnjoy shall support Users in reserve Available Cars.
-\item PowerEnjoy shall apply a fixed Surcharge of 1 EUR if he/she has reserved a Car and not unlocked it within a time range of 60 minutes.
-\item PowerEnjoy shall support a User in unlock a Car he/she has previously reserved when he/she is in a range of 15 meters from the same Car.
-\item PowerEnjoy shall charge the User of a fixed fee per minutes, communicating to him/her the Fee he will get charged at the end of the ride basing only on the driving time and the fee per minutes.
-\item PowerEnjoy shall be able to know if a User has took in the Car he/she is driving at least two other passengers for at least 3 minutes. If so, PowerEnjoy should apply a percentage Discount of 10\% on the final Fee of the last ride.
-\item PowerEnjoy shall allow the User to end the ride in a Parking or Charging Area. 
-\item PowerEnjoy shall allow any User who has ended a ride to plug the Car he/she has driven to a Socket in a time rage of 2 minutes since he/she has ended the ride, in order to get a percentage Discount of 30\% on the final Fee of the last ride.
-\item PowerEnjoy shall apply a percentage Discount of 20\% on the final Fee of the last ride if the User will end the ride leaving the Car with more than 50\% battery charge status.
-\item PowerEnjoy shall apply a percentage Surcharge of 30\% on the final Fee of the last ride if a User leaves the Car at more than 3 km from the nearest Charging Area or with a battery charge status less than 20\%.
-\item PowerEnjoy shall provide a User the ability to use the "Money Saving Option", telling him/her the position of a Charging Area where he/she has to park the Car he/she is driving in order to get a Discount on the total Fee. The Charging Area is determined by the System to ensure a uniform distribution of Cars in the city of that address and depends both on the destination of the User and on the availability of Sockets at the selected Charging Area.
-\item PowerEnjoy shall interface with an external Mailing System to send emails to Users.
-\item PowerEnjoy shall interface with an external Banking System to charge Fee to Users.
-\item PowerEnjoy shall interface with an external GPS System to know the positions of Users and Areas.
-\item PowerEnjoy shall interface with an external Mapping System to know the positions of Users and Areas.
-\item PowerEnjoy shall interface with the existing Car to get their GPS position, damages, connection to an electrical socket, the number of seats occupied. 
+	\item The System shall provide Users with the ability to access all the System functionalities reserved to them.
+	\item The System shall support Users in locating Available Cars within a range of 5 Km from a specific position.
+	\item The System shall support Users in locating Parking Areas and their free parking slots.
+	\item The System shall support Users in locating Charging Areas and their free parking slots and free charging sockets.
+	\item The System shall support Users in reserve Available Cars.
+	\item The System shall apply a fixed Surcharge of 1 EUR if he/she has reserved a Car and not unlocked it within a time range of 60 minutes.
+	\item The System shall support a User in unlock a Car he/she has previously reserved when he/she is in a range of 15 meters from the same Car.
+	\item The System shall charge the User of a fixed fee per minutes, communicating to him/her the Fee he will get charged at the end of the ride basing only on the driving time and the fee per minutes.
+	\item The System shall be able to know if a User has took in the Car he/she is driving at least two other passengers for at least 3 minutes. If so, The System should apply a percentage Discount of 10\% on the final Fee of the last ride.
+	\item The System shall allow the User to end the ride in a Parking or Charging Area. 
+	\item The System shall allow any User who has ended a ride to plug the Car he/she has driven to a Socket in a time rage of 2 minutes since he/she has ended the ride, in order to get a percentage Discount of 30\% on the final Fee of the last ride.
+	\item The System shall apply a percentage Discount of 20\% on the final Fee of the last ride if the User will end the ride leaving the Car with more than 50\% battery charge status.
+	\item The System shall apply a percentage Surcharge of 30\% on the final Fee of the last ride if a User leaves the Car at more than 3 km from the nearest Charging Area or with a battery charge status less than 20\%.
+	\item The System shall provide a User the ability to use the "Money Saving Option", telling him/her the position of a Charging Area where he/she has to park the Car he/she is driving in order to get a Discount on the total Fee. The Charging Area is determined by the System to ensure a uniform distribution of Cars in the city of that address and depends both on the destination of the User and on the availability of Sockets at the selected Charging Area.
+	\item When the Car status is \textit{In Use} and a \textit{Minor damage} is detected, the Car status will be set to \textit{Unavailable} by the System at the end of the ride. 
+	\item When a \textit{Major damage} is detected the Car status is immediately set to \textit{Unavailable} by the System.
+	\item When the Car is \textit{In Use} and the battery charge level reaches the 0\% of the full capacity the Car is immediately set as \textit{Unavailable} by the System.	
+	\item The System shall interface with an external Mailing System to send emails to Users.
+	\item The System shall interface with an external Banking System to charge Fee to Users.
+	\item The System shall interface with an external GPS System to know the positions of Users and Cars.
+	\item The System shall interface with an external Mapping System to show the positions of Users, Cars and Areas on a map and to retrieve the GPS position corresponding to a given address.
+	\item The System shall interface with the existing Car to get their GPS position, damages, connection to an electrical socket, the number of seats occupied. In order to fullfil this requirement, a Car Board will be installed on every Car.
 \end{enumerate}
 
 \subsubsection{Use cases specification}

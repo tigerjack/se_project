@@ -4,7 +4,7 @@
 % It starts from 0 by default, so I've incremented it.
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Register Account}} % Table caption
@@ -15,25 +15,25 @@
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
 	\textbf{Description} & The \emph{Visitor} wants to create an \emph{Account} for the \emph{Car-Sharing} Service. \\ \hline
 	\textbf{Actors} & \emph{Visitor}.\\ \hline
-	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the \emph{Company's Car-Sharing} Application. \\ \hline
+	\textbf{Pre-Conditions} & The \emph{Visitor} opens the \emph{Application}. \\ \hline
 	\textbf{Flow of events} & 
 		\begin{enumerate}
 			\item The \emph{Visitor} selects the function \textit{\textquotedblleft{Sign Up}\textquotedblright}.
 			\item The \emph{System} returns a form to enter all the required data: Name, Surname, Birth date, ID Card Number, Driving License number and Credit Card number. It also asks for an email address and a password which will be used for the future logins.
 			\item The \emph{Visitor} fills the form with all the required information.
-			\item The \emph{System} stores the request together with all the data provided with it, generates a random activation URL and asks the \emph{Mail System} to forward his/her URL to the email address of the \emph{Visitor}.
+			\item The \emph{System} stores the request together with all the data provided with it, generates a random activation URL and asks the \emph{Mailing System} to forward his/her URL to the email address of the \emph{Visitor}.
 		\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{Mail System} sends the activation URL to the \emph{Visitor}'s email provided in the registration form. \\ \hline
+	\textbf{Post Conditions} & The \emph{Mailing System} sends the activation URL to the \emph{Visitor}'s email provided in the registration form. \\ \hline
 	\textbf{Exceptions} & 
 		\begin{itemize}
 		\item The \emph{System} recognizes invalid or missing data in the form compiled by the emph{Visitor}and informs him/her of the error. The flow of events restarts from point 1.
-		\item The Visitor inserts in the form an ID Card Number, or Driving License number, or Email Address, which is already present in the System. The System shows an error message saying that some of those credentials were already been inserted into the System for another account. The flow of events restarts from point 1.
+		\item The Visitor inserts in the form an ID Card Number, or Driving License number, or Email Address, which is already present in the System. The System shows an error message explaining the reason of the error. The flow of events restarts from point 1.
 		\end{itemize} \\ \hline
 \end{longtable}
 
 
 \stepcounter{UseCaseIdCounter}
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Activate Account}} % Table caption
@@ -47,18 +47,17 @@
 	\textbf{Flow of events} & 
 	\begin{enumerate}
 		\item The \emph{Visitor} opens the received activation URL.
-		\item The \emph{System} acknowledges that the Visitor has arrived in his/her activation Web Page and activates his/her account.
+		\item The \emph{System} activates the account and updates the data of the Visitor to reflect this change.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{Visitor} is now become an \emph{User} which can access the \emph{System} using the credentials (Email, password) he provided during the registration phase. \\ \hline
+	\textbf{Post Conditions} & The \emph{Visitor} is now become an \emph{User} which can access the \emph{System} using the pair (email, password) provided during the registration phase. \\ \hline
 	\textbf{Exceptions} & 
 	\begin{itemize}
-		\item The Activation URL expires after 10 days it has been generated. The Visitor's data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
+		\item The Activation URL expires after 1 day it has been generated. The Visitor's data are cancelled from the System and the Visitor will have to perform the Registration (UC1) again.
 	\end{itemize} \\ \hline
 \end{longtable}
 
 \stepcounter{UseCaseIdCounter}
-
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Log In}} % Table caption
@@ -69,23 +68,23 @@
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
 	\textbf{Description} & The \emph{Visitor} wants to log in the \emph{System}. \\ \hline
 	\textbf{Actors} & \emph{Visitor}.\\ \hline
-	\textbf{Pre-Conditions} & The \emph{Visitor} connects to the Company's \emph{Car-Sharing Application}.
-	 The \emph{Visitor} has already activated his/her account (UC2) \\ \hline
+	\textbf{Pre-Conditions} & The \emph{Visitor} opens the \emph{Application}. The \emph{Visitor} has already activated his/her account (UC2) \\ \hline
 	\textbf{Flow of events} & 
 	\begin{enumerate}
-		\item The \emph{Visitor} selects the function \textit{\textquotedblleft{Login}\textquotedblright} .
+		\item The \emph{Visitor} selects the function \textit{\textquotedblleft{Login}\textquotedblright}.
 		\item The \emph{System} shows the \emph{Visitor} a login form, asking him to insert the email and password provided in the registration form.
-		\item The \emph{Visitor} inserts the pair (Email,Password) used during the registration phase and selects the function \textit{\textquotedblleft{Log me in}\textquotedblright}
+		\item The \emph{Visitor} inserts the pair (email, password) used during the registration phase and selects the function \textit{\textquotedblleft{Log me in}\textquotedblright}
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} verifies the existence of an account associated with that pair (Email,password) and logs the \emph{Visitor} in. The \emph{Visitor} has now become \emph{User}  \\ \hline
+	\textbf{Post Conditions} & The \emph{System} verifies the existence of an account associated with the pair (email, password) and logs the \emph{Visitor} in. The \emph{Visitor} has now become \emph{User}  \\ \hline
 	\textbf{Exceptions} & 
 	\begin{itemize}
-	\item The System doesn’t find an account associated with that pair (Email, Password) and shows an error message, the flow of events starts from point 1.
+	\item The System does not find a valid account associated with the pair (email, password) and shows an error message. The flow of events restarts from point 1.
 	\end{itemize} \\ \hline
 \end{longtable}
+
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Log Out}} % Table caption
@@ -105,19 +104,16 @@
 	\textbf{Post Conditions} & The \emph{System} shows the confirmation of the logout to the \emph{User}.
 	
 	The \emph{User} is now not able to use the \emph{System} functionalities dedicated to Users anymore (until he logs in again). \\ \hline
-	\textbf{Exceptions} &  \\
-%	\begin{itemize}
-%	\end{itemize} \\ 
-\hline
+	\textbf{Exceptions} &  \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Show Parking Areas}} % Table caption
-	\label{UC_Logout}%If later on you want to refer to this label, you can use this label. 
+	\label{UC_ShowAreas}%If later on you want to refer to this label, you can use this label. 
 	\\ \hline % end of row + new horizontal line
 	
 	% The table itself
@@ -127,17 +123,16 @@
 	\textbf{Pre-Conditions} & The \emph{User} is logged in the \emph{System} \\ \hline
 	\textbf{Flow of events} & 
 	\begin{enumerate}
-		\item The \emph{User} selects the function \textit{\textquotedblleft{Show Parking Areas}\textquotedblright} .
+		\item The \emph{User} selects the function \textit{\textquotedblleft{Show Parking Areas}\textquotedblright}.
+		\item The \emph{System} shows the \emph{User} a map with all the \emph{Parking Areas} distributed around the city.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} shows the \emph{User} a map with all the \emph{Parking Areas} distributed around the city. \\ \hline
-	\textbf{Exceptions} &  \\
-	%	\begin{itemize}
-	%	\end{itemize} \\ 
-	\hline
+	\textbf{Post Conditions} & The User is now able to see the distribution of the Areas and the information associated to each Area.\\ \hline
+	\textbf{Exceptions} & \\ \hline
 \end{longtable}
+
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Locate Available Cars}} % Table caption
@@ -152,11 +147,14 @@
 	\textbf{Flow of events} & 
 	\begin{enumerate}
 		\item The \emph{User} selects the function \textit{\textquotedblleft{Locate Cars}\textquotedblright}.
-		\item The \emph{System} shows a text box asking the \emph{User} to provide an address near which they would like to see the \emph{Cars} whose state is \textit{Available}.
+		\item The \emph{System} shows a text box asking the \emph{User} to provide an address.
 		\item The \emph{User} inserts the desired address and selects the \textit{\textquotedblleft{Locate}\textquotedblright} function.
+		\item The \emph{System} send the address to the \emph{Mapping System}.
+		\item The \emph{Mapping System} returns the GPS position corresponding to that address.
+		\item The \emph{System} shows the \emph{User} a map containing all the \emph{Cars} whose state is \textit{Available} and which are within a 5 km range from the provided address. 
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} shows the \emph{User} a map containing all the \emph{Cars} whose state is Available and which are within a 5KM range from the provided address. \\ \hline
-	\textbf{Alternative Flow of Events} & The \emph{User} selects the function \textit{\textquotedblleft{Near Me}\textquotedblright} instead of inserting a specific address and sends their \emph{GPS Coordinates} to the \emph{System}. \\ \hline
+	\textbf{Post Conditions} & The User is now able to see the distribution of the Cars and the information associated to each Car. At this point, he/she can also decide to reserve one of the previously retrieved Cars (see UC7).\\ \hline
+	\textbf{Alternative Flow of Events} & The \emph{User} selects the function \textit{\textquotedblleft{Near Me}\textquotedblright} instead of Step 1 and sends their \emph{GPS Coordinates} to the \emph{System}. The flow continues at Step 6. \\ \hline
 	\textbf{Exceptions} & 
 	\begin{itemize}
 		\item The System does not find the inserted address and informs the User. The Flow of Events starts from point 1.
@@ -165,7 +163,7 @@
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Reserve Available Car}} % Table caption
@@ -181,12 +179,12 @@
 	\begin{enumerate}
 		\item The \emph{User} chooses a specific \emph{Car} among those showed on the map.
 		\item The \emph{User} selects the function \textit{\textquotedblleft{Reserve this Car}\textquotedblright}.
+		\item The \emph{System} stores the \emph{Reservation} of the \emph{Car}, changing its status to \emph{Reserved}.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} stores the \emph{Reservation} of the \emph{Car}, changing its status to \emph{Reserved}.
-The \emph{System} activates a countdown of 1 hour during which the \emph{User} will have the possibility to unlock the \emph{Reserved} \emph{Car}. \\ \hline
-	\textbf{Exceptions} & If one hour has passed since the reservation has been made and the \emph{User} hasn't unlocked the Car, either because he wasn't within the 15 meters distance range or didn't activate this function, then:
+	\textbf{Post Conditions} & The \emph{System} activates a countdown of 1 hour during which the \emph{User} will have the possibility to unlock the \emph{Reserved} \emph{Car}. \\ \hline
+	\textbf{Exceptions} & If one hour has passed since the reservation has been made and the \emph{User} has not unlocked the Car then:
 		\begin{itemize}
-		\item The reservation expires, so that the \emph{User} cannot unlock the \emph{Car} anymore (unless they reserve it again).
+		\item The reservation expires, so that the \emph{User} cannot unlock the \emph{Car} anymore (unless he/she reserve it again).
 		\item The \emph{System} changes the \emph{Car}'s status to \emph{Available}.
 		\item The \emph{System} communicates to the \emph{Banking System} the \emph{Fee} to charge the \emph{User} (this sum amounts to 1 EUR).
 		\item The \emph{System} asks the \emph{Mail System} to forward the reservation details to the \emph{User} email address. 
@@ -195,7 +193,7 @@ The \emph{System} activates a countdown of 1 hour during which the \emph{User} w
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Unlock Car}} % Table caption
@@ -210,20 +208,15 @@ The \emph{System} activates a countdown of 1 hour during which the \emph{User} w
 	\textbf{Flow of events} & 
 	\begin{enumerate}
 		\item The \emph{User} activates the function\textit{\textquotedblleft{Unlock Car}\textquotedblright}.
-		\item The \emph{User} sends their GPS coordinates to the \emph{System}.
-		\item The \emph{System} checks that the GPS coordinates of the \emph{User} are within a 15 metres range from those of the \emph{Car} itself.
+		\item The \emph{User} sends his/her GPS coordinates to the \emph{System}.
+		\item The \emph{System} checks that the GPS coordinates of the \emph{User} are within a 15 metres range from those of the \emph{Car} itself and, if so, unlock the doors of the Car and changes the \emph{Car} status to \emph{In Use}.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} has verified that the \emph{User} is nearby the car (within the specified distance range) and unlocks the \emph{Car}'s doors.
-	 
-The \emph{System} then changes the \emph{Car} status to \emph{In Use} and sets the \emph{Plugged} Flag to False.
-
-The \emph{User} enters the \emph{Car}. \\ \hline
-	\textbf{Exceptions} & %TODO User not near range, system not unlock the car
-	\\ \hline
+	\textbf{Post Conditions} & The \emph{User} is now able to enter the \emph{Car}. \\ \hline
+	\textbf{Exceptions} & If the GPS coordinates of the \emph{User} are not within a 15 meters range from the \emph{Car}, the \emph{System} shows an error message. \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Drive Car}} % Table caption
@@ -238,17 +231,16 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 	\textbf{Flow of events} & 
 	\begin{enumerate}
 		\item The \emph{User} starts the engine of the \emph{Car}.
-		\item The \emph{System} starts the Ride Timer which indicates the time usage of the \emph{Car}.
+		\item The \emph{System} starts a Ride Timer which indicates the time usage of the \emph{Car}.
 		\item {[}Extension Point UC 10{]}
 		\item {[}Extension Point UC 13{]}
-		\item The \emph{System} calculates the current \emph{Fee} charged to the \emph{User} (calculated as a given amount of money per minute on the Ride Timer) while showing it on the on-board screen.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{User} drives the \emph{Car} \\ \hline
+	\textbf{Post Conditions} & The \emph{User} drives the \emph{Car} and the \emph{System} shows the \emph{Current Fee} on the Car display.\\ \hline
 	\textbf{Exceptions} & \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Drive With Passengers $<<$extends UC 9$>>$}} % Table caption
@@ -259,20 +251,19 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
 	\textbf{Description} & The \emph{User} picks up \emph{Passengers} to share the ride with. \\ \hline
 	\textbf{Actors} & \emph{User}.\\ \hline
-	\textbf{Pre-Conditions} & The \emph{User} is driving their \emph{Reserved} \emph{Car}. \\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} is driving the \emph{Car}. \\ \hline
 	\textbf{Flow of events} & 
 	\begin{enumerate}
-		\item The \emph{User} picks up the \emph{Passengers}.
-		\item The \emph{Car} detects the presence and number of the \emph{Passengers}.
+		\item The \emph{User} picks up other \emph{Passengers}.
+		\item The \emph{Car} sensors detect the presence and number of the \emph{Passengers}.
+		\item The \emph{System} stores the number of \emph{Passengers} who were picked up and whether they stayed in the \emph{Car} for at least 3 minutes.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{User} is sharing the ride with their \emph{Passengers}.
-	
-	The \emph{System} stores the number of \emph{Passengers} who were picked up and whether they stayed in the \emph{Car} for at least 3 minutes.\\ \hline
+	\textbf{Post Conditions} & \\ \hline
 	\textbf{Exceptions} & \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{End Ride}} % Table caption
@@ -283,44 +274,20 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
 	\textbf{Description} & The \emph{User} ends the ride and the \emph{System} processes the \emph{Fee}. \\ \hline
 	\textbf{Actors} & \emph{User}.\\ \hline
-	\textbf{Pre-Conditions} & The \emph{User} parks the \emph{Car} in one of the \emph{Parking Areas}. \\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} parks the \emph{Car} in a \emph{Parking Area}. \\ \hline
 	\textbf{Flow of events} & 
 	\begin{enumerate}
 		\item The \emph{User} exits the \emph{Car}.
-		\item The \emph{System} verifies that no one is in the \emph{Car}.
-		\item The \emph{System} checks the \emph{Battery} status. 
-		\item The \emph{System} checks, via the GPS coordinates, whether the \emph{User} has left the \emph{Car} within a 3KM distance range from the nearest \emph{Charging Area}.
-		\item The \emph{System} checks if the \emph{User} drove with \emph{Passengers} (UC10).
+		\item The \emph{System} verifies that no one is in the \emph{Car} and that the engine is off. If both are true, the \emph{System} locks the doors of the \emph{Car}.
+		\item The \emph{System} stores all the information relevant to the computation of the \emph{Fee}, including the \emph{Battery} status, the GPS coordinates of the Car, whether the \emph{User} has left the \emph{Car} within a 3 km distance range from the nearest \emph{Charging Area}, whether the \emph{User} drove with \emph{Passengers} (UC10). 
 		\item {[}Extension Point UC12{]}.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} & The \emph{System} locks the doors of the \emph{Car} and sets its status to \emph{Available}.
-	
-	The \emph{System} communicates to the \emph{Banking System} the final \emph{Fee} to charge the \emph{User}. 
-	
-	The \emph{System} asks the \emph{Mail System} to forward the drive details to the \emph{User} email address. \\ \hline
-		\textbf{Alternative Flow of Events} &
-	\begin{itemize}
-		\item The \emph{Battery} status is higher than 50\%, the \emph{User} didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 20\% \emph{Discount} on the \emph{Fee} of the last ride and communicates it to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{User} did plug the \emph{Car} (UC12), the \emph{Battery} status is higher than or equal to 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), hence the System applies a 30\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{User} did plug the \emph{Car} (UC12), the \emph{Battery} status is lower than 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), hence the System doesn't apply any \emph{Discount} or \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{User} didn't plug the \emph{Car} (UC12), the \emph{Battery} status is higher than 50\%, they either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		% Even longtable can't handle tables this long
-		\end{itemize} \\ &
-		\begin{itemize}
-		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 10\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{Battery} status is lower than 20\%, the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), either did or didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\item The \emph{Battery} status is lower than 20\%, the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), either did or didn't leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-		\end{itemize} \\ &
-		\begin{itemize}
-		\item The \emph{Battery} status is higher than 50\%, the \emph{User} either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.	
-		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3KM from the nearest \emph{Charging Area}, hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
-	\end{itemize} \\ \hline
+	\textbf{Post Conditions} & The \emph{System} will wait to check if the \emph{User} will plug the \emph{Car} into a \emph{Socket} of the \emph{Charging Area}. \\ \hline
 	\textbf{Exceptions} & If the \emph{Battery} status reaches 0\% of capacity or the \emph{Car} detects a major damage, the \emph{Car} stops and an assistance team is deployed. \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Plug the Car $<<$extends UC 11$>>$}} % Table caption
@@ -331,25 +298,44 @@ The \emph{User} enters the \emph{Car}. \\ \hline
 	\textbf{ID} & UC\theUseCaseIdCounter \\ \hline
 	\textbf{Description} & The \emph{User} plugs the \emph{Car} for recharging. \\ \hline
 	\textbf{Actors} & \emph{User}.\\ \hline
-	\textbf{Pre-Conditions} & The \emph{User} has parked the \emph{Car} in one of the \emph{Charging Areas} designated by the \emph{System}. \\ \hline
+	\textbf{Pre-Conditions} & The \emph{User} has parked the \emph{Car} in one of the \emph{Charging Areas} designated by the \emph{System} within 2 minutes from the end of the ride. \\ \hline
 	\textbf{Flow of events} & 
 	\begin{enumerate}
 		\item The \emph{User} plugs the \emph{Car} into a \emph{Socket} of the \emph{Charging Area}. 
-		\item The \emph{System} detects that the \emph{Car} has been plugged within 2 minutes since the \emph{User} got off the \emph{Car}.
+		\item The \emph{System} detects that the \emph{Car} has been plugged within 2 minutes since the ride end and sets the \emph{Plugged} flag of the \emph{Car} to True.
 	\end{enumerate}	 \\ \hline
 	\textbf{Post Conditions} & The \emph{Battery} of the \emph{Car} is charging and the \emph{System} remembers the \emph{User}'s action for possible discounts.
 	
-The \emph{System} sets the \emph{Car}'s \emph{Plugged} flag to True.
-	\\ \hline
+	The \emph{System} communicates to the \emph{Banking System} the final \emph{Fee} to charge the \emph{User}. 
+	
+	The \emph{System} asks the \emph{Mailing System} to forward the drive details to the \emph{User} email address. \\ \hline
+		\textbf{Alternative Flow of Events} &
+	\begin{itemize}
+		\item The \emph{Battery} status is higher than 50\%, the \emph{User} didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), didn't leave the \emph{Car} further than 3 km from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 20\% \emph{Discount} on the \emph{Fee} of the last ride and communicates it to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} did plug the \emph{Car} (UC12), the \emph{Battery} status is higher than or equal to 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), hence the System applies a 30\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} did plug the \emph{Car} (UC12), the \emph{Battery} status is lower than 20\%, they didn't or did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), hence the System doesn't apply any \emph{Discount} or \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{User} didn't plug the \emph{Car} (UC12), the \emph{Battery} status is higher than 50\%, they either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3 km from the nearest \emph{Charging Area}, hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		% Even longtable can't handle tables this long
+		\end{itemize} \\ &
+		\begin{itemize}
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), didn't leave the \emph{Car} further than 3 km from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 10\% \emph{Discount} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is lower than 20\%, the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), either did or didn't leave the \emph{Car} further than 3 km from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} did take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3 km from the nearest \emph{Charging Area}, hence the System applies a 20\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\item The \emph{Battery} status is lower than 20\%, the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), either did or didn't leave the \emph{Car} further than 3 km from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+		\end{itemize} \\ &
+		\begin{itemize}
+		\item The \emph{Battery} status is higher than 50\%, the \emph{User} either did or didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3 km from the nearest \emph{Charging Area}, didn't plug the \emph{Car} (UC12), hence the System applies a 10\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.	
+		\item The \emph{Battery} status is between 20\% and 50\% (included), the \emph{User} didn't take at least 2 \emph{Passengers} with him for at least 3 minutes (UC10), did leave the \emph{Car} further than 3 km from the nearest \emph{Charging Area}, hence the System applies a 30\% \emph{Surcharge} on the \emph{Fee} of the last ride and communicates to the \emph{Banking System} the \emph{Fee} which will be charged to the \emph{User}.
+	\end{itemize} \\ \hline
 	\textbf{Exceptions} & \\ \hline
 \end{longtable}
 \stepcounter{UseCaseIdCounter}
 
-\begin{longtable}{|p{0.2\linewidth} p{0.8\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth} | p{0.8\linewidth}|}
 	% Some table settings
 	\captionsetup{labelformat=empty} % To not show Table 1, Table 2 under the table
 	\caption{\textbf{Enable Money Saving Option $<<$extends UC 9$>>$}} % Table caption
-	\label{UC_PlugCar}%If later on you want to refer to this label, you can use this label. 
+	\label{UC_MoneySavingOption}%If later on you want to refer to this label, you can use this label. 
 	\\ \hline % end of row + new horizontal line
 	
 	% The table itself
@@ -361,9 +347,10 @@ The \emph{System} sets the \emph{Car}'s \emph{Plugged} flag to True.
 	\begin{enumerate}
 		\item The \emph{System} asks the\emph{User} the destination address, providing them with a text box where to insert it.
 		\item The \emph{User} provides the address to the \emph{System}.
-		\item The \emph{System} computes an algorithm which takes in consideration the distribution of the Cars in the city, the final destination of the \emph{User} and the availability of power plugs in the \emph{Charging Areas}.
+		\item The \emph{System} runs an algorithm which takes in consideration the distribution of the Cars in the city, the final destination of the \emph{User} and the availability of power plugs in the \emph{Charging Areas}.
+		\item The \emph{System} will present the result to the \emph{User}, displaying the address of the \emph{Charging Area}.
 	\end{enumerate}	 \\ \hline
-	\textbf{Post Conditions} &  The result of this algorithm will be sent to the \emph{User}, providing him the address of the \emph{Charging Area} where to leave the \emph{Car}. The \emph{User} will still have to plug the \emph{Car} in order to get a discount.
+	\textbf{Post Conditions} & The \emph{User} can now decide if the proposed \emph{Charging Area} is suitable for their needs. Note that, even if the \emph{User} chooses this \emph{Charging Area}, he/she will still have to plug the \emph{Car} into a Socket of this area in order to get a discount.
 	\\ \hline
 	\textbf{Exceptions} & If the \emph{Socket} of the \emph{Charging Area} has no more available plugs while the \emph{User} is driving to reach it, the \emph{System} informs the \emph{User} and the Flow of Events starts from point 1.\\ \hline
 \end{longtable}

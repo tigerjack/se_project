@@ -1,19 +1,33 @@
 \subsection{Non-Functional Requirements}
-
 \subsubsection{Performance Requirements}
 The System will be able to fulfill clients' requests within 10 seconds from their arrival.
+
+\subsubsection{Privacy Requirements}
+All information collected from User and Visitor will not be sold, shared, or rented to others in any way. 
+However, all the information sent to external Systems such as the email text sent to the Mailing System or the Fee sent to the Banking System are not under the responsibility of this System.
+
 \subsubsection{Safety and Security Requirements}
-There will not exist cases in which sensible data belonging to the User, Visitor, Company, will be passed on a insecure channel.
+To access all the functionalities of the System, every User should be correctly identified with username and password. 
 
-Stakeholders did not ask for any special requirement.
-\subsubsection{Portability}
-Stakeholders did not ask for any special requirement.
+All password should be salted and hashed before the insertion into the Database. For the hashing, it will be used a widely adopted function like SHA-1 or MD5. It is strongly recommended to use prebuilt, already tested libraries provided by all the major programming languages.
+
+The Database should be encrypted in order to prevent the disclosure of relevant sensitive Users data. To further secure Users data, it is important to establish a rigid access control policy on the Database, giving each Developer only a limited access to specific part of the Database. Each Developer (or group of them) should be given the smallest privileges possible in order to fullfil their assignment.
+
+There will not exist cases in which sensible data belonging to the User, Visitor, Company, will be passed on an insecure channel. All the communications between the different machines of this System will be built on top of an encrypted channel such as HTTPS. It is also required to enforce security mechanism in the communication with all the external systems, avoiding the disclosure of all the System IP addresses and encrypting the communication using HTTP(S) or any other kind of secure protocol.
+
+It is also important to avoid the possibility of all the most relevant attack to the System, including but not limited to:
+\begin{itemize}
+	\item SQL-injection: it is important to use most known guidelines to avoid this kind of attack
+	\item bruteforce password attempts: it is important to limit the number of login request per second
+	\item URL parameter tampering: encrypt the URL parameters in the HTTP requests
+	\item XSS: it is important to use well known guidelines to avoid this kind of attack
+\end{itemize}
+
 \subsubsection{Availability and Reliability}
-The Server on which the System runs must always be reachable, in addition it must provide a relaiability and availability of 99.9%.
-The DataBase used by the System must be always must always be reachable, in addition it must provide a reliability and availability of 99.9%.
+The System (including all its components) provide a reliability and availability of 99.9\%.
+The System will be able to fullfil requests coming from Users in at most 10 seconds 99\% of the time.
 
-Stakeholders did not ask for any special requirement.
 %\subsubsection{Reliability}
 %\subsubsection{Extensibility}
 %\subsubsection{Interoperability}
-%\subsubsection{Business Rules}
+%\subsubsection{Usability}
