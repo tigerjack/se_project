@@ -13,7 +13,7 @@ Furthermore, the TCP/IP stack will also be used to communicate with the Cars and
 The System, for example, should be able to have access to all the informations provided by the wide variety of sensors placed inside the Cars, in order to know, in every moment, their GPS position, the status of their battery, their possible damages, their plugged status and the number of seats occupied. 
 On the other hand, the System should also access data coming from a Charging or Parking Area (f.e. the number of free sockets and/or the number of free parking slots).
 
-The interaction among the Users and the System will also be built using the Internet Protocol Suite. Users will access the System functionalities using the Application, which is the interface between the User and the back end of the System. The Application will use the HTTP(S) and TCP/IP protocols to allow the communication.
+The interaction among the Users and the System will also be built using the Internet Protocol Suite. Users will access the System functionalities using the Application, which is the interface between the User and the Backend of the System. The Application will use the HTTP(S) and TCP/IP protocols to allow the communication.
 
 At last, Users should also be able to communicate their position to the System using their GPS coordinates. For this reason, the Application need access to the User GPS module, which is required in order to unlock previously reserved cars.
 
@@ -36,7 +36,7 @@ Here we have an UML Statechart diagram explaining the various states in which a 
 \FloatBarrier
 
 \subsection{Product Functions}
-Using the Application, the User will be able to register to the System. After a successful registration, the System will create an Account related to the User, which can use it to log in to the System and access the System functionalities.
+Using the Application, a Visitor will be able to register to the System. After a successful registration, the System will create an Account related to the User, which is set as Inactive. The System will ask the Mailing System to send an activation URL to the User email address and, once the User clicks on it, he/she can use his/her Account credentials to log in to the System and access the System functionalities.
 
 The User can now use the Application to locate all the Cars, whose state is \textit{Available}, in two different ways: a) specifying a desired address or b) asking the System to locate him/her through the GPS coordinates. In the first case, the Mapping System is called to check for the existence of the specified address and to return a GPS position corresponding to that address. In both cases the GPS position will be sent to the Backend, which will return all the \textit{Available} Cars in a predefined distance range from the previously sent GPS position. The Mapping System will be called again by the Application to show to the User a map with all the Cars.
 
@@ -51,19 +51,18 @@ At the end of the ride, the System, basing on the time usage period of the Car, 
   \begin{tabular}{|p{.2\textwidth}|p{.39\textwidth}|p{.39\textwidth}|}
     \hline
     \textbf{Name} & \textbf{Description} & \textbf{Actions} \\ \hline
-    Visitor & A person who would like to register an account to access the System functionalities. & Can perform the registration and activation of the account. Successively he can log in the System becoming a User.\\\hline
-    User & Someone who is registered in the System and can access its functionalities & Can locate, reserve and drive Cars. Will be charged for the use of the Cars. \\ \hline
+    Visitor & A person who would like to register an account or log in to access the System functionalities. & He/She can log in the System with his/her Account informations, but only if he/she has already registered to the System.\\ \hline
+    User & Someone who is registered in the System and can access its functionalities & Can locate, reserve, unlock and drive Cars; can locate parking and charging area.\\ \hline
     \end{tabular}
 \end{center}
 \vspace{5mm}
-External access to the Database provided to Employees or any other person is under the responsibility and the regulations of the Company and is not managed by this System.
 
 \subsection{Constraints}
 \subsubsection{Hardware Constraints}\label{OE}
 The Device used by the User should be able to establish an internet connection to the System using the Internet Protocol Suite. In addition, in order to perform the localization, reservation and unlocking of a Car the User device must have installed a working GPS module. 
 
 The set of sensors, actuators and display inside Cars and Areas are already installed by the Company and the System has to communicate with them. Check the assumptions to see all the kind of hardware already shipped with Cars and Areas. 
-On the other hand, the System will have a Car Board installed on each Car which will be used to enable the communication between the Car and the Backend. The aim is to avoid the constant polling of the Car sensors to get the data, using instead a special board to send the data only on specific events.
+To avoid the constant polling of the Car sensors to get the data, each Car will have a Car Board installed on it, which will be used to enable the communication between the Car and the Backend. In this way, data will be sent only on specific events.
 
 \subsubsection{Design and Implementation Constraints}
 The System will employ the Internet Protocol Suite in order to enable the communication between its various parts, namely Application, Backend, Database and Car Board. The communication must be secured using at least the HTTP(S) application protocol.
@@ -73,14 +72,15 @@ The communication with the external systems will be built on top of the same set
 \begin{enumerate}
 	\item The User do not create more than one Account at a time. Every User is accountable for improper use of their Account.
 	\item Users will never forget their password.
-	\item The User always provides real correct data in his/her registration form. 	
+	\item The User always provides real correct data during the registration. 	
 	\item The Company can decide at any time to revoke an User access to the System, charge the User with a fine or apply any other policy it choose (f.e. due to improper behaviour, unpaid bill, car parked outside a safe area, ...).
-	\item The User which has reserved and then unlocked the Car will always be the person driving it. It will always be accounted for the usage of the Car and any improper action taken by the Driver. 
-	\item The Database infrastructure in which the Cars, Parking Areas, Charging Areas, Users, etc, are stored, is owned and managed by the Company (and not by this System), which is responsible for its security, reliability and availability. Our System is provided by the Company with read/write access to the Database.
-	\item The Company is responsible for the Employees and all their actions.
+	\item The User which has reserved and then unlocked the Car will always be the person driving it. Even if it is not the case, he/she will always be accounted for the usage of the Car and any improper action taken by the actual driver. 
+%	\item The Database infrastructure in which the Cars, Parking Areas, Charging Areas, Users, etc, are stored, is owned and managed by the Company (and not by this System), which is responsible for its security, reliability and availability. Our System is provided by the Company with read/write access to the Database.
+	\item The Company is responsible for the Employees and all their actions onto Cars and Database fields.
 	\item The Car has a set of sensors that can detect, in every moment, its position, the status of its battery, the status of the engine, its damages, the connection of its plug to an electrical socket and the number of seats occupied. It also has actuators to remotely unlock its doors and a display to show information to the User. We assume that these devices are always perfectly functioning and their measures are always correct. In the case of damages to this devices, their repair is under the responsibility of the Company.
+	\item The Car Boards installation on the Cars is under the responsibility of the Company. In the case of damages to this devices, their repair is under the responsibility of the Company.
 	\item After the doors of the cars are unlocked by the User, he/she always enters the Car, ignites the engine and leave the Parking Area.
-	\item After a Car is Plugged to the Socket of a Charging Area, it will not be maliciously unplugged by the User himself/herself or by other people.
+	\item After a Car is Plugged to the Socket of a Charging Area, it will not be maliciously unplugged by the User himself/herself or by any other people.
 	\item An User can park/stop the Car everywhere and leave the Car at anytime. However, the system will not apply any fine only if he/she ends the ride inside a Parking or Charging Area. In all other cases the Company can decide to charge the User with a fine.
 	\item If the Car has been left out of a Parking Area there will always be an Employee which immediately reaches it, recharges it and move it to a Charging Area. 
 	\item When a User will park the Car inside a Parking or Charging Area, it will always correctly use one and only one free slot.		
@@ -88,10 +88,9 @@ The communication with the external systems will be built on top of the same set
 	\item When the Car is \textit{In Use} and the battery charge level reaches the 0\% of the full capacity the Car stops working.
 	\item The Car will always be able to communicate a Major Damage to the System.
 	\item If the Car status is \textit{Unavailable}, the Car will always be reached by an Employee to consider if the Car needs to be repaired, if an User should be charged for the damages or if the Car just needs to be recharged.
-	\item A car which is \textit{Available} or \textit{Plugged} can be set as \textit{Unavailable} in every moment by an Employee. This is done through another Company's System as it is not provided in this System.
-	\item A car which is \textit{Unavailable} can be set to \textit{Available} in every moment by an Employee. This is done through another Company's System and it is not provided in this System.
+	\item A car which is \textit{Available} or \textit{Plugged} can be set as \textit{Unavailable} in every moment by an Employee. This is done through another Company's system and it is not provided by this System.
+	\item A car which is \textit{Unavailable} can be set to \textit{Available} in every moment by an Employee. This is done through another Company's system and it is not provided by this System.
 	\item Every fine received by the Company for improper use of the Car will be managed by the Company.
 	\item Parking and Charging Areas have sensors to detect the number of parking and charging slots occupied at any time.
 \end{enumerate}
-
 \clearpage
