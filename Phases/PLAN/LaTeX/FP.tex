@@ -43,34 +43,50 @@ Once the function is identified and categorized into a type, it is then assessed
 	EI & 3 & 4 & 6\\ \hline	
 \end{longtable}
 
-\subsubsection{Internal Logic Files (ILF)}
+\subsubsection{Data functions}
+%TODO refine
+\begin{longtable}{| c | c | c | c |}
+	% Some table settings
+	\caption{\textbf{Complexity matrix for EIF and EOF}} % Table caption
+	\label{tab:ilf_elf_complexity_matrix}%If later on you want to refer to this label, you can this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{RETs} &	\multicolumn{3}{c|}{\textbf{DETs}} \\ \hline
+	  & 1-19 & 20-50 & 51+\\ \hline 
+	1 & L & L & A\\ \hline 
+	2 to 5 & L & A & H\\ \hline 
+	6 or more & A & H & H \\ \hline 
+\end{longtable}
+
+\paragraph{Internal Logic Files (ILFs)}
 PowerEnjoy has to store information related to various kind of entities in order to provide the required functionalities. All the homogeneous information are stored into different files or tables in a database. To ensure that the entities are uniquely identified inside a specific file or table we assign to each one an ID, which is unique inside the file or the table.
-\bigskip
+\smallskip
 
 The first entities PowerEnjoy should track are surely the users; for this reason, we have a table for them storing for each one an email, a password, a social security number, a driving license number, a credit card number and a status (active/inactive). 
 So, we can count 6 DETs, one for each of the data element identified above. Of course, we have to add the ID DET common to all the entities. Based on the information provided, we can thus judge that there will be only 1 RET ? meaning that all 7 DETs will be stored in a single file or Table in the database.
-\bigskip
+\smallskip
 
 Secondly, we have to store information about areas: GPS latitude, GPS longitude, city and parking slots. The System has to manage two different kind of areas: a parking area and a charging area, the latter being an extension of the former. There are various kind of strategies to manage this kind of hierarchy at the data level; we choose to use the "single table strategy", in which the two classes of the hierarchy are mapped to a single table or file which has a discriminator column containing a value that identifies the subclass to which the instance represented by the record belongs. In our case, this discriminator is a boolean condition that is set to true if the specified record is a charging area. In addition to this field, for a charging area, we also have to add another field to store the number of charging slots associated to the charging area.\\
 So, in the end we can come up with 1 RET and 7 DETs.
-\bigskip
+\smallskip
 
-Another important piece of information is associated to the cars managed by the System. For each car, we have to store plate number, GPS latitude, GPS longitude, battery level and the status (available, unavailable, reserved or in use). We must also have a field to check if the car is plugged to a socket of a charging area. Finally, we have to know in which area the car is; for this reason, we have a field that has the identifier of an area. Thus, for this kind of data, we came up with 1 RET and 8 DETs.
-\bigskip
+Another important piece of information is associated to the cars managed by the System. For each car, we have to store plate number and its status (available, unavailable, reserved or in use). Finally, we have to know in which area the car is; for this reason, we have a field that has the identifier of an area. Thus, for this kind of data, we came up with 1 RET and 4 DETs.
+\smallskip
 
-Closely related to a car we also need a table containing all the damages. A damage, for this reason, has a mandatory identifier of the car on which the damage is. Apart from this, the table has other fields to help the identification of the damage: a text containing the description and if the specific damage is a major damage or not. It also stores two different timestamps related to when the damage was detected and when (optionally) it was solved. Of course, we have also a boolean flag that indicates if a damage has been solved or not. For this reason, we count 1 RET and 8 DETs.
-\bigskip
+Closely related to a car we also need a table containing all the damages. We must note that a damage is autodetected from the car set of sensors and for these reasons some of the data associated to a specific damage belongs to the ELF category. Nevertheless, the System must store and maintain, for each damage, the identifier of the car on which the damage has been detected, two different timestamps related to when the damage was detected and when (optionally) it was solved. Of course, we have also a boolean flag that indicates if a damage has been solved or not. For this reason, we count 1 RET and 5 DETs. 
+\smallskip
 
 For the main functionalities provided by our System we have to store other two different kind of homogeneous data: the first one for the reservations and the second one for the drivings.
 First of all, each reservation has a reference to both the ID of the user which has made the reservation and the ID of the car being reserved. Also, we store the time on which the reservation was made and the time on which it was concluded. Finally, we have a boolean flag to know if the reservation is currently active.
 We came up with 1 RET and 5 DETs.
-\bigskip
+\smallskip
 
 The driving table is very similar to the previous one, storing a reference to both the ID of the user which driving the car, the ID of the car being driven, the time on which the drive started, the time on which it was concluded and the active flag. Apart from the previous fields, we have to store other information relevant for the evaluation of the fee applied to the user: three flag to know if the drive has to be applied a discount (the user has taken other passengers, the user left the auto with an high battery, the user plugged the car into a socket at the end of the ride) and other two for a surcharge (if the user left the auto with a low battery or if the car was left far from a charging area). In the end, we have 1 RET and 11 DETs.
-\bigskip
+\smallskip
 
 Another homogeneous kind of data stored is related to the banking operations managed by our System. A banking operation can be related to an expired reservation or to a driving. For this reason, we have two optional data elements: the first one refers to the ID of a reservation, the last one to the ID of a driving. Of course we must also store the final fee of the specific banking operation, if it has been paid and if it has been processed. Thus, we have 1 RET and 6 DETs.
-\bigskip
+\smallskip
 
 In the ILF we must surely count the various configuration files used by the System to define the amount of each banking operation. This kind of data relies on many different variables:
 \begin{enumerate}
@@ -89,37 +105,35 @@ In the ILF we must surely count the various configuration files used by the Syst
 	\item low battery percentage for surcharge represents the maximum percentage of the battery that has to be considered as low battery for the surcharge at the previous point.
 \end{enumerate}
 We don't need an ID for this kind of data, so we can easily conclude that we have 1 RET and 13 DETs.
-\bigskip
+\smallskip
 
-The last kind of data we should manage is related to the configuration of other parameters related to the cars, namely:
+Another kind of data we should manage is related to the configuration of other parameters related to the cars, namely:
 \begin{enumerate}
 	\item locate car nearby range, id est the maximum range between an user and the available cars that the System should use;
 	\item unlock car nearby range, id est the maximum range between an user and the car he/she has reserved inside which he/she can unlock the car;
 	\item battery percentage available, id est the minimum percentage level that the System should use to classify a car as available.
 \end{enumerate}
-We can easily came up with 1RET and 3 DETs.
+We can easily came up with 1 RET and 3 DETs.
+\smallskip
+
+We must also store some kind of data related to the messages presented to the users:
+\begin{enumerate}
+	\item registration email object contain the object of the email that will sent to an user asking to register to the System;
+	\item registration email subject contain the subject of the email that will sent to an user asking to register to the System;
+\end{enumerate}
+We count 1 RET and 2 DETs.
+\smallskip
+
+Lastly, the System should keep track of other two kind of informations: the users that are logged in the System and the users that have requested to register into the System. 
+In order to accomplish the first objective, it has to store a uniquely identified token and the id corresponding to the logged user. We obviously have 1 RET and 2 DETs.
+For the second objective, it has to store a uniquely identified URLs and the id corresponding to the registering user. Even in this case we have 1 RET and 2 DETs.
 \bigskip
 
-At the end of the ILF analysis, basing on the value of the tables \ref{tab:fp_weights} and \ref{tab:ilf_complexity_matrix}, we came up with the value indicated in the table \ref{tab:ilf_weights}.
-
-\begin{longtable}{| c | c | c | c |}
-	% Some table settings
-	\caption{\textbf{Complexity matrix}} % Table caption
-	\label{tab:ilf_complexity_matrix}%If later on you want to refer to this label, you can this label. 
-	\\ \hline % end of row + new horizontal line
-	
-	% The table itself
-	\textbf{RETs} &	\multicolumn{3}{c|}{\textbf{DETs}} \\ \hline
-	  & 1-19 & 20-50 & 51+\\ \hline 
-	1 & L & L & A\\ \hline 
-	2 to 5 & L & A & H\\ \hline 
-	6 or more & A & H & H \\ \hline 
-	
-\end{longtable}
+At the end of the ILF analysis, basing on the value of the tables \ref{tab:fp_weights} and \ref{tab:ilf_elf_complexity_matrix}, we came up with the value indicated in the table \ref{tab:ilf_weights}.
 
 \begin{longtable}{| c | c | c |}
 	% Some table settings
-	\caption{\textbf{Weights}} % Table caption
+	\caption{\textbf{ILF Weights}} % Table caption
 	\label{tab:ilf_weights}%If later on you want to refer to this label, you can this label. 
 	\\ \hline % end of row + new horizontal line
 	
@@ -132,22 +146,125 @@ At the end of the ILF analysis, basing on the value of the tables \ref{tab:fp_we
 	Reservation & Low & 7\\ \hline
 	Driving & Low & 7\\ \hline
 	Banking & Low & 7\\ \hline
-	Fees & Low & 7\\ \hline
-	Cars & Low & 7\\ \hline
+	Fees configuration & Low & 7\\ \hline
+	Cars configuration & Low & 7\\ \hline
+	Logged users & Low & 7\\ \hline
+	Registering users & Low & 7 \\ \hline
+	Messages & Low & 7 \\ \hline
+	\multicolumn{2}{|c|}{Total} & 84 \\ \hline
+	
 \end{longtable}
 
-\subsubsection{External Logic Files (ELF)}	
-Those are data used and referenced by our System but not generated and maintained by it.
-	e.g. External Systems 
+\paragraph{External Logic Files (ELFs)}
+Also called External Interface Files (EIFs), those are the data used and referenced by our System but not generated and maintained by it.
+The official IFPUG definition of an EIF is:
 
-\subsubsection{External Input (EI)}
-	elementary operations to elaborate data coming from extern environment
+\begin{quote}
+An external interface file (EIF) is a user identifiable group of logically related data or control information referenced by the application, but maintained within the boundary of another application. The primary intent of an EIF is to hold data referenced through one or more elementary processes within the boundary of the application counted. This means an EIF counted for an application must be in an ILF in another application.
+\end{quote}
+
+Assigning an FP value to an EIF is the same as assigning one to an ILF. First, determine the number of DETs and RETs in the ELF, then do a lookup in the following table to determine whether the EIF has a complexity of Low, Average, or High.  
+
+
+The main external data source the System should interact with is the set of cars. Each car has a set of sensors and the System must retrieve from them data about GPS latitude, GPS longitude, engine status, number of passengers, plugged status, door lock status and battery level. We must also note that each car can detect the presence of a damage through its sensors; for these reasons, the System should also retrieve data about a damage, namely if it is a major damage and an auto-generated text containing the description of the damage.
+We assume that each of these fields are maintained in a single RET in the car system. So, we came up with 1 RET and 9 DETs.
+
+The second data source for our System is the external mapping system, which is used for two different purposes:
+\begin{itemize}
+	\item given an address, get the correspondent pair of GPS coordinates (reverse geo-coding);
+	\item draw the graphical representation of different kind of maps.
+\end{itemize}
+While we can easily count 1 RET and 2 DETs for the first point, it is difficult to use the same kind of metrics for the second point. However, given the complexity of the interaction and the presumably high volume of data exchanged, it is reasonable to classify this kind of file as a complex one.
+\bigskip
+
+At the end of this analysis, using the values of tables \ref{tab:fp_weights} and \ref{tab:ilf_elf_complexity_matrix}, we came up with the following weights.
+\begin{longtable}{| c | c | c |}
+	% Some table settings
+	\caption{\textbf{ELF Weights}} % Table caption
+	\label{tab:elf_weights}%If later on you want to refer to this label, you can this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{Function Type} & \textbf{Complexity} & \textbf{FPs}\\ \hline
+	Car & Low & 7\\ \hline
+	Reverse geo-coding & Low & 7\\ \hline
+	Graphical map retrieval & High & 15\\ \hline
+\end{longtable}
+
+\subsubsection{Transactional Functions}
+
+\begin{longtable}{| c | c | c | c |}
+	% Some table settings
+	\caption{\textbf{Complexity matrix for EIs}}
+	\label{tab:ei_complexity_matrix}
+	\\ \hline
+	
+	% The table itself
+	\textbf{FTRs}  & \multicolumn{3}{c|}{\textbf{DETs}} \\ \hline
+	   & 1-4  & 5-15  & 16+ \\ \hline
+	0-1  & L  & L  & A \\ \hline
+	2  & L  & A  & H \\ \hline
+	3 or more  & A  & H  & H \\ \hline
+\end{longtable}
+
+\begin{longtable}{| c | c | c | c |}
+	% Some table settings
+	\caption{\textbf{Complexity matrix for EOs and EQs}}
+	\label{tab:eo_eq_complexity_matrix}
+	\\ \hline
+	
+	% The table itself
+	\textbf{FTRs}  & \multicolumn{3}{c|}{\textbf{DETs}} \\ \hline
+   		 & 1-5  & 6-19  & 20+ \\ \hline 
+	0-1  & L  & L  & A \\ \hline 
+	2-3  & L  & A  & H \\ \hline 
+	4 or more  & A  & H  & H \\ \hline 
+\end{longtable}
+
+In this section we come to define the transactional functions
+%TODO refine
+The official IFPUG definition of an EI is as follows:
+
+\begin{quote}
+    An external input (EI) is an elementary process that processes data or control information that comes from outside the application boundary. The primary intent of an EI is to maintain one or more ILFs and/or to alter the behaviour of the system. 
+\end{quote}
+Examples of EIs include:
+\begin{itemize}
+    \item Data entry by users.
+    \item Data or file feeds by external applications. 
+\end{itemize}
+
+In the PowerEnjoy system, we have three different kind of clients that corresponds to this definition: the web client, the mobile device and the car board.
+
+\subparagraph{Web clients}
+The web clients are used by users of the System to perform three kind of operations.
+
+The first operation is a registration. The user that wants to access the functionalities of our System should insert their email, SSN, driving license number and credit card number. During the process, we can safely predict that all of the data will be "transacted" to a single record in an ILF or FTR, namely the ILF corresponding to the users. For this reason, we have 1 FTR and 4 DETs for this transactional function. This is an internal operation, so belongs to the EI category. We count a low complexity corresponding to 3 FPs.
+
+However, during this function, the System generates a random URL to be sent to the email the user provided through the external mailing system. So, in this process, the System
+	\item Generates a random and unique URL. We can assume that all the input data will be used to generate the URL. This accounts for an EO process with 1 FTR and 4 DETs, corresponding to a low complexity and 4 FPs.
+	\item ask the external System to send the mail to the user email address. This process reference both the user ILF to retrieve the email address and the message ILF to retrieve the subject and the object of the mail. Thus, it accounts for an EQ process with 2 FTRs and 3 DETs, corresponding to a low complexity and 3 FPs.
+\end{itemize}
+So, the total for the registration operation amounts to 10 FPs.
+\smallskip
+
+The second operation is the confirmation of a registration through an URL. After the external mailing system send the email to the user, the latter can confirm the activation using this URL. This is a completely internal operation (an EI process) that access the ILF containing the user corresponding to that URL and modifies the ILF related to the user itself. It accounts for 2 FTRs and 1 DET, resulting in a low complexity and 3 FPs.
+\smallskip
+
+The last kind of operation performed with a web client is a login operation. 
+The first part of this operation is an EI process: the user enters his/her email and password and ask to log in the System. It accounts for 1 FTP and 2 DETs and can be categorized with a low complexity and 3 FPs.
+However, in the same operation, the System must generate, store and send back to the user a security token: this can be categorized as an EO process. We can assume that all the users input data are used to generate the random token; this accounts for 1 FTR and 4 DETs, resulting in a low complexity output corresponding to 4 FPs.
+The total for the login operation is of 7 FPs.
+
+\paragraph{Mobile device}
+\paragraph{Car board}
+
 	e.g. calls to our app by clients: register, confirm, login/out, reserve cars, unlock cars, drive car, end ride, enable money saving
 
-\subsubsection{External Output (EO)}
+\subsubsection{External Output (EOs)}
 	elem ops that generates data for the ext environm. includes elaboration of data from logic files
 	e.g. notify charge to user, notify company of damage, notify 
 
-\subsubsection{External Inquiry (EQ)}
+\subsubsection{External Inquiry (EQs)}
 	elem ops that involves input and output. w/out significant elaboration of data from logic files
 	e.g. show areas, show available cars, 

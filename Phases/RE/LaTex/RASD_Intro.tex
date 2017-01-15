@@ -159,19 +159,18 @@ The analysis led to the image represented in Figure \ref{fig:WorldMachine}.
 
 	\item \emph{Backend}\\
 	It is the part of the System which collects input from users for processing.
-	
-%	\item \emph{Company Database} \\
-%	An infrastructure provided by the Company on which the (System) Database will run.
-	
+		
 	\item \emph{Database} \label{var:database}\\
 	A structure that holds all the information used by the System. For instance, a Database could hold records of every User, Car, every time a User rented a Car and so on. 
 	The Company will have the privileges to read all data into our Database at any time. It will also have the ability to write or modify specific portion of data such as:
 	\begin{itemize}
 		\item set a specific Car as Available/Unavailable;
+		\item add a new Car together with its plate number;
 		\item set a specific User as Active/Inactive;
-		\item insert a new Damage on a Car, mark a pre-existing Damage as solved, adding information to a pre-existing Damage;
+		\item mark a Damage as solved, adding additional information to a pre-existing Damage;
 		\item mark a specific banking transaction as paid;
-		\item creating new Parking or Charging Area, modifying pre-existing Parking and Charging Area informations.
+		\item creating new Parking or Charging Area together with its internal identifier;
+		\item modifying pre-existing Parking and Charging Area informations (such as GPS coordinates, city, internal id, parking and/or charging slots).
 	\end{itemize}
 	
 	\item \emph{Developer}
