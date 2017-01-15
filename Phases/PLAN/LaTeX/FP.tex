@@ -242,6 +242,7 @@ The web clients are used by users of the System to perform three kind of operati
 The first operation is a registration. The user that wants to access the functionalities of our System should insert their email, SSN, driving license number and credit card number. During the process, we can safely predict that all of the data will be "transacted" to a single record in an ILF or FTR, namely the ILF corresponding to the users. For this reason, we have 1 FTR and 4 DETs for this transactional function. This is an internal operation, so belongs to the EI category. We count a low complexity corresponding to 3 FPs.
 
 However, during this function, the System generates a random URL to be sent to the email the user provided through the external mailing system. So, in this process, the System
+\begin{itemize}
 	\item Generates a random and unique URL. We can assume that all the input data will be used to generate the URL. This accounts for an EO process with 1 FTR and 4 DETs, corresponding to a low complexity and 4 FPs.
 	\item ask the external System to send the mail to the user email address. This process reference both the user ILF to retrieve the email address and the message ILF to retrieve the subject and the object of the mail. Thus, it accounts for an EQ process with 2 FTRs and 3 DETs, corresponding to a low complexity and 3 FPs.
 \end{itemize}
