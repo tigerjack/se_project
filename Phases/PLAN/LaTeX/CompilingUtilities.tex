@@ -1,0 +1,68 @@
+% To avoid compiling stuff other than what you're working on right
+% now, change the following command giving your file as its
+% argument. Also, you have to modify the \input part inside the 
+% \begin{document} section
+\includeonly{COCOMO}
+
+% From now on, these are all the packages, colors and variables 
+% used by all files
+%%%% LAYOUT AND FONTS
+\documentclass[12pt]{article}
+\DeclareTextFontCommand{\emph}{\bfseries\em}
+
+%%%% PACKAGES
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{caption}
+
+% Used to specify a new tex language(Alloy)
+\usepackage{listings}%
+
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{placeins}
+\usepackage{rotating}
+\usepackage{tikz}
+\renewcommand{\topfraction}{.9}
+\renewcommand{\bottomfraction}{.7}
+\renewcommand{\textfraction}{.1}
+\renewcommand{\floatpagefraction}{.66}
+\renewcommand{\dbltopfraction}{.66}
+\renewcommand{\dblfloatpagefraction}{.66}
+\setcounter{topnumber}{9}
+\setcounter{bottomnumber}{9}
+\setcounter{totalnumber}{20}
+\setcounter{dbltopnumber}{9}
+
+
+% To split tables b/w pages
+\usepackage{longtable}
+\usepackage{enumitem}
+
+%\usepackage[shortlabels]{enumerate}
+
+%%%% GLOBAL VARIABLES
+\setcounter{secnumdepth}{4}
+%S: TOC Depth set to 3 as specified by Prof during lessons
+\setcounter{tocdepth}{3}
+
+
+%%%% COLORS
+\definecolor{numbersRed}{RGB}{255, 0, 0}
+\definecolor{eclipseBlue}{RGB}{42,0.0,255}
+\definecolor{eclipseGreen}{RGB}{63,127,95}
+\definecolor{eclipsePurple}{RGB}{127,0,85}
+
+%%%% Actual document, remember to modify the \input part to
+%%%% include your file
+\begin{document}
+\title{Requirement Analysis and Specification Document for PowerEnJoy}
+\author{Enrico Migliorini, Alessandro Paglialonga, Simone Perriello}
+\clearpage
+\maketitle
+\clearpage
+\tableofcontents
+\clearpage
+
+\input{Main}
+\end{document}
