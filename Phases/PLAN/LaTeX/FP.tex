@@ -118,13 +118,17 @@ We can easily came up with 1 RET and 3 DETs.
 
 We must also store some kind of data related to the messages presented to the users:
 \begin{enumerate}
-	\item registration email object contain the object of the email that will sent to an user asking to register to the System;
-	\item registration email subject contain the subject of the email that will sent to an user asking to register to the System;
+	\item registration email object contains the text of the object of the email that will be sent to an user asking to register to the System;
+	\item registration email subject, as before, but containing the subject;
+	\item reservation expired email subject contains the text of the subject of the email that will be sent to an user in the case of an expired reservation;
+	\item reservation expired email object, as before, but containing the object;
+	\item drive end email subject contains the text of the subject of the email that will be sent to an user at the end of the ride;
+	\item drive end email object, as before, but containing the object.
 \end{enumerate}
-We count 1 RET and 2 DETs.
+We count 1 RET and 6 DETs.
 \smallskip
 
-Lastly, the System should keep track of other two kind of informations: the users that are logged in the System and the users that have requested to register into the System. 
+The System should also keep track of other two kind of informations: the users that are logged in the System and the users that have requested to register into the System. 
 In order to accomplish the first objective, it has to store a uniquely identified token and the id corresponding to the logged user. We obviously have 1 RET and 2 DETs.
 For the second objective, it has to store a uniquely identified URLs and the id corresponding to the registering user. Even in this case we have 1 RET and 2 DETs.
 \bigskip
@@ -165,11 +169,12 @@ An external interface file (EIF) is a user identifiable group of logically relat
 
 Assigning an FP value to an EIF is the same as assigning one to an ILF. First, determine the number of DETs and RETs in the ELF, then do a lookup in the following table to determine whether the EIF has a complexity of Low, Average, or High.  
 
-
 The main external data source the System should interact with is the set of cars. Each car has a set of sensors and the System must retrieve from them data about GPS latitude, GPS longitude, engine status, number of passengers, plugged status, door lock status and battery level. We must also note that each car can detect the presence of a damage through its sensors; for these reasons, the System should also retrieve data about a damage, namely if it is a major damage and an auto-generated text containing the description of the damage.
 We assume that each of these fields are maintained in a single RET in the car system. So, we came up with 1 RET and 9 DETs.
 
-The second data source for our System is the external mapping system, which is used for two different purposes:
+The second data source for the System is related to the communication with the GPS system of the mobile device. For the use of some functionalities, the user should provide its GPS position. For this reason, the System should retrieve the GPS latitude and longitude from the GPS system of the mobile device. This operation accounts for 1 RET and 2 DETs.
+
+Another external source of data for our System is the mapping system, which is used for two different purposes:
 \begin{itemize}
 	\item given an address, get the correspondent pair of GPS coordinates (reverse geo-coding);
 	\item draw the graphical representation of different kind of maps.
@@ -187,8 +192,10 @@ At the end of this analysis, using the values of tables \ref{tab:fp_weights} and
 	% The table itself
 	\textbf{Function Type} & \textbf{Complexity} & \textbf{FPs}\\ \hline
 	Car & Low & 7\\ \hline
+	User GPS position & Low & 7 \\ \hline 
 	Reverse geo-coding & Low & 7\\ \hline
 	Graphical map retrieval & High & 15\\ \hline
+	\multicolumn{2} {|c|}{Total} & 36 \\ \hline 
 \end{longtable}
 
 \subsubsection{Transactional Functions}
@@ -239,33 +246,133 @@ In the PowerEnjoy system, we have three different kind of clients that correspon
 \subparagraph{Web clients}
 The web clients are used by users of the System to perform three kind of operations.
 
-The first operation is a registration. The user that wants to access the functionalities of our System should insert their email, SSN, driving license number and credit card number. During the process, we can safely predict that all of the data will be "transacted" to a single record in an ILF or FTR, namely the ILF corresponding to the users. For this reason, we have 1 FTR and 4 DETs for this transactional function. This is an internal operation, so belongs to the EI category. We count a low complexity corresponding to 3 FPs.
+The first operation is a registration. The user that wants to access the functionalities of our System should insert their email, SSN, driving license number and credit card number. During the process, we can safely predict that all of the data will be "transacted" to a single record in an ILF or FTR, namely the ILF corresponding to the users. For this reason, we have 1 FTR and 4 DETs for this transactional function. We have to add 1 DET for the submit operation, which is the function activated by the user (likely through a button) to send its data. The whole operation is internal, so belongs to the EI category. We count an average complexity corresponding to 4 FPs.
 
 However, during this function, the System generates a random URL to be sent to the email the user provided through the external mailing system. So, in this process, the System
 \begin{itemize}
-	\item Generates a random and unique URL. We can assume that all the input data will be used to generate the URL. This accounts for an EO process with 1 FTR and 4 DETs, corresponding to a low complexity and 4 FPs.
-	\item ask the external System to send the mail to the user email address. This process reference both the user ILF to retrieve the email address and the message ILF to retrieve the subject and the object of the mail. Thus, it accounts for an EQ process with 2 FTRs and 3 DETs, corresponding to a low complexity and 3 FPs.
+	\item Generates a random and unique URL. We can assume that all the input data will be used to generate the URL. The URL must then be stored into an ILF associated to the corresponding user. This accounts for an EO process with 1 FTR and 4 DETs, corresponding to a low complexity and 4 FPs.
+	\item Ask the external System to send the mail to the user email address. This process reference both the user ILF to retrieve the email address and the message ILF to retrieve the subject and the object of the mail. Thus, it accounts for an EQ process with 2 FTRs and 3 DETs, corresponding to a low complexity and 3 FPs.
 \end{itemize}
-So, the total for the registration operation amounts to 10 FPs.
+So, the total for the registration operation amounts to 11 FPs.
 \smallskip
 
 The second operation is the confirmation of a registration through an URL. After the external mailing system send the email to the user, the latter can confirm the activation using this URL. This is a completely internal operation (an EI process) that access the ILF containing the user corresponding to that URL and modifies the ILF related to the user itself. It accounts for 2 FTRs and 1 DET, resulting in a low complexity and 3 FPs.
 \smallskip
 
-The last kind of operation performed with a web client is a login operation. 
-The first part of this operation is an EI process: the user enters his/her email and password and ask to log in the System. It accounts for 1 FTP and 2 DETs and can be categorized with a low complexity and 3 FPs.
+\paragraph{Mobile device}
+Mobile devices are also used by users to interact with the System. 
+
+The first kind of operation performed with a mobile client is a login operation. 
+The first part of this operation is an EI process: the user enters his/her email and password and ask to log in the System. It accounts for 1 FTP and 3 DETs (email, password and log in function) and can be categorized with a low complexity and 3 FPs.
 However, in the same operation, the System must generate, store and send back to the user a security token: this can be categorized as an EO process. We can assume that all the users input data are used to generate the random token; this accounts for 1 FTR and 4 DETs, resulting in a low complexity output corresponding to 4 FPs.
 The total for the login operation is of 7 FPs.
+\smallskip
 
-\paragraph{Mobile device}
+Thus, for each of the following transactions, the mobile device must send the previously retrieved token to the server. This operation involves the retrieval of the user data associated to the token, so it involves the ILF that tracks the pair of tokens and users. It is a completely internal operation, id est an EI process, that counts 1 FTR and 1 DET.
+\smallskip
+
+After a successful login, an user can retrieve the list of all the cars near him/her. In order to accomplish this goal, he/she can decide to either give a specific address or his/her GPS coordinates and then submit the data.
+In the first case, there is an EI process includes including the insertion of an address and the selection of the "locate cars" function. It accounts for 0 FTR (we do not maintain any ILF/ELF for this input) and 2 DETs.
+ 
+The submission of the address trigger an EQ process, which asks the external mapping system the reverse geo-coding. In a similar manner to what we have previously done, we can assume that this operation involves 1 FTR and 2 DETs.
+
+Then, the pair of GPS coordinates is sent to the System, which elaborates the data and returns to the user the list of cars near him/her whose status is available. We can see how this is an EO operation, because it also involves some calculation to see the cars near the user. In order to fullfil this transaction, the System should access the ILF containing a parameter for the maximum distance between the user and the car, then access another ILF containing all the cars, selecting only those whose status is available and near the user and presenting all their informations. So, we have 2 FTRs and 7 DETs for this EO operation.
+
+Lastly, the System asks the external mapping system to give a graphical representation of the previous list of cars on a map. This is an EQ process which involves an high quantity of data, thus accounting for an high complexity and 6 FPs.
+
+In the end, the retrieval of the list of cars through an address is a process characterized by:
+\begin{itemize}
+	\item an EI process involving the insertion of an address, the selection of the appropriate function and the sending of an authentication token: 2 FTRs, 3 DETs; Low Complexity; 3 FPs;
+	\item an EQ process involving 1 FTR and 2 DETs; Low Complexity; 3 FPs;
+	\item an EQ process involving a High Complexity operation; 6 FPs;
+	\item an EO process involving 2 FTRs and 7 DETs; Average Complexity; 5 FPs.
+\end{itemize}
+The total for this process is of 17 FPs.
+\bigskip
+
+If, on the other hand, the user decides to directly send the pair of his/her GPS coordinates, the process is slightly different.
+The EI process does not include an insertion of a text, but only the selection of a function; so, 0 FTR and 1 DET.
+
+There is another kind of EQ process, which asks the GPS system of the device to get the pair of GPS coordinates of the user. It accounts for 1 FTR and 2 DETs.
+
+Then, the pair of GPS coordinates is sent to the System for the elaboration, in a similar manner to what we have seen in the previous point.
+
+So, the only difference is that we have only 1 DET less for an EI process, which does not modify its complexity. So, the total count for this process is again of 17 FPs.
+\bigskip
+
+Another kind of function selectable by an user is the retrieval of all the areas in a given city. This transaction which involves:
+\begin{itemize}
+	\item an EI process in which a user insert the name of a city and the specific function: 0 FTR, 2 DETs; Low Complexity; 3 FPs;
+	\item an EO process in which the System retrieve all the areas belonging to the given city accessing the appropriate ILF: 1 FTR, 8 DETs; Low Complexity; 3 FPs;
+	\item an EQ operation in which the System asks the external mapping system to display the list of areas on a map: we categorize it as an operations which involves large quantities of data and so it is, presumably from different FTRs, and for this reason we assign to it an high complexity and 6 FPs.
+\end{itemize}
+The total for this transaction is 12 FPs. 
+\bigskip
+
+When users are logged into the System, they can also decide to reserve a car from the list of the available cars shown at the end of the previous transaction.
+The first part is an EI process, in which the user simply selects a car from the list. The selection triggers an action that sends, besides the token, the id of the car which the user wants to reserve. So, we have 2 FTPs and 2 DETs, resulting in a low complexity and 3 FPs.
+
+During the same transaction, the System has to display a message to the user have to check, basing on the user and the car ids, that the user has no active reservation or driving and similarly that the car has not yet been reserved or driven and that it is still available. So, it has to access three ILFs containing the informations related to this data: the one for the reservation, providing it the user id and car id; the one for the driving, providing it the user id and car id again; the one for the car, checking that the status of the car is setted to available. Then, if the reservation can be made, the System has to update the ILF corresponding to the reservation (inserting a new reservation) and the one corresponding to the car (changing its status to reserved). We only count the same ILF and DET once, but during the insertion of the new reservation the System has to store also the data related to the start time and setting the active flag to true. Thus we come up with 3 FTRs and 7 DETs, resulting in an average complexity and 5 FPs.
+
+The total for this transaction is of 8 FPs.
+\bigskip
+
+If the user does not unlock a car in a one hour time, the System should also charge the user with a fee, performing an EO process in which the user will be notified with an email containing the details of the expired reservation. This process involve the external mailing system, during which the System will access the mailing ILF (2 DETs), the reservation ILF (3 DETs) and the banking ILF (2 DETs). This will result in 3 FTRs and 6 DETs, accounting for 5 FPs.
+\bigskip
+
+Through his/her device, the user can also unlock a previously reserved car. 
+In the first step, the user select from his device the function to unlock the car. This will send to the System his/her GPS coordinates, the reservation id and the token. This is an EI operation of 2 FTR and 4 DETs, contributing with 3 FPs.
+
+The selection of the unlock function results in an EQ to the GPS system of the device, which will be called to retrieve the user GPS pair of coordinates; we count 1 FTR and 2 DETs for this process. For this reason, it contributes with 3 FPs.
+
+In order to display a proper message to the user, the System should access 2 ILFs to evaluate if he/she can be authorized to unlock the car:
+\begin{itemize}
+	\item the ILF file containing the parameter of the maximum distance range between an user requesting the unlock and the car to be unlocked
+	\item the ILF file containing the GPS longitude and latitude of the car
+\end{itemize}
+So, this EO operation accounts for 2 FTRs and 3 DETs. It contributes for 4 FPs.
+
+Laslty, the System will perform an EQ process, sending to the appropriate car a piece of data to unlock the car. It is safe to assume that this data will only have 1 DET and will not be stored in an ILF file; the result is a low complexity and 3 FPs.
+
+The whole process contributes with 13 FPs.
+\bigskip
+
+The last kind of operation that an user can perform through the mobile device is the selection of the money saving option.
+When the user wants to select this option, he/she has to enter a destination address and submit the data. It accounts for an EI process with 0 FTR and 2 DETs, id est a low complexity process contributing with 3 FPs.
+
+The System ask the reverse geo-coding of this data to the GPS System of the module. Again, it involves 1 FTR and 2 DETs, resulting in an EQ low complexity process which contributes for 3 FPs.
+
+Then, the System has to display a result to the user. For this reason, it access the ILF files containing the informations of the area, basing on their city, GPS latitude, GPS longitude, free charging slots and free parking slots. So, this is an EO process with 1 FTP and 5 DETs, resulting in a low complexity and 4 FPs.
+
+The total for this operation is of 10 FPs.
+
 \paragraph{Car board}
+The last kind of client for our System is the car board, which will be installed on each car. The board have an internal system which continuously fetch the data coming from the car sensors. 
 
-	e.g. calls to our app by clients: register, confirm, login/out, reserve cars, unlock cars, drive car, end ride, enable money saving
+Thus, there is a large number of EI processes, involving a big amount of data exchanged between the car and the System to update the data of a drive. For this reason, we can assume that this process has an high complexity, resulting in 15 FPs.
 
-\subsubsection{External Output (EOs)}
-	elem ops that generates data for the ext environm. includes elaboration of data from logic files
-	e.g. notify charge to user, notify company of damage, notify 
+During the ride, the System should also display the current fee to the user. This is an EO operation which can be classified as having a low complexity, resulting in 4 FPs.
 
-\subsubsection{External Inquiry (EQs)}
-	elem ops that involves input and output. w/out significant elaboration of data from logic files
-	e.g. show areas, show available cars, 
+At the end of the ride, the System should then charge the user with a fee. In order to do so, it has to evaluate the data both fetched during the drive and at the end of the ride. Even in this case, the operation involves a large amount of data to be processed, among which the update of various ILFs (mainly those related to the cars and to the banking operations) and the processing of ELF data of the car. It is safe to assume that this EO process has an high complexity, contributing for 7 FPs.
+
+Then, it has to invoke the external banking system in order to charge the user with the final fee. This operation does not involve any mathematical formula or calculation, but only the retrieval of the data from the ILF containing the banking information to retrieve the final fee and the credit card of the user to charge. This EQ process results in 1 FTP and 2 DETs, resulting in a low complexity and contributing for 3 FPs.
+
+Lastly, it has to perform an EQ process to send an email to the user with all the details of his/her drive, together with the final fee. For this scope, it has to access the mailing ILF (2 DETs), the driving ILF (7 DET) and the banking ILF (1 DET), resulting in 3 FTRs and 10 DETs and accounting for 4 FPs.
+
+
+\subsubsection{Overall estimation}
+\begin{longtable}{| c | c |}
+	% Some table settings
+	\caption{\textbf{Function Points overall estimation}} % Table caption
+	\label{tab:fp_results}%If later on you want to refer to this label, you can this label. 
+	\\ \hline % end of row + new horizontal line
+	
+	% The table itself
+	\textbf{Function Points } & \textbf{Value} \\ \hline
+	ILF & 84 \\ \hline
+	ELF & 36 \\ \hline
+	EI & 43 \\ \hline
+	EO & 33 \\ \hline
+	EQ & 40 \\ \hline
+	\emph{Total} & \emph{236} \\ \hline
+\end{longtable}
