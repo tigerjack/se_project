@@ -1,6 +1,6 @@
 A function point is a conceptual measure that express the amount of business functionality a software provides, based on what the end user request and receives.
 
-The Function Points approach, originally defined in 1979 by Allan Albrecht, provides an estimation of the size of a project based.  The approach takes as inputs the functional user requirements of the software and each one is categorized into one of five types:
+The Function Points approach, originally defined in 1979 by Allan Albrecht, provides an estimation of the size of a project.  The approach takes as inputs the functional user requirements of the software and each one is categorized into one of five types:
 \begin{itemize}
 	\item internal logic files (ILF) 
 	\item external logic files (ELF)
@@ -8,8 +8,9 @@ The Function Points approach, originally defined in 1979 by Allan Albrecht, prov
 	\item external outputs (EO)
 	\item external inquiries (EQ)
 \end{itemize} 
+Once the function is identified and categorized into a type, it is then assessed for complexity (high, medium or low ) and assigned a number of function points. 
 
-The 5 types of function points above, also known as Elementary Processes (EPs) can be grouped into 2 types of functions:
+The 5 types of function points above, also known as Elementary Processes (EPs), can be grouped into 2 types of functions:
 
 \begin{itemize}
 	\item Inputs, Outputs and Queries all qualify as Transactional Functions and,
@@ -21,18 +22,20 @@ These groupings are helpful in determining the types of elements that each funct
 A Transactional Function is broken down into DETs and FTRs, while a Data Function is broken down into DETs and RETs.
 
 \begin{itemize}
-	\item DET, Data Element Type is a unique user recognizable, non-repetitive field.
+	\item DET, Data Element Type is a unique user recognizable, non-repetitive field in all the kind of functions.
 	\item FTR, File Type Referenced is a file type referenced by a transaction. An FTR must also be either an Internal or External file.
 	\item RET Record Element Type is a user recognizable sub group of data elements within an Internal or External File.
 \end{itemize}
-   
-Once the function is identified and categorized into a type, it is then assessed for complexity and assigned a number of function points.
+So, basically, the elementary variables in functions are denoted as Data Element Type (DET). The functional complexity is computed as the total number of user identifiable groups that exists within DETs and is termed as Record Element Type (RET) in Data Functions and all referenced file types are counted as File Type Records (FTR) in Transactions Functions. 
+A corresponding matrix holds the reference function point values for all function types (namely the ILF, EIF, EI, EO and EQ), with respect to the range of DET and RET/FTR in each function. These tables are shown in the following sections.
+
+The following matrix represents instead the function points assigned for each subgroup of functions based on the corresponding complexity.
 
 \begin{longtable}{| c | c | c | c |}
 	% Some table settings
 	\caption{\textbf{Function Point Weights}} % Table caption
 	\label{tab:fp_weights}%If later on you want to refer to this label, you can this label. 
-	\\ \hline % end of row + new horizontal line
+	\\ \hline
 	
 	% The table itself
 	\textbf{Function Type} & \textbf{Low} & \textbf{Average} & \textbf{High}\\ \hline
@@ -44,12 +47,16 @@ Once the function is identified and categorized into a type, it is then assessed
 \end{longtable}
 
 \subsubsection{Data functions}
-%TODO refine
+Data functions relate to the actions of storing and retrieving data in both local files or databases and external to the application through remote interfaces, associated middleware or outside the boundary of the application concerned.
+
+Table \ref{tab:ilf_elf_complexity_matrix} is used as a reference for deriving the complexity for both ILFs and ELFs.
+\clearpage
+
 \begin{longtable}{| c | c | c | c |}
 	% Some table settings
 	\caption{\textbf{Complexity matrix for EIF and EOF}} % Table caption
-	\label{tab:ilf_elf_complexity_matrix}%If later on you want to refer to this label, you can this label. 
-	\\ \hline % end of row + new horizontal line
+	\label{tab:ilf_elf_complexity_matrix}
+	\\ \hline
 	
 	% The table itself
 	\textbf{RETs} &	\multicolumn{3}{c|}{\textbf{DETs}} \\ \hline
@@ -60,18 +67,24 @@ Once the function is identified and categorized into a type, it is then assessed
 \end{longtable}
 
 \paragraph{Internal Logic Files (ILFs)}
-PowerEnjoy has to store information related to various kind of entities in order to provide the required functionalities. All the homogeneous information are stored into different files or tables in a database. To ensure that the entities are uniquely identified inside a specific file or table we assign to each one an ID, which is unique inside the file or the table.
+The official IFPUG definition of an EIF is:
+
+\begin{quote}
+An external interface file (EIF) is a user identifiable group of logically related data or control information referenced by the application, but maintained within the boundary of another application. The primary intent of an EIF is to hold data referenced through one or more elementary processes within the boundary of the application counted. This means an EIF counted for an application must be in an ILF in another application.
+\end{quote}
+
+PowerEnjoy has to store information related to various kind of entities in order to provide the required functionalities. All the homogeneous information are stored into different files or tables in a database. To ensure that the entities are uniquely identified inside a specific file or table we assign to each one an ID, which is unique inside the file or the table. However, this is a system-generated sequence number, not an user-recognizable, so it does not count as a DET.
 \smallskip
 
 The first entities PowerEnjoy should track are surely the users; for this reason, we have a table for them storing for each one an email, a password, a social security number, a driving license number, a credit card number and a status (active/inactive). 
-So, we can count 6 DETs, one for each of the data element identified above. Of course, we have to add the ID DET common to all the entities. Based on the information provided, we can thus judge that there will be only 1 RET ? meaning that all 7 DETs will be stored in a single file or Table in the database.
+So, we can count 6 DETs, one for each of the data element identified above. Based on the information provided, we can thus judge that there will be only 1 RET, meaning that all 6 DETs will be seen by an user as a unique logically grouping.
 \smallskip
 
 Secondly, we have to store information about areas: GPS latitude, GPS longitude, city and parking slots. The System has to manage two different kind of areas: a parking area and a charging area, the latter being an extension of the former. There are various kind of strategies to manage this kind of hierarchy at the data level; we choose to use the "single table strategy", in which the two classes of the hierarchy are mapped to a single table or file which has a discriminator column containing a value that identifies the subclass to which the instance represented by the record belongs. In our case, this discriminator is a boolean condition that is set to true if the specified record is a charging area. In addition to this field, for a charging area, we also have to add another field to store the number of charging slots associated to the charging area.\\
-So, in the end we can come up with 1 RET and 7 DETs.
+So, in the end we can come up with 1 RET and 6 DETs.
 \smallskip
 
-Another important piece of information is associated to the cars managed by the System. For each car, we have to store plate number and its status (available, unavailable, reserved or in use). Finally, we have to know in which area the car is; for this reason, we have a field that has the identifier of an area. Thus, for this kind of data, we came up with 1 RET and 4 DETs.
+Another important piece of information is associated to the cars managed by the System. For each car, we have to store plate number and its status (available, unavailable, reserved or in use). Finally, we have to know in which area the car is; for this reason, we have a field that has the identifier of an area. Thus, for this kind of data, we came up with 1 RET and 3 DETs.
 \smallskip
 
 Closely related to a car we also need a table containing all the damages. We must note that a damage is autodetected from the car set of sensors and for these reasons some of the data associated to a specific damage belongs to the ELF category. Nevertheless, the System must store and maintain, for each damage, the identifier of the car on which the damage has been detected, two different timestamps related to when the damage was detected and when (optionally) it was solved. Of course, we have also a boolean flag that indicates if a damage has been solved or not. For this reason, we count 1 RET and 5 DETs. 
@@ -82,10 +95,10 @@ First of all, each reservation has a reference to both the ID of the user which 
 We came up with 1 RET and 5 DETs.
 \smallskip
 
-The driving table is very similar to the previous one, storing a reference to both the ID of the user which driving the car, the ID of the car being driven, the time on which the drive started, the time on which it was concluded and the active flag. Apart from the previous fields, we have to store other information relevant for the evaluation of the fee applied to the user: three flag to know if the drive has to be applied a discount (the user has taken other passengers, the user left the auto with an high battery, the user plugged the car into a socket at the end of the ride) and other two for a surcharge (if the user left the auto with a low battery or if the car was left far from a charging area). In the end, we have 1 RET and 11 DETs.
+The driving table is very similar to the previous one, storing a reference to both the ID of the user which driving the car, the ID of the car being driven, the time on which the drive started, the time on which it was concluded and the active flag. Apart from the previous fields, we have to store other information relevant for the evaluation of the fee applied to the user: three flag to know if the drive has to be applied a discount (the user has taken other passengers, the user left the auto with an high battery, the user plugged the car into a socket at the end of the ride) and other two for a surcharge (if the user left the auto with a low battery or if the car was left far from a charging area). In the end, we have 1 RET and 10 DETs.
 \smallskip
 
-Another homogeneous kind of data stored is related to the banking operations managed by our System. A banking operation can be related to an expired reservation or to a driving. For this reason, we have two optional data elements: the first one refers to the ID of a reservation, the last one to the ID of a driving. Of course we must also store the final fee of the specific banking operation, if it has been paid and if it has been processed. Thus, we have 1 RET and 6 DETs.
+Another homogeneous kind of data stored is related to the banking operations managed by our System. A banking operation can be related to an expired reservation or to a driving. For this reason, we have two optional data elements: the first one refers to the ID of a reservation, the last one to the ID of a driving. Of course we must also store the final fee of the specific banking operation, if it has been paid and if it has been processed. Thus, we have 1 RET and 5 DETs.
 \smallskip
 
 In the ILF we must surely count the various configuration files used by the System to define the amount of each banking operation. This kind of data relies on many different variables:
@@ -104,7 +117,7 @@ In the ILF we must surely count the various configuration files used by the Syst
 	\item low battery surcharge percentage represents the percentage of the surcharge to be applied in the case in which the user, at the end of the ride, left the Car with a low battery percentage
 	\item low battery percentage for surcharge represents the maximum percentage of the battery that has to be considered as low battery for the surcharge at the previous point.
 \end{enumerate}
-We don't need an ID for this kind of data, so we can easily conclude that we have 1 RET and 13 DETs.
+We can easily conclude that we have 1 RET and 13 DETs.
 \smallskip
 
 Another kind of data we should manage is related to the configuration of other parameters related to the cars, namely:
@@ -167,7 +180,8 @@ The official IFPUG definition of an EIF is:
 An external interface file (EIF) is a user identifiable group of logically related data or control information referenced by the application, but maintained within the boundary of another application. The primary intent of an EIF is to hold data referenced through one or more elementary processes within the boundary of the application counted. This means an EIF counted for an application must be in an ILF in another application.
 \end{quote}
 
-Assigning an FP value to an EIF is the same as assigning one to an ILF. First, determine the number of DETs and RETs in the ELF, then do a lookup in the following table to determine whether the EIF has a complexity of Low, Average, or High.  
+Assigning an FP value to an EIF is the same as assigning one to an ILF. First, determine the number of DETs and RETs in the ELF, then do a lookup in the table \ref{tab:ilf_elf_complexity_matrix} to determine whether the ELF has a complexity of Low, Average, or High.  
+\bigskip
 
 The main external data source the System should interact with is the set of cars. Each car has a set of sensors and the System must retrieve from them data about GPS latitude, GPS longitude, engine status, number of passengers, plugged status, door lock status and battery level. We must also note that each car can detect the presence of a damage through its sensors; for these reasons, the System should also retrieve data about a damage, namely if it is a major damage and an auto-generated text containing the description of the damage.
 We assume that each of these fields are maintained in a single RET in the car system. So, we came up with 1 RET and 9 DETs.
@@ -199,6 +213,18 @@ At the end of this analysis, using the values of tables \ref{tab:fp_weights} and
 \end{longtable}
 
 \subsubsection{Transactional Functions}
+Transaction functions relate to read/write operations performed on the data. The transaction functions will read or write data from and to an ILF or EIF. There are three basic type of Transaction functions which comprises of External Input, External Inquiry and External Output.
+
+The official IFPUG definition of the previous functions is as follows:
+\begin{quote}
+An external input (EI) is an elementary process that processes data or control information that comes from outside the application boundary. The primary intent of an EI is to maintain one or more ILFs and/or to alter the behaviour of the system. [...]
+
+An external output (EO) is an elementary process that sends data or control information outside the application boundary. The primary intent of an external output is to present information to a user through processing logic other than, or in addition to, the retrieval of data or control information . The processing logic must contain at least one mathematical formula or calculation, create derived data maintain one or more ILFs or alter the behavior of the system. 
+
+An external inquiry (EQ) is an elementary process that sends data or control information outside the application boundary. The primary intent of an external inquiry is to present information to a user through the retrieval of data or control information from an ILF of EIF. The processing logic contains no mathematical formulas or calculations, and creates no derived data. No ILF is maintained during the processing, nor is the behavior of the system altered.     
+\end{quote}
+
+The IFPUG also provides a matrix for each of the previous group of functions. To note that the the matrix for EOs and EQs is the same.
 
 \begin{longtable}{| c | c | c | c |}
 	% Some table settings
@@ -228,20 +254,9 @@ At the end of this analysis, using the values of tables \ref{tab:fp_weights} and
 	4 or more  & A  & H  & H \\ \hline 
 \end{longtable}
 
-In this section we come to define the transactional functions
-%TODO refine
-The official IFPUG definition of an EI is as follows:
+To emphasize the normal flow of each function, we have decided to not treat each of them separately, but rather highlight the different kind of functions related to a specific interaction with the System.
 
-\begin{quote}
-    An external input (EI) is an elementary process that processes data or control information that comes from outside the application boundary. The primary intent of an EI is to maintain one or more ILFs and/or to alter the behaviour of the system. 
-\end{quote}
-Examples of EIs include:
-\begin{itemize}
-    \item Data entry by users.
-    \item Data or file feeds by external applications. 
-\end{itemize}
-
-In the PowerEnjoy system, we have three different kind of clients that corresponds to this definition: the web client, the mobile device and the car board.
+Furthermore, in PowerEnjoy we basically have three different kind of clients: the web client, the mobile device and the car board. These are the primary sources of input for the System and for this reason we decided to classify all the  provided functionalities basing on this distinction.
 
 \subparagraph{Web clients}
 The web clients are used by users of the System to perform three kind of operations.
