@@ -400,7 +400,7 @@ The Model macrocomponent would be made up of many different components, each rep
 
 For web applications such as the ones we are developing, the MVC paradigm comes naturally, since these applications are naturally divided in three main components: a GUI running from the user's smartphone and the Web Browsers are the View macrocomponent, the Server-side code is the Controller, while the SQL database is the Model.
 
-\subsubsection{Server-Client}
+\subsubsection{Multi-tier Server-Client}
 We mentioned above that we are using a client mobile application the user will interact with, while a large server will perform most of the computation. This is called \emph{Server-Client approach}, and it is used in most web application.
 
 There are several reasons to choose this approach over having every instance of the application fulfill the duties of both the View and Controller macrocomponents: first and foremost, the client application can be kept lightweight, allowing it to be used even on low-end smartphones. Since the client needs to perform close to no computation, only handling communications, the application can easily run on most platforms.
@@ -410,6 +410,18 @@ Another advantage is that if every client application processed its requests at 
 Finally, having a centralized server application allows for much quicker communication with the database, which is necessarily centralized.
 
 Other than for the mobile application, the Server-Client approach will be used to manage communication between the server and the Cars: every Car will be outfitted with a small computation unit tasked with collating sensor data. It will be this Car system that will calculate, update and show the current Fee, detect damage, check for the presence of Passengers and communicate with the Server when the Ride ends, either because the User wants to or because the Car has sustained major damage.
+
+To enable the system to cope with flexibility and reusability, we have also segregated our System into tiers, a practice that ensure that we can decide at a later point to modify or add a specific layer, instead of reworking the entire System.
+So, the application will be divided into several layers:
+\begin{enumerate}
+	\item Database
+	\item Entities (Persistence Layer)
+	\item Repositories (Data Access Layer)
+	\item Services (Business Logic Layer)
+	\item Controllers (Communication Layer)
+	\item Thin Client
+\end{enumerate}
+All layers except the last one make up the Server Tier.
 
 \subsubsection{RESTful web service}\label{sec:rest}
 The communication between the thin client making up the View and the server-side Controller application is set up according to the REpresentational State Transfer set of constraints. Data exchange is also made through the HTTP protocol, using SSL to provide encryption of sensible data, but the data are codified in the JSON format, according to the REST constraints.
