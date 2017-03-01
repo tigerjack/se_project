@@ -5,10 +5,11 @@
 \usepackage{algorithm2e}
 \usepackage{calc}
 \usepackage{enumitem}
-
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{longtable}
+\usepackage[section]{placeins}
 
 \title{Design Document}
 \author{Enrico Migliorini, Alessandro Paglialonga, Simone Perriello}
@@ -21,6 +22,19 @@
 \clearpage
 
 \section{Introduction}
+\subsection{Revision history}
+\begin{longtable}{| c | c | p{40mm}  | p{50mm} |}
+	% Some table settings
+	\caption{\textbf{Revision History}}
+	\label{tab:rev_history}
+	\\ \hline
+	
+	% The table itself
+	\textbf{Version} & \textbf{Date} & \textbf{Authors} & \textbf{Summary}\\ \hline
+	1.0 & 11/12/2016& E. Migliorini, S. Perriello, A.Paglialonga & First release\\ \hline
+	1.1 & 01/03/2017& S. Perriello & Added infos to overview, component view and communication view, general restyling\\ \hline
+	
+\end{longtable}
 \subsection{Purpose}
 This document is aimed at providing a technical overview of the PowerEnJoy System, explaining how to satisfy the various project requirements stated in the RASD.
 
@@ -57,45 +71,78 @@ Finally, the Requirements Traceability section connects the stakeholder's requir
 \clearpage
 \section{Architectural Design}
 \subsection{Overview}
-\label{MVC}
-The System will be built according to the Model-View-Controller design pattern, being divided in three separate macrocomponents interacting with each other.
+Figure \ref{fig:overview} shows the high level overview of our System. 
 
-The User Application will make up the View macrocomponent. It will display data from the Model and tell the Controller the actions to perform. It would interface with the rest of the system through a Java servlet, allowing information to be transferred seamlessly over a networked connection.
-
-The Server-Side Application will make up the Controller macrocomponent. According to the requests of the View, the various parts of the Controller will read and, in some cases, modify the data stored in the Model, then send the appropriate data back to the View, allowing the User to make further decisions. The Controller would be divided into several components, each one interfacing with a different component of the Model: a Database Controller, for instance, would access the Society Database to retrieve information about the Users and the Cars, while the Maps Controller would get data from the Maps API.
-
-The Model macrocomponent would be made up of many different components, each representing a different subset of the data required by the application: the Controller would have access to the data stored, to display them via the View. Different data subsets would be handled differently: the Society Database, for example, will allow the Controller to change the data, but external APIs will only provide the required information.
-
-\subsection{Motivation for MVC}
-The Model-View-Controller design pattern is a tried and tested paradigm that has proved itself to be effective and efficient. By separating the application in three macrocomponents, it allows for full encapsulation, with all the related advantages: each component can be changed without hassle, since they only need to present a coherent interface to the other ones, and it is easy to perform integration testing even if one or more components haven't been fully implemented.
-
-For web applications such as the ones we are developing, the MVC paradigm comes naturally, since these applications are naturally divided in three main components: a GUI running from the user's smartphone is the View macrocomponent, the Server-side code is the Controller, while the internal SQL database (integrated, in our case, by external APIs) is the Model.
-
-\subsection{Motivation for the Server-Client approach}
-We mentioned above that we are using a client mobile application the user will interact with, while a large server will perform most of the computation. This is called \emph{Server-Client approach}, and it is used in most web application.
-
-There are several reasons to choose this approach over having every instance of the application fulfill the duties of both the View and Controller macrocomponents: first and foremost, the client application can be kept lightweight, allowing it to be used even on low-end smartphones. Since the client needs to perform close to no computation, only handling communications, the application can easily run on most platforms.
-
-Another advantage is that if every client application processed its requests at the same time, there would be a significant chance of collision: for example, two users could reserve the same car at the same time. With a server-side application, collisions can be readily detected and resolved.
-
-Finally, having a centralized server application allows for much quicker communication with the company database, which is necessarily centralized, possibly even located on the same machine.
-
-Other than for the mobile application, the Server-Client approach will be used to manage communication between the server and the Cars: every Car will be outfitted with a small computation unit tasked with collating sensor data. It will be this Car system that will calculate, update and show the current Fee, detect damage, check for the presence of Passengers and communicate with the Server when the Ride ends, either because the User wants to or because the Car has sustained major damage.
+As we can easily guess, there are a lot of different Systems which need to communicate. lAll the details are explained through the next sections.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{../Images/Overview}
 	\caption{An overview of the System}
+	\label{fig:overview}
 \end{figure}
 
-\clearpage
+
 \subsection{Component View}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{../Images/Component}
 	\caption{Component Diagram}
+	\label{fig:component}
 \end{figure}
-The above image shows the various System components and their relationship with each other. The following diagrams show the Class Diagrams for various parts of the System.
+Image \ref{fig:component} shows the various System components and their relationship with each other. 
+
+We can see three different kind of clients for our System:
+\begin{itemize}
+\item\textbf{Web Clients} represent the web browser that Users can use to access the System. The System returns simple HTML/JSP pages to them.
+\item\textbf{Mobile Rest Clients} mainly represent all the clients that uses a RESTful approach to access the System functionalities. The main kind of Rest Clients are surely the user Devices on which the PowerEnjoy App is running, though it is surely possible to access the System functionalities through other kind of clients, provided them invokes the correct URLs. As we can see, it is required that the PowerEnjoy App has access to the GPS System of the Client in order to fullfil some of the requests and an external Map System used to show different kind of maps to the User.
+\item\textbf{Car Systems} can access the System in order to send useful data of the Cars. This is due to the fact that, instead of continuously make the Server polling all the Cars for their data, we decided to install a board on each Car that sends data on specific, meaningful events.
+\end{itemize}
+
+The main part of the Component Diagram (and as a consequence of the entire System) is the Server, named as Servlet Container. In fact, in our approach, given the used technologies, the Server should be a Java Servlet Container (see also \ref{par:tomcat}).
+Inside it, you can see the Spring Framework, which is the core component of the Server and that provides some interesting features to manage all the other components (see also \ref{Spring}).
+
+Spring’s web module includes, among the others, two interesting beans that is worth mentioning:
+\begin{itemize}
+\item A \textit{DispatcherServlet}. Spring’s web MVC framework is, like many other web MVC frameworks, request-driven, designed around a central Servlet that dispatches requests to controllers and offers other functionality that facilitates the development of web applications. In practice, all the requests coming from clients are intercepted by the DispatcherServlet and redirected to the appropriate controllers: it is an expression of the "Front Controller" design pattern, a pattern that Spring Web MVC shares with many other leading web frameworks.
+Note that we can achieve analogous results using the default JEE framework, but obviously Spring greatly simplifies our tasks.
+\item Various \textit{Configuration classes} used to configure all the relevant aspects of the framework. Among them, for example, we have the \textit{WebApplicationInitializer}, that ensures the code-based configuration is detected and automatically used to initialize any Servlet 3 container.
+\end{itemize}
+
+\bigskip
+
+The core logic of the System is encapsulated in the @Component, a name which is used to honour the Spring name. 
+A @Component is a generic stereotype for any Spring-managed component. As such, all the @Component s are auto detectable by spring container and we don't need to define bean in configuration file because they will be automatically detected at runtime by Spring.
+
+@Repository, @Service, and @Controller, on the other hand, are specializations of @Component for more specific use cases, namely the persistence layer, the service layer and the presentation layer respectively. Obviously, the use of the specialized stereotypes is encouraged, because on one hand they can provide further functionalities (such as the automatic translation of database exceptions for @Repository), and on the other they are useful to separate the layers of the application.
+
+In addition to that, we use a specialized kind of @Controller, namely @RestController, to implement the RESTful pattern and responds to specific HTTP requests coming from RestClients and Devices.
+
+We can also note the use of an authentication controller. Its role is to grant the access to specific controllers only to authenticated users, id est users already registered to the System and which has provided the correct access identifiers.
+
+All the Controllers can/should use one or more services in order to correctly elaborate client requests.
+
+\bigskip
+
+For the @Service layer, we decided to separate the logic into two different components:
+\begin{itemize}
+\item The external service component are a simply interface between the System and external services. They are used to wrap invocations to external System methods into our methods, ensuring in this way that changes in the external System APIs can be managed only by the appropriate external service class, while at the same time not affecting the behaviour of any other class. They are invoked by the internal services to process transactions.
+\item The internal service component are related to the core business logic of the System and are directly invoked by @Controllers or by other services to fullfil specific tasks. A specialized class of them is involved into elaborating specific tasks in background on specific events. 
+\end{itemize}
+
+One thing is worth noting at this point: the Car System acts both as a Client and as a Server for our System. Indeed, as previously said, a Car can send data to the System at the occurrence of specific events. On the other hand, the System can query the Car status at any point for specific reasons. It is this the reason for which we must have a Car Interface Service.
+
+\bigskip
+The goal of the Spring @Repository is to significantly reduce the amount of boilerplate code required to implement data access layers for various persistence stores. In other words, it is used to provide a single way to access different type of data storage implementations. Indeed, you can use specific naming conventions for the methods of the repository classes and the framework automatically translates them into queries specific for the underlying data storage.
+
+The Repository pattern is in general slightly different from the DAO pattern, because it can manage aggregate data more than single data. However, in Spring the distinction between the two patterns is not so clear.
+In our approach, we have repository classes for the most relevant entities of our database, while other entities can be accessed indirectly.
+
+\bigskip
+Last but not least, in our Server we have to provide the JPA @Entity annotation on those classes that are directly mapped into the database. In other words, the @Entity annotation is used to define classes whose instances can be stored in a database.
+
+\subsection{Class View}
+The following diagrams show the Class Diagrams for various parts of the System.
 We then have a diagram showing the relationships between the POJOs, the Objects that make up the Persistence layer, and finally one for the tasks that are constantly running on the Server.
 
 \begin{figure}[h]
@@ -129,15 +176,8 @@ We then have a diagram showing the relationships between the POJOs, the Objects 
 \end{figure}
 \clearpage
 
-\subsection{Deployment View}
-The following diagram shows the deployment view of the whole System. The server specifications are described in \ref{server}.
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{../Images/Deployment}
-	\caption{Deployment Diagram}
-\end{figure}
-
-The following diagrams, on the other hand, show the HTTP requests that Clients use to contact the server, along with the server response.
+\subsection{Communication View}
+The following diagrams are used to show the HTTP requests that Clients use to contact the server, along with the most relevant server responses.
 
 \begin{figure}[h]
 	\centering
@@ -157,11 +197,46 @@ The following diagrams, on the other hand, show the HTTP requests that Clients u
 	\caption{Communication Diagram for Mobile Client Secure}
 \end{figure}
 
+\FloatBarrier
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{../Images/WebClient_Communication}
 	\caption{Communication Diagram for Web Client}
 \end{figure}
+
+Is it interesting to note that while to requests from Web Clients the Server responds with HTML/JSP files, for the Mobile Clients and Car Clients it returns JSON data which must be correctly processed by the clients.
+
+We can also that the secured connection between Mobile Clients and the server is ensured by the use of a token, which is generated by the Server on a successful login and then sent back to the client. On subsequent access, the clients should send this token in order to access secured resources.
+
+\subsection{Deployment View}
+The following diagram shows the deployment view of the whole System. The server specifications are described in \ref{server}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Deployment}
+	\caption{Deployment Diagram}
+\end{figure}
+
+As per the overview diagram in figure \ref{fig:overview}, we introduced also some security layers between the various part of our System.
+
+The Reverse Proxy is a type of proxy server that retrieves resources on behalf of a client from one or more servers. These resources are then returned to the client as if they originated from the proxy server itself. Among the others, a reverse proxy is useful for the following reasons:
+\begin{itemize}
+\item Application firewall features can protect against common web-based attacks, such as DoS or DDoS. Without a reverse proxy, removing malware or initiating takedowns, for example, can become difficult.
+\item In the case of secure websites, a web server may not perform SSL encryption itself, but instead offloads the task to a reverse proxy that may be equipped with SSL acceleration hardware.
+\item A reverse proxy can distribute the load from incoming requests to several servers, with each server serving its own application area. In the case of reverse proxying in the neighborhood of web servers, the reverse proxy may have to rewrite the URL in each incoming request in order to match the relevant internal location of the requested resource.
+\item Reverse proxies can operate wherever multiple web-servers must be accessible via a single public IP address. The web servers listen on different ports in the same machine, with the same local IP address or, possibly, on different machines and different local IP addresses altogether. The reverse proxy analyzes each incoming request and delivers it to the right server within the local area network.
+\end{itemize}
+
+We choose to deploy the reverse proxy on a Linux machine, inside which we used the Nginx server to easily configure all the relevant aspects.
+
+\bigskip
+The Server is instead deployed on two different Linux machines which runs the Tomcat server, an open source Java Servlet container.
+Whenever the Server must invoke the methods of external systems, its requests are handled by the forward proxy. Basically, it acts as an intermediary for requests from clients (in this case our Server) seeking resources from other servers (the external systems). Among other well-known capabilities provided by a forward proxy, we must note the added security layer introduced by its use. Indeed, a proxy can keep the internal network structure of the company secret by using network address translation. This makes requests from machines and users on the local network anonymous. 
+We choose to use Tinyproxy, a fast and small open source implementation of a proxy server, which will run on a single Linux machine.
+
+\bigskip
+The access to the Database is also mediated by a firewall, whose capabilities are well-known and beyond the scope of this document.
+
 \clearpage
 
 \subsection{Runtime View}
@@ -306,62 +381,84 @@ The System is based on the Spring framework (see \ref{Spring}) and uses its inte
 The Model, View and Controller macrocomponents communicate with each other through a number of protocols:
 \subsubsection{HTTP}
 HTTP, HyperText Transfer Protocol, is the hypermediaexchange protocol that is the basis of the World Wide Web. An analysis of the HTTP protocol is beyond the scope of this document, however it has to be mentioned, since Registration can be performed via the Company website, which is HTTP-based. Therefore, communication between the Web Client (the website itself, accessed through the User or Visitor's browser) and the Server will be managed through HTTP requests and dynamic JSP pages.
-\subsubsection{RESTful web service}
+
+\subsubsection{API queries}
+Parts of our System rely on external services: the Maps component, for instance, will send requests to an external API to obtain maps for the desired location, and in the same way the Banking component will process payment by sending requests to an external banking system's API. All communication between the APIs and the Controller will make use of the HTTP protocol.
+
+\subsection{Architectural Style}
+The System will be mainly built according to three different architectural patterns: Model-View-Controller (MVC for short), Client-Server multitier and REST. 
+Furthermore, the Application will be mainly built using the Spring framework. Further details can be found in section \ref{Spring}, which can easily cope with the architectural decision previously mentioned.
+
+\subsubsection{MVC}\label{MVC}
+The Model-View-Controller design pattern is a tried and tested paradigm that has proved itself to be effective and efficient. By separating the application in three macrocomponents, it allows for full encapsulation, with all the related advantages: each component can be changed without hassle, since they only need to present a coherent interface to the other ones, and it is easy to perform integration testing even if one or more components haven't been fully implemented.
+
+The User Application will make up the View macrocomponent. It will display data from the Model and tell the Controller the actions to perform. It would interface with the rest of the system through a Java servlet, allowing information to be transferred seamlessly over a networked connection.
+
+The Server-Side Application will make up the Controller macrocomponent. According to the requests of the View, the various parts of the Controller will read and, in some cases, modify the data stored in the Model, then send the appropriate data back to the View, allowing the User to make further decisions. The Controller would be divided into several components, each one interfacing with a different component of the Model: a Database Controller, for instance, would access the Database to retrieve information about the Users and the Cars, while the Maps Controller would get data from the Maps API.
+
+The Model macrocomponent would be made up of many different components, each representing a different subset of the data required by the application: the Controller would have access to the data stored, to display them via the View. Different data subsets would be handled differently: the Database, for example, will allow the Controller to change the data, but external APIs will only provide the required information.
+
+For web applications such as the ones we are developing, the MVC paradigm comes naturally, since these applications are naturally divided in three main components: a GUI running from the user's smartphone and the Web Browsers are the View macrocomponent, the Server-side code is the Controller, while the SQL database is the Model.
+
+\subsubsection{Multi-tier Server-Client}
+We mentioned above that we are using a client mobile application the user will interact with, while a large server will perform most of the computation. This is called \emph{Server-Client approach}, and it is used in most web application.
+
+There are several reasons to choose this approach over having every instance of the application fulfill the duties of both the View and Controller macrocomponents: first and foremost, the client application can be kept lightweight, allowing it to be used even on low-end smartphones. Since the client needs to perform close to no computation, only handling communications, the application can easily run on most platforms.
+
+Another advantage is that if every client application processed its requests at the same time, there would be a significant chance of collision: for example, two users could reserve the same car at the same time. With a server-side application, collisions can be readily detected and resolved.
+
+Finally, having a centralized server application allows for much quicker communication with the database, which is necessarily centralized.
+
+Other than for the mobile application, the Server-Client approach will be used to manage communication between the server and the Cars: every Car will be outfitted with a small computation unit tasked with collating sensor data. It will be this Car system that will calculate, update and show the current Fee, detect damage, check for the presence of Passengers and communicate with the Server when the Ride ends, either because the User wants to or because the Car has sustained major damage.
+
+To enable the system to cope with flexibility and reusability, we have also segregated our System into tiers, a practice that ensure that we can decide at a later point to modify or add a specific layer, instead of reworking the entire System.
+So, the application will be divided into several layers:
+\begin{enumerate}
+	\item Database
+	\item Entities (Persistence Layer)
+	\item Repositories (Data Access Layer)
+	\item Services (Business Logic Layer)
+	\item Controllers (Communication Layer)
+	\item Thin Client
+\end{enumerate}
+All layers except the last one make up the Server Tier.
+
+\subsubsection{RESTful web service}\label{sec:rest}
 The communication between the thin client making up the View and the server-side Controller application is set up according to the REpresentational State Transfer set of constraints. Data exchange is also made through the HTTP protocol, using SSL to provide encryption of sensible data, but the data are codified in the JSON format, according to the REST constraints.
 
 Complying with the REST constraints allowed not only for simple component design, but also for intermediate layers such as firewalls or proxies. That is because the stateless nature of the system means that every request sent by the client contains all the necessary information for processing, not relying on server-side information. Furthermore, using a RESTful service allows us to design a uniform interface, easily allowing for future scalability.
 
 The communication between the Cars and the Servers will be REST-compliant as well.
 
-\subsubsection{API queries}
-Part of the Model macrocomponent is made up by a database handled by the Society, which will interact with the Controller through a query language like SQL.
-
-However, parts of the Model rely on external services: the Maps component, for instance, will send requests to an external API to obtain maps for the desired location, and in the same way the Banking component will process payment by sending requests to an external banking system's API. All communication between the APIs and the Controller will make use of the HTTP protocol.
-
-\subsection{Architectural Style}
-The application will be divided into several layers:
-\begin{enumerate}
-	\item Database
-	\item Repositories (Data Access Layer)
-	\item Entities (Persistence Layer)
-	\item Services (Business Logic Layer)
-	\item Controllers (Communication Layer)
-	\item Thin Client
-\end{enumerate}
-All layers except Thin Client make up the Server Tier.
-
-The components that make up these layers will be explained in the next subsection.
-
-\subsection{The Spring Framework}
-\label{Spring}
+\subsection{Other design decision}
+\subsubsection{The Spring Framework} \label{Spring}
 Spring is an open-source, modular application framework generally used to build web applications on top of the Java EE platform. It provides a plethora of functionalities, from high-level servlet control to security services, that can be used by Java-based web applications. One core feature of Spring is that it can be used on any deployment platform: therefore the development team can focus on building the application without being constrained by the target platform's specifications, and the application could be easily deployed to a different target with minimal effort.
 
 Spring is focused on the Inversion of Control pattern, according to which the programmer should not create objects, rather specify how objects should be created, then delegate that responsibility to an external object or service. This is extremely useful because, according to the Java Persistence Standard, objects will need to be dynamically created at runtime.
 
 Spring allows to use annotations to classify the servlets that we are creating into several stereotypes: here are the ones that we are using.
 \begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries @Repository}]
-	\item[@Entity] This stereotype marks persistent entities, called POJOs, which can be accessed by Controllers, Repositories, and Services, as well as by the mobile client. Users, Cars, and Reservations are examples of objects that can be represented as POJOs, making up a Persistent Layer that can be provided information by a Data Access Layer (explained below).
 	\item[@Repository] Repositories control access to databases, retrieving the information needed to create Entities. Repositories manage database and API queries, providing a Data Access Layer to control information and exchange it with the Persistence Layer.
 	\item[@Controller] Controllers are used for connecting the client to the server, managing HTTP requests, and invoking Services. Their function is to translate HTTP requests to functions and viceversa, providing an interface for client-server communication. For the Car and Mobile clients, which have more responsibilities than the simple Web Client, a specialization \textbf{@RESTController} will be used, allowing us to provide a simple RESTful interface.
 	\item[@Service] Services make up the Business Logic Layer. We provide two specializations of Service, \textbf{@InternalService} and \textbf{@ExternalService}: the former will handle internal logic, such as gathering relevant information to send to the Client, performing checks on Cars and Users, or calculating the optimal Charging Areas for users using the Money Saving Option, while the latter will provide an interface for the external services such as Mapping or Banking. Services will interact with Controllers for client-server communication and with Repositories for data access and modification.
 \end{description}
 
-\subsection{Server Specifications}
+\subsubsection{Server Specifications}
 \label{server}
-\subsubsection{Tomcat}
+\paragraph{Tomcat}\label{par:tomcat}
 While Spring provides tool for working with servlets, they would be implemented through the Apache Tomcat container and HTTP server. An open source project, Tomcat has been extensively tested and is known for its stability, performance and scalability, also providing excellent documentation and community support. Furthermore, there is an edition focused for Java EE, called TomEE, which integrates flawlessly with Spring.
 
-\subsubsection{NGINX}
+\paragraph{NGINX}\label{par:nginx}
 In order to manage requests, allowing the server to be easily contacted by the clients is paramount. In order to do that, an easy way is introducing an intermediary called a reverse proxy, tasked with retrieving resources according to incoming requests, reducing the risk of overloading the server.
 
 NGINX is an open source reverse proxy that can also act as an HTTP server. It can be set to integrate flawlessly with Tomcat and enables the server to manage thousands of simultaneous connections without any drop in performance. Again, NGINX has an extensive documentation and community support.
 
-\subsubsection{Forward Proxy and Firewall}
+\paragraph{Forward Proxy and Firewall}
 In order to contact External Services, the System sends requests through a forward proxy. This ensures that the System will present a unified outbound interface for HTTP requests. We chose to use tinyproxy for that, because it's lightweight and compatible with Tomcat.
 
-We also assume that the Company will protect its database with a Firewall. It is worth noting that they will have to add the Application servers to the list of trusted addresses.
+We also assume that the database will be protected by a Firewall. It is worth noting that, for this reason, the Application servers should be on the list of trusted addresses.
 
-\subsection{Scenarios}
+\subsubsection{Scenarios}
 During the writing of this document, a case has been repeatedly brought forward and analyzed: that is, what happens when a User wants to leave the car for a relatively short amount of time and not have someone reserve it, possibly leaving them without a ride?
 
 Several solutions have been considered. In the end, our solution was to introduce a "End Ride" button on the screen of the Car system. This way, even if the User kills the engine and exits the Car, the doors are not locked and the Ride does not end unless that button is pressed. As a side-effect, this makes it less likely for the user to forget their belongings, in the Car, since it would not lock unless the User had pushed the button.
@@ -545,7 +642,8 @@ When the End Ride button is pressed, the Car will check to be parked in a Parkin
 09/12 & 9h\\
 10/12 & 3h\\
 11/12 & 8h\\ \hline
-TOTAL & 59h\\
+01/03 & 5h\\ \hline
+TOTAL & 64h\\
 \end{tabular}
 \subsection{Alessandro Paglialonga}
 \begin{tabular}{l r}
