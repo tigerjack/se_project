@@ -32,7 +32,7 @@
 	% The table itself
 	\textbf{Version} & \textbf{Date} & \textbf{Authors} & \textbf{Summary}\\ \hline
 	1.0 & 11/12/2016& E. Migliorini, S. Perriello, A.Paglialonga & First release\\ \hline
-	1.1 & 01/03/2017& S. Perriello & Added infos to overview, component view and communication view, general restyling\\ \hline
+	1.1 & 02/03/2017& S. Perriello & Added infos to overview, component view, communication view, car board; general restyling\\ \hline
 	
 \end{longtable}
 \subsection{Purpose}
@@ -95,14 +95,14 @@ Image \ref{fig:component} shows the various System components and their relation
 We can see three different kind of clients for our System:
 \begin{itemize}
 \item\textbf{Web Clients} represent the web browser that Users can use to access the System. The System returns simple HTML/JSP pages to them.
-\item\textbf{Mobile Rest Clients} mainly represent all the clients that uses a RESTful approach to access the System functionalities. The main kind of Rest Clients are surely the user Devices on which the PowerEnjoy App is running, though it is surely possible to access the System functionalities through other kind of clients, provided them invokes the correct URLs. As we can see, it is required that the PowerEnjoy App has access to the GPS System of the Client in order to fullfil some of the requests and an external Map System used to show different kind of maps to the User.
+\item\textbf{Mobile Rest Clients} represent the devices used by Users to access the System functionalities. The PowerEnjoy App will run on those devices and must have access to the GPS System of the Client in order to fullfil some of the requests and to an external Map System used to show different kind of maps to the User.
 \item\textbf{Car Systems} can access the System in order to send useful data of the Cars. This is due to the fact that, instead of continuously make the Server polling all the Cars for their data, we decided to install a board on each Car that sends data on specific, meaningful events.
 \end{itemize}
 
 The main part of the Component Diagram (and as a consequence of the entire System) is the Server, named as Servlet Container. In fact, in our approach, given the used technologies, the Server should be a Java Servlet Container (see also \ref{par:tomcat}).
 Inside it, you can see the Spring Framework, which is the core component of the Server and that provides some interesting features to manage all the other components (see also \ref{Spring}).
 
-Spring’s web module includes, among the others, two interesting beans that is worth mentioning:
+Spring’s web module includes, among the others, two interesting aspects that is worth mentioning:
 \begin{itemize}
 \item A \textit{DispatcherServlet}. Spring’s web MVC framework is, like many other web MVC frameworks, request-driven, designed around a central Servlet that dispatches requests to controllers and offers other functionality that facilitates the development of web applications. In practice, all the requests coming from clients are intercepted by the DispatcherServlet and redirected to the appropriate controllers: it is an expression of the "Front Controller" design pattern, a pattern that Spring Web MVC shares with many other leading web frameworks.
 Note that we can achieve analogous results using the default JEE framework, but obviously Spring greatly simplifies our tasks.
@@ -117,6 +117,8 @@ A @Component is a generic stereotype for any Spring-managed component. As such, 
 @Repository, @Service, and @Controller, on the other hand, are specializations of @Component for more specific use cases, namely the persistence layer, the service layer and the presentation layer respectively. Obviously, the use of the specialized stereotypes is encouraged, because on one hand they can provide further functionalities (such as the automatic translation of database exceptions for @Repository), and on the other they are useful to separate the layers of the application.
 
 In addition to that, we use a specialized kind of @Controller, namely @RestController, to implement the RESTful pattern and responds to specific HTTP requests coming from RestClients and Devices.
+
+See also \ref{Spring} for further info.
 
 We can also note the use of an authentication controller. Its role is to grant the access to specific controllers only to authenticated users, id est users already registered to the System and which has provided the correct access identifiers.
 
@@ -140,6 +142,37 @@ In our approach, we have repository classes for the most relevant entities of ou
 
 \bigskip
 Last but not least, in our Server we have to provide the JPA @Entity annotation on those classes that are directly mapped into the database. In other words, the @Entity annotation is used to define classes whose instances can be stored in a database.
+
+
+\subsection{Deployment View}
+The following diagram shows the deployment view of the whole System. The server specifications are described in \ref{server}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{../Images/Deployment}
+	\caption{Deployment Diagram}
+\end{figure}
+
+As per the overview diagram in figure \ref{fig:overview}, we introduced also some security layers between the various part of our System that, for the sake of simplicity, we did not show in the Component diagram.
+
+The Reverse Proxy is a type of proxy server that retrieves resources on behalf of a client from one or more servers. These resources are then returned to the client as if they originated from the proxy server itself. Among the others, a reverse proxy is useful for the following reasons:
+\begin{itemize}
+\item Application firewall features can protect against common web-based attacks, such as DoS or DDoS. Without a reverse proxy, removing malware or initiating takedowns, for example, can become difficult.
+\item In the case of secure websites, a web server may not perform SSL encryption itself, but instead offloads the task to a reverse proxy that may be equipped with SSL acceleration hardware.
+\item A reverse proxy can distribute the load from incoming requests to several servers, with each server serving its own application area. In the case of reverse proxying in the neighborhood of web servers, the reverse proxy may have to rewrite the URL in each incoming request in order to match the relevant internal location of the requested resource.
+\item Reverse proxies can operate wherever multiple web-servers must be accessible via a single public IP address. The web servers listen on different ports in the same machine, with the same local IP address or, possibly, on different machines and different local IP addresses altogether. The reverse proxy analyzes each incoming request and delivers it to the right server within the local area network.
+\end{itemize}
+
+We choose to deploy the reverse proxy on a Linux machine, inside which we used the Nginx server to easily configure all the relevant aspects.
+
+\bigskip
+The Server is instead deployed on two different Linux machines which runs the Tomcat server, an open source Java Servlet container.
+Whenever the Server must invoke the methods of external systems, its requests are handled by the forward proxy. Basically, it acts as an intermediary for requests from clients (in this case our Server) seeking resources from other servers (the external systems). Among other well-known capabilities provided by a forward proxy, we must note the added security layer introduced by its use. Indeed, a proxy can keep the internal network structure of the company secret by using network address translation. This makes requests from machines and users on the local network anonymous. 
+We choose to use Tinyproxy, a fast and small open source implementation of a proxy server, which will run on a single Linux machine.
+
+\bigskip
+The access to the Database is also mediated by a firewall, whose capabilities are well-known and beyond the scope of this document.
+
+\clearpage
 
 \subsection{Class View}
 The following diagrams show the Class Diagrams for various parts of the System.
@@ -205,40 +238,9 @@ The following diagrams are used to show the HTTP requests that Clients use to co
 	\caption{Communication Diagram for Web Client}
 \end{figure}
 
-Is it interesting to note that while to requests from Web Clients the Server responds with HTML/JSP files, for the Mobile Clients and Car Clients it returns JSON data which must be correctly processed by the clients.
+Is it interesting to note that while to requests from Web Clients the Server responds with HTML/JSP files, for the Mobile Clients and Car Clients it returns JSON data which must be correctly processed by the clients. This is because we decided to use the Web Client only to provide the Users registrations functionalities, while all other relevant aspects are processed through the PowerEnjoy App and the PowerEnjoy Car board.
 
-We can also that the secured connection between Mobile Clients and the server is ensured by the use of a token, which is generated by the Server on a successful login and then sent back to the client. On subsequent access, the clients should send this token in order to access secured resources.
-
-\subsection{Deployment View}
-The following diagram shows the deployment view of the whole System. The server specifications are described in \ref{server}.
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{../Images/Deployment}
-	\caption{Deployment Diagram}
-\end{figure}
-
-As per the overview diagram in figure \ref{fig:overview}, we introduced also some security layers between the various part of our System.
-
-The Reverse Proxy is a type of proxy server that retrieves resources on behalf of a client from one or more servers. These resources are then returned to the client as if they originated from the proxy server itself. Among the others, a reverse proxy is useful for the following reasons:
-\begin{itemize}
-\item Application firewall features can protect against common web-based attacks, such as DoS or DDoS. Without a reverse proxy, removing malware or initiating takedowns, for example, can become difficult.
-\item In the case of secure websites, a web server may not perform SSL encryption itself, but instead offloads the task to a reverse proxy that may be equipped with SSL acceleration hardware.
-\item A reverse proxy can distribute the load from incoming requests to several servers, with each server serving its own application area. In the case of reverse proxying in the neighborhood of web servers, the reverse proxy may have to rewrite the URL in each incoming request in order to match the relevant internal location of the requested resource.
-\item Reverse proxies can operate wherever multiple web-servers must be accessible via a single public IP address. The web servers listen on different ports in the same machine, with the same local IP address or, possibly, on different machines and different local IP addresses altogether. The reverse proxy analyzes each incoming request and delivers it to the right server within the local area network.
-\end{itemize}
-
-We choose to deploy the reverse proxy on a Linux machine, inside which we used the Nginx server to easily configure all the relevant aspects.
-
-\bigskip
-The Server is instead deployed on two different Linux machines which runs the Tomcat server, an open source Java Servlet container.
-Whenever the Server must invoke the methods of external systems, its requests are handled by the forward proxy. Basically, it acts as an intermediary for requests from clients (in this case our Server) seeking resources from other servers (the external systems). Among other well-known capabilities provided by a forward proxy, we must note the added security layer introduced by its use. Indeed, a proxy can keep the internal network structure of the company secret by using network address translation. This makes requests from machines and users on the local network anonymous. 
-We choose to use Tinyproxy, a fast and small open source implementation of a proxy server, which will run on a single Linux machine.
-
-\bigskip
-The access to the Database is also mediated by a firewall, whose capabilities are well-known and beyond the scope of this document.
-
-\clearpage
-
+We can also that the secured connection between Mobile Clients (id est the PowerEnjoy App) and the server is ensured by the use of a token, which is generated by the Server on a successful login and then sent back to the client. On subsequent access, the clients should send this token in order to access secured resources.
 \subsection{Runtime View}
 \subsubsection{Registration}
 \begin{figure}[h]
@@ -443,6 +445,17 @@ Spring allows to use annotations to classify the servlets that we are creating i
 	\item[@Service] Services make up the Business Logic Layer. We provide two specializations of Service, \textbf{@InternalService} and \textbf{@ExternalService}: the former will handle internal logic, such as gathering relevant information to send to the Client, performing checks on Cars and Users, or calculating the optimal Charging Areas for users using the Money Saving Option, while the latter will provide an interface for the external services such as Mapping or Banking. Services will interact with Controllers for client-server communication and with Repositories for data access and modification.
 \end{description}
 
+\subsubsection{The PowerEnjoy Board}
+As we have already mentioned in the previous section, we decided to install a board on each Car that collect data on behalf of the Server and send to it only on specific key events. 
+
+The main goal of this decision is to avoid the continuous polling of data from the Server, which may result in a great bandwidth and memory consumption on the Server side.
+
+To note that this board will be the only point of communication between the Cars and the Server. For this reason, the board should interface with all the set of sensors and actuators of the Car. For example, the board will be in charge of sending the Car GPS position at the end of a ride, but also of sending to the Car on-board display information relative to the current fee.
+
+It is also worth noting that the PowerEnjoy Board will not only act as a client for our server, but also as a server itself. Indeed, the Server should be able to query the Board at any point for whatever reason and at the same time send specific requests to control the actuators (for example close the doors of the car).
+
+For all the reasons mentioned above, special care should be taken in the installation and configuration of this board because they should have a high reliability and availability.
+
 \subsubsection{Server Specifications}
 \label{server}
 \paragraph{Tomcat}\label{par:tomcat}
@@ -643,7 +656,8 @@ When the End Ride button is pressed, the Car will check to be parked in a Parkin
 10/12 & 3h\\
 11/12 & 8h\\ \hline
 01/03 & 5h\\ \hline
-TOTAL & 64h\\
+02/03 & 2h\\ \hline
+TOTAL & 66h\\
 \end{tabular}
 \subsection{Alessandro Paglialonga}
 \begin{tabular}{l r}
