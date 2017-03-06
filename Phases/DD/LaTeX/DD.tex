@@ -350,9 +350,9 @@ We take as an assumption that when a Major Damage happens the people will leave 
 \end{enumerate}
 
 \begin{figure}[h]
-\vspace{-2cm}
+\vspace{-3cm}
 	\centering
-	\includegraphics[width=.9\textwidth]{../Images/Sequence_Final/Drive_Car}
+	\includegraphics[width=.8\textwidth]{../Images/Sequence_Final/Drive_Car}
 	\caption{Drive Car}
 \end{figure}
 \clearpage
@@ -482,11 +482,9 @@ We also assume that the database will be protected by a Firewall. It is worth no
 \subsubsection{Scenarios}
 During the writing of this document, a case has been repeatedly brought forward and analyzed: that is, what happens when a User wants to leave the car for a relatively short amount of time and not have someone reserve it, possibly leaving them without a ride?
 
-Several solutions have been considered. In the end, our solution was to introduce a "End Ride" button on the screen of the Car system. This way, even if the User kills the engine and exits the Car, the doors are not locked and the Ride does not end unless that button is pressed. As a side-effect, this makes it less likely for the user to forget their belongings, in the Car, since it would not lock unless the User had pushed the button.
+Several solutions have been considered. In the end, our solution was to introduce a "End Ride" button on the screen of the Car system. This button will allow the User to end their Ride provided that they are in a Safe Area.
 
-Of course, there is an undesired side-effect as well: since the Car is unlocked, it would be possible for a malicious passerby to get in the Car and drive away. Since Cars can be remotely operated, a User could notice it readily and notify the Company to ask for intervention, but it is recommended that the Terms and Conditions specify that the User may be held liable for any such misdemeanor. A User who is worried about this happening should end the ride before leaving the Car, then immediately Reserve it again through the Mobile application.
-
-Furthermore, in order to minimize the chance of someone forgetting to press the "End Ride" button, the Mobile application will receive regular notifications whenever the associated Car is empty but still In Use.
+Should a User leave their Car without pressing the End Ride button, as soon as the Car detects that the Engine is not running and no one is inside, it will automatically start the End Ride use case. Therefore, a User who wishes to park their Car for a brief period should quickly reserve it again after leaving it.
 
 \clearpage
 \section{Algorithm Design}
